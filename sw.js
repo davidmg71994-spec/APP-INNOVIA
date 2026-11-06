@@ -1,7 +1,7 @@
 /* Service worker de Visitas PRL: la app abre sin cobertura en obra.
    Red primero para la página (así llegan las versiones nuevas); si no hay red, la copia guardada.
    No toca la caché 'registro-rp-senal', que gestiona la propia app. */
-const SHELL = 'visitasprl-shell-v1';
+const SHELL = 'visitasprl-shell-v2';
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(SHELL).then(c => c.addAll(['./', './VisitasPRL.html'])).then(() => self.skipWaiting()));
