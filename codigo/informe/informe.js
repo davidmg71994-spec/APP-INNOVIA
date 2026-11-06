@@ -165,13 +165,19 @@ function progreso(sec) {
   const ids = sec.items.flatMap(it => contables(it));
   return {n: ids.filter(i => INF.v[i]).length, t: ids.length};
 }
+/* apartado 9: las fechas de revisión pueden salir de Inicio › Revisiones */
+function extraSec(sec) {
+  if (sec.id !== 's9' || !window.REV_API) return '';
+  const n = REV_API.lista().filter(r => (r.inf || []).length).length;
+  return `<div class="iq"><div class="rv-ibox"><p><b>Revisiones de las instalaciones.</b> ${n ? `Tienes ${plural(n, 'revisión', 'revisiones')} con casilla en este apartado: sus fechas pueden pasar solas.` : 'Si das de alta tus revisiones en Inicio › Revisiones, sus fechas pasan solas a este apartado.'}</p>${n ? '<button type="button" class="btn" data-ia="revs">Rellenar con mis revisiones</button>' : ''}</div></div>`;
+}
 function pillSec(sec) {
   const p = progreso(sec); if (!p.t) return '';
   return `<span class="pill${p.n === p.t ? ' ok' : ''}">${p.n}/${p.t}</span>`;
 }
 function seccionHtml(sec) {
   const abierta = abiertas.has(sec.id);
-  return `<details class="block isec" data-sec="${esc(sec.id)}"${abierta ? ' open' : ''}><summary class="bh"><h2>${esc(sec.t)}</h2><span data-pill="${esc(sec.id)}">${pillSec(sec)}</span></summary><div class="isec-b" data-body="${esc(sec.id)}">${abierta ? sec.items.map(x => itemHtml(x)).join('') : ''}</div></details>`;
+  return `<details class="block isec" data-sec="${esc(sec.id)}"${abierta ? ' open' : ''}><summary class="bh"><h2>${esc(sec.t)}</h2><span data-pill="${esc(sec.id)}">${pillSec(sec)}</span></summary><div class="isec-b" data-body="${esc(sec.id)}">${abierta ? extraSec(sec) + sec.items.map(x => itemHtml(x)).join('') : ''}</div></details>`;
 }
 function visitasBoxHtml() {
   const vs = visitasDe(INF), inc = incluidas(INF);
@@ -256,7 +262,7 @@ async function onClick(e) {
   const a = t.closest('[data-ia]');
   if (a) accion(a.dataset.ia, a.dataset.id);
 }
-function refrescaBody(body) { if (!body) return; const sec = SECS.find(s => s.id === body.dataset.body); body.innerHTML = sec.items.map(x => itemHtml(x)).join(''); pintaAutos(); pintaPills(); }
+function refrescaBody(body) { if (!body) return; const sec = SECS.find(s => s.id === body.dataset.body); body.innerHTML = extraSec(sec) + sec.items.map(x => itemHtml(x)).join(''); pintaAutos(); pintaPills(); }
 function onInput(e) {
   const t = e.target;
   if (t.dataset.name) { INF.titulo = t.value; guardarPronto(); return; }
@@ -278,11 +284,21 @@ function onToggle(e) {
   if (d.open) {
     abiertas.add(id);
     const sec = SECS.find(s => s.id === id), body = d.querySelector('[data-body]');
-    if (sec && body && !body.children.length) { body.innerHTML = sec.items.map(x => itemHtml(x)).join(''); pintaAutos(); }
+    if (sec && body && !body.children.length) { body.innerHTML = extraSec(sec) + sec.items.map(x => itemHtml(x)).join(''); pintaAutos(); }
   } else abiertas.delete(id);
 }
 async function accion(a, id) {
   if (a === 'back') { volverLista(); return; }
+  if (a === 'revs') {
+    if (!window.REV_API || !INF) return;
+    const r = REV_API.paraInforme(INF);
+    if (!r.n) { await ask({title:'Nada que rellenar', body:`<p>No hay revisiones${INF.contrato && INF.contrato.id ? ' de este contrato' : ''} con casilla del informe y hechas antes del ${esc(fmtDate(INF.hasta || hoy()))}.</p>`, yes:'Entendido', single:true}); return; }
+    if (!(await ask({title:'¿Rellenar con tus revisiones?', body:r.html, yes:'Rellenar'}))) return;
+    Object.entries(r.vals).forEach(([k, v]) => set(k, v));
+    refrescaBody(document.querySelector('[data-body="s9"]')); pintaPills();
+    toast('Apartado 9 rellenado con tus revisiones.');
+    return;
+  }
   if (a === 'new') {
     let base = null;
     if (INFS.length) { const r = await ask({title:'Nuevo informe', body:'<p>¿Quieres empezar con las respuestas del informe anterior? Es lo más cómodo si casi todo se repite: luego solo cambias lo que haya cambiado.</p>', yes:'Copiar el anterior', no:'Empezar en blanco'}); if (r === null) return; if (r === true) { const act = window.INI_API ? INI_API.activo() : null; base = (act && INFS.find(x => x.contrato && x.contrato.id === act.id)) || INFS[0]; } }

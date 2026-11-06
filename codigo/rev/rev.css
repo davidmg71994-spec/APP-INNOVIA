@@ -1,0 +1,81 @@
+/* Revisiones: cabecera azul como planificación y calendario; tarjetas con el estado a la vista y tabla como la del Calendario PRL */
+#view-rev{gap:12px}
+#view-rev>div{min-width:0}
+#rev-main:not([hidden]),#rev-form:not([hidden]){display:grid;gap:12px;min-width:0}
+#rev-main>*,#rev-form>*{min-width:0}
+#rev-form .ihead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.rv-blank{gap:10px}
+.rv-blank .btn{justify-self:start;margin-top:4px}
+.rv-ctrs{gap:6px}
+.rv-ctrs .chip{padding:8px 12px;font-size:14px}
+.rv-aviso{margin:0;padding:10px 12px;border:1px solid var(--brand-line);background:var(--brand-soft);border-radius:10px;font-size:14px;color:var(--ink)}
+/* estado */
+.rv-st{display:inline-block;font:600 12px/1 var(--f-body);border-radius:99px;padding:5px 9px;white-space:nowrap;background:var(--surface-2);color:var(--muted)}
+.rv-st.bad{background:var(--bad-soft);color:var(--bad)}
+.rv-st.warn{background:var(--brand-soft);color:var(--brand-text)}
+.rv-st.soon{background:var(--corp-soft);color:var(--corp-text)}
+.rv-st.ok{background:var(--ok-soft);color:var(--ok)}
+/* tarjetas */
+.rv-list{display:grid;gap:10px}
+.rv-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;display:grid;min-width:0;overflow:hidden;box-shadow:inset 5px 0 0 var(--line-strong)}
+.rv-card.st-bad{border-color:var(--bad-line);box-shadow:inset 5px 0 0 var(--bad)}
+.rv-card.st-warn{box-shadow:inset 5px 0 0 var(--brand)}
+.rv-card.st-soon{box-shadow:inset 5px 0 0 var(--corp-text)}
+.rv-card.st-ok{box-shadow:inset 5px 0 0 var(--ok)}
+.rv-open{appearance:none;background:none;border:0;margin:0;padding:12px 14px 10px 19px;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;display:grid;gap:7px;min-width:0}
+.rv-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.rv-h b{font:700 15.5px/1.25 var(--f-display);overflow-wrap:anywhere;min-width:0}
+.rv-meta{font-size:13px;color:var(--muted)}
+.rv-fechas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.rv-fechas span{display:grid;gap:2px;font:600 13px/1.25 var(--f-mono);font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
+.rv-fechas small{font:600 10.5px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rv-acts{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px dashed var(--line);padding:9px 14px 10px 19px}
+.rv-cert{display:inline-flex;align-items:center;gap:5px;font:600 12.5px/1 var(--f-body);color:var(--muted)}
+.rv-cert svg{width:15px;height:15px}
+.rv-cert.ok{color:var(--ok)}
+.rv-cert.falta{color:var(--brand-text);background:var(--brand-soft);border-radius:99px;padding:5px 9px}
+.rv-hecha{appearance:none;display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--ok);background:var(--ok-soft);color:var(--ok);border-radius:99px;padding:0 13px 0 10px;min-height:38px;font:600 14px/1 var(--f-display);cursor:pointer;flex:none;margin-left:auto}
+.rv-hecha svg{width:16px;height:16px}
+/* tabla */
+.rv-tw{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.rv-t{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+.rv-t th{font:600 11px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+.rv-t td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+.rv-t tr:last-child td{border-bottom:0}
+.rv-t tbody tr{cursor:pointer}
+.rv-t tbody tr:hover td,.rv-t tbody tr:focus td{background:var(--corp-soft)}
+.rv-t td b{font-weight:600;display:block}
+.rv-t td small{color:var(--muted);font-size:12px}
+.rv-t td.n{font:500 13px/1.3 var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* ficha */
+.rv-ff{display:grid;gap:16px}
+.rv-ff .opc{font-style:normal;font-weight:500;opacity:.8}
+.rv-chips{gap:6px}
+.rv-chips .chip{padding:9px 12px;font-size:14px}
+.rv-ult{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.rv-ult input[type=date],.rv-ult input[type=month]{flex:1 1 180px;min-width:0}
+.rv-mes{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;color:var(--ink);cursor:pointer}
+.rv-mes input{width:20px;height:20px;min-height:0;accent-color:var(--corp-2)}
+.rv-falta{margin:0;padding:10px 12px;border-radius:10px;background:var(--brand-soft);border:1px solid var(--brand-line);font-size:14px;color:var(--ink)}
+.rv-up{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.rv-file{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.rv-file svg{width:18px;height:18px}
+.rv-file input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;font-size:200px}
+.rv-doc{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);min-width:0}
+.rv-di{width:44px;height:44px;flex:none;border-radius:8px;background:var(--corp-soft);color:var(--corp-text);display:grid;place-items:center;overflow:hidden}
+.rv-di svg{width:22px;height:22px}
+.rv-di img{width:100%;height:100%;object-fit:cover;display:block}
+.rv-dt{flex:1;min-width:0;display:grid;gap:2px}
+.rv-dt b{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-dt small{font-size:12.5px;color:var(--muted)}
+.rv-ant{border:1px dashed var(--line-strong);border-radius:10px;padding:0 10px}
+.rv-ant summary{cursor:pointer;padding:10px 0;font-size:14px;color:var(--corp-text);font-weight:600}
+.rv-ant .rv-doc{margin-bottom:8px}
+.rv-hist{margin:0;padding-left:20px;font:500 14px/1.6 var(--f-mono);font-variant-numeric:tabular-nums}
+.rv-inf-l{margin:6px 0;padding-left:20px;font-size:14.5px;line-height:1.5}
+/* en el informe */
+.rv-ibox{display:grid;gap:8px;border:1px solid var(--corp-soft);background:var(--corp-soft);border-radius:10px;padding:12px}
+.rv-ibox p{margin:0;font-size:14px}
+.rv-ibox .btn{justify-self:start}
+#rev-form .cal-fbtns .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+#rev-form .cal-fbtns .btn svg{width:18px;height:18px;flex:none}

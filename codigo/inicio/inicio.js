@@ -59,6 +59,12 @@ function calSub() {
   return [r.hoy ? `Hoy: ${r.hoy}` : 'Nada para hoy', r.semana ? `${r.semana} en 7 días` : '', r.venc ? plural(r.venc, 'vencida', 'vencidas') : ''].filter(Boolean).join(' · ');
 }
 const calN = () => { const r = window.CAL_API ? CAL_API.resumen() : null; return r && r.venc ? r.venc : null; };
+function revSub() {
+  const r = window.REV_API ? REV_API.resumen() : null;
+  if (!r || !r.n) return 'Instalaciones, equipos y certificados';
+  return [r.bad ? plural(r.bad, 'vencida', 'vencidas') : '', r.warn ? `${r.warn} ${r.warn === 1 ? 'vence' : 'vencen'} ya` : '', !r.bad && !r.warn ? 'Todo al día' : ''].filter(Boolean).join(' · ');
+}
+const revN = () => { const r = window.REV_API ? REV_API.resumen() : null; return r && r.bad ? r.bad : null; };
 const planN = () => { const r = window.PLAN_API ? PLAN_API.resumenActivo() : null; return r && r.n ? r.n : null; };
 function tile(o) {
   return `<button type="button" class="ini-t${o.soon ? ' soon' : ''}${o.wide ? ' wide' : ''}${o.bad ? ' bad' : ''}" data-ini="${o.act}"${o.soon ? ` data-n="${esc(o.t)}"` : ''}>
@@ -102,7 +108,7 @@ function renderHome() {
     </div>
     <h2 class="ini-sec">Control y consulta</h2>
     <div class="ini-grid">
-      ${tile({act:'soon', ic:IC.rev, t:'Revisiones', s:'Vehículos, equipos, instalaciones', soon:true})}
+      ${tile({act:'rev', ic:IC.rev, t:'Revisiones', s:revSub(), n:revN(), bad:!!revN()})}
       ${tile({act:'soon', ic:IC.norma, t:'Normativa PRL', s:'Consulta con enlace al BOE', soon:true})}
     </div>
     <button type="button" class="ini-me" data-ini="perfil"><span class="ini-av sm">${iniciales2(nom)}</span><span><b>${esc(nom || 'Mi perfil')}</b><small>${esc(p.cargo || 'Técnico de prevención')} · ${plural(p.contratos.length, 'contrato', 'contratos')}</small></span>${IC.sig}</button>
@@ -297,6 +303,7 @@ async function onClick(e) {
   if (a === 'inf') { const t = $('#tab-inf'); if (t) t.click(); return; }
   if (a === 'plan') { if (window.PLAN_API) PLAN_API.abrirInicio(); return; }
   if (a === 'cal') { if (window.CAL_API) CAL_API.abrir(); return; }
+  if (a === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
   if (a === 'seguir') { showTab('form'); return; }
   if (a === 'nueva') {
     if (!(await confirmLeave())) return;
