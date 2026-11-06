@@ -45,6 +45,7 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 | 1.10.0 | 13 | 06/11/2026 | Barra de abajo por secciones (Inicio, Visitas, Documentos, Consulta, Perfil) con subpestañas arriba (Registro/Historial, Informe/Planificación/EVRL, Señalización/Normativa) y recorrido de primera vez en 3 pasos (perfil, contrato, primera visita). |
 | 1.11.0 | 14 | 06/11/2026 | Planificación: botón «✓ Aplicada» en cada medida (y «Deshacer»), lista con las vencidas arriba (Vencidas, Pendientes, Aplicadas) y vista «Por meses» con la tira de los 12 meses. El vencimiento cuenta hasta el último día del mes. |
 | 1.11.1 | 15 | 06/11/2026 | La plantilla del informe ya no guarda datos del informe que se usó de modelo (nombres, comentarios, cifras); el Word que sale es idéntico. Versión publicada también en GitHub. |
+| 1.12.0 | 16 | 06/11/2026 | Calendario PRL desde Inicio: empieza en blanco y cada técnico añade sus tareas (sueltas o que se repiten cada semana, mes, 3, 4 o 6 meses o año), con contrato y tipo; agenda con vencidas, hoy, 7 días y 30 días; vista de mes; marcar hechas; ideas rápidas; entra en la copia de seguridad. |
 
 ## Cómo funciona en el móvil
 - **PDF y copias de seguridad**: «Compartir» los envía por WhatsApp, correo, Drive…; «Guardar» los deja en **Descargas › Visitas PRL**. Con el PDF el botón es **«Guardar y abrir»**: lo guarda y lo abre con el visor del móvil para revisarlo.
@@ -67,3 +68,10 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 - La guía rápida está en `GUIA` (`index.html`): título, texto y dibujo de cada pantalla. El mensaje al compartir sale de `mensajeRegistro(r)`; en Android lo envía `AndroidApp.compartirTexto` (EXTRA_TEXT + portapapeles).
 - Antes de construir, en `index.html`: subir `APP_VER` (igual que el versionName), añadir la versión nueva **al principio** de `NOVEDADES` (frases cortas, en lenguaje de técnico) y cambiar el texto de `#ver-t`. Quien venga de varias versiones atrás ve todas las novedades que se ha saltado.
 - Huella SHA-256 del certificado de firma: `e0bd5c46…046679ca` (comprobar con `apksigner verify --print-certs`).
+
+## Calendario PRL (versión 1.12.0)
+- Se entra desde Inicio (tarjeta «Calendario PRL», que enseña lo de hoy, lo de 7 días y las vencidas). En la barra de abajo cuenta como Inicio. Empieza **en blanco**: cada técnico añade sus tareas.
+- Tarea (IndexedDB `registro-rp-cal`, almacén `tareas`): `{id, t, k, ctr:{id,nombre,sie}|null, f (AAAA-MM-DD), rep, hasta, notas, hechas:{fecha: marca}, desde, creado, guardado}`. `k` = tipo con los colores del Calendario PRL: `vis` visitas y planificación, `inst` instalaciones, `veh` vehículos y maquinaria, `reg` índices y registros, `ma` medio ambiente, `hito` comités/informes/simulacros, `otr` otros.
+- `rep`: `''` (una vez), `sem`, `mes`, `tri`, `cua`, `semes`, `anu`. Mensuales y demás caen el mismo día del mes (o el último si el mes es más corto). Las repeticiones anteriores a `desde` (el día en que se dio de alta) no cuentan, para no llenar de vencidas. Cada repetición se marca hecha por su fecha en `hechas`.
+- Agenda: Vencidas (hasta 400 días atrás), Hoy, Próximos 7 días y Más adelante (hasta 30 días, solo la siguiente vez de cada tarea). Vista «Mes» (`localStorage['cal-modo']`): rejilla con un punto por tarea; al pulsar un día salen sus tareas. Filtro por contrato. «Ideas rápidas» al crear: rellenan título, tipo y repetición de las tareas habituales (no se crean solas).
+- Va en la copia de seguridad (`calendario`). Código: `/home/claude/pwa/cal/` (`cal.js`, `cal.css`, `inject.py`, que va después de `plan/inject.py`). Prueba: `test-cal.js`.
