@@ -1,0 +1,7 @@
+firma/
+*.jks
+*.keystore
+clave.txt
+build/
+assets/www/
+*.idsig
