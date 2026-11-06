@@ -2,7 +2,7 @@
 
 App para los técnicos de PRL de Innovia: registro de comprobación del recurso preventivo en obra, informe de seguimiento cuatrimestral y planificación preventiva, con salida en PDF, Word y Excel.
 
-**Versión 1.13.0 · 06/11/2026**
+**Versión 1.14.0 · 06/11/2026**
 
 ## Cómo usarla
 
@@ -23,7 +23,7 @@ Los datos (visitas, informes, planificaciones, calendario, revisiones con sus ce
   - *Planificación preventiva*: tabla de seguimiento de medidas correctoras por contrato y año, con el origen de cada medida según la leyenda (periódica PRL, periódica CA-MA, visita del Responsable SPP/MA, auditoría, deficiencia en visita), vencimientos, vista por meses y Excel con el formato de Innovia.
 - **Calendario PRL**: cada técnico apunta sus tareas (sueltas o que se repiten cada semana, mes, trimestre o año), con contrato y tipo; agenda con vencidas, hoy y próximos días, vista de mes y marcar como hechas. Empieza en blanco.
 - **Revisiones**: instalaciones y equipos (camión pluma, extintores, aire acondicionado, puesta a tierra, legionela…) con su última revisión, periodicidad, vencimiento y aviso; certificado de mantenimiento en PDF o foto; las fechas pasan al apartado 9 del informe cuatrimestral.
-- **Consulta**: láminas de señalización de obras fijas (Norma 8.3-IC).
+- **Consulta**: láminas de señalización de obras fijas (Norma 8.3-IC) y **Normativa PRL**: 33 fichas (qué regula, para qué sirve en obra y lo más importante) que se consultan sin cobertura, con enlace al texto consolidado del BOE, buscador y favoritas.
 - **Primera vez**: configuración en 3 pasos (perfil, contrato y primera visita).
 
 ## Contenido del repositorio
@@ -33,7 +33,7 @@ Los datos (visitas, informes, planificaciones, calendario, revisiones con sus ce
 | `docs/` | La web que publica GitHub Pages: `VisitasPRL.html` (la app en un solo archivo), `index.html` (entrada) y `sw.js` (caché sin conexión). |
 | `VisitasPRL.apk` | La app de Android firmada. |
 | `codigo/app-web/` | Código fuente de la app web (`index.html` con todos los módulos ya integrados). |
-| `codigo/informe/`, `codigo/inicio/`, `codigo/plan/`, `codigo/cal/`, `codigo/rev/` | Fuentes de cada módulo y sus scripts `inject.py` (se ejecutan en ese orden: informe, inicio, plan, cal, rev). |
+| `codigo/informe/`, `codigo/inicio/`, `codigo/plan/`, `codigo/cal/`, `codigo/rev/`, `codigo/norma/` | Fuentes de cada módulo y sus scripts `inject.py` (se ejecutan en ese orden: informe, inicio, plan, cal, rev, norma). |
 | `codigo/android/` | Proyecto Android (sin la clave de firma). |
 | `codigo/LEEME.md` | Notas técnicas de cada versión. |
 

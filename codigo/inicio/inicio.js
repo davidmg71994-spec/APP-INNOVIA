@@ -109,7 +109,7 @@ function renderHome() {
     <h2 class="ini-sec">Control y consulta</h2>
     <div class="ini-grid">
       ${tile({act:'rev', ic:IC.rev, t:'Revisiones', s:revSub(), n:revN(), bad:!!revN()})}
-      ${tile({act:'soon', ic:IC.norma, t:'Normativa PRL', s:'Consulta con enlace al BOE', soon:true})}
+      ${tile({act:'norma', ic:IC.norma, t:'Normativa PRL', s:'Fichas sin cobertura y enlace al BOE'})}
     </div>
     <button type="button" class="ini-me" data-ini="perfil"><span class="ini-av sm">${iniciales2(nom)}</span><span><b>${esc(nom || 'Mi perfil')}</b><small>${esc(p.cargo || 'Técnico de prevención')} · ${plural(p.contratos.length, 'contrato', 'contratos')}</small></span>${IC.sig}</button>
   </div>`;
@@ -304,6 +304,7 @@ async function onClick(e) {
   if (a === 'plan') { if (window.PLAN_API) PLAN_API.abrirInicio(); return; }
   if (a === 'cal') { if (window.CAL_API) CAL_API.abrir(); return; }
   if (a === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
+  if (a === 'norma') { if (window.NORMA_API) NORMA_API.abrir(); return; }
   if (a === 'seguir') { showTab('form'); return; }
   if (a === 'nueva') {
     if (!(await confirmLeave())) return;
@@ -324,7 +325,7 @@ function onInput(e) {
 }
 
 /* ---------- barra de abajo por grupos y subpestañas arriba ---------- */
-const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', sen:'con'};
+const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', sen:'con', norma:'con'};
 let tabAct = 'ini';
 function navSync(t) {
   if (t) tabAct = t;
@@ -354,7 +355,7 @@ function montarNav() {
   nueva('tab-plan', 'doc', IC.plan, 'Planificación').addEventListener('click', () => { if (window.PLAN_API) PLAN_API.abrirInicio(); });
   nueva('tab-evrl', 'doc', IC.evrl, 'EVRL', true).addEventListener('click', () => toast('La evaluación de riesgos (EVRL) llegará en una próxima versión.'));
   mover('tab-sen', 'con');
-  nueva('tab-norma', 'con', IC.norma, 'Normativa', true).addEventListener('click', () => toast('La normativa PRL llegará en una próxima versión.'));
+  nueva('tab-norma', 'con', IC.norma, 'Normativa').addEventListener('click', () => { if (window.NORMA_API) NORMA_API.abrir(); });
   const tin = $('.top-in'), steps = $('#steps'); tin.insertBefore(sub, steps);
   /* barra de abajo: 5 secciones */
   const ti = $('#tab-ini'); ti.dataset.grp = 'ini';

@@ -977,6 +977,61 @@ body.onb-on{overflow:hidden}
 #rev-form .cal-fbtns .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
 #rev-form .cal-fbtns .btn svg{width:18px;height:18px;flex:none}
 /*REV-CSS-END*/
+/*NORMA-CSS-START*/
+/* Normativa: cabecera azul de la casa; lista por bloques con el código de la norma en monoespaciada y fichas tipo nota técnica */
+#view-norma{gap:12px}
+#view-norma>div{min-width:0}
+#nm-main:not([hidden]),#nm-ficha:not([hidden]){display:grid;gap:12px;min-width:0}
+#nm-main>*,#nm-ficha>*{min-width:0}
+#nm-ficha .ihead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.nm-buscar input{font-size:16px;padding-left:40px;background:var(--field) no-repeat 13px 50%/18px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23889' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 20 20'/%3E%3C/svg%3E")}
+.nm-filtros{gap:6px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.nm-filtros::-webkit-scrollbar{display:none}
+.nm-filtros .chip{flex:none;padding:8px 12px;font-size:14px}
+.nm-gh{display:flex;align-items:center;gap:8px;margin:10px 2px 0;font:600 12.5px/1.2 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.nm-gh i{font-style:normal;font:600 11.5px/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
+.nm-n{margin:0 2px;font-size:13px;color:var(--muted)}
+.nm-list{display:grid;gap:8px}
+.nm-item{display:flex;align-items:stretch;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
+.nm-row{appearance:none;flex:1;min-width:0;background:none;border:0;margin:0;padding:12px 6px 12px 14px;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;display:grid;gap:4px;justify-items:start}
+.nm-row b{font:700 15.5px/1.25 var(--f-display)}
+.nm-c{font:600 12px/1.2 var(--f-mono);letter-spacing:.02em;color:var(--corp-text)}
+.nm-q{font-size:13.5px;line-height:1.35;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nm-star{appearance:none;flex:none;width:52px;border:0;background:none;display:grid;place-items:center;cursor:pointer;color:var(--line-strong)}
+.nm-star svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
+.nm-star[aria-pressed="true"]{color:var(--brand)}
+.nm-star[aria-pressed="true"] svg{fill:currentColor}
+.nm-star.big{width:44px;height:44px;border-radius:10px}
+.nm-pill{display:inline-block;font:600 11.5px/1 var(--f-body);border-radius:99px;padding:4px 8px;margin-top:2px}
+.nm-pill.nueva{background:var(--ok-soft);color:var(--ok)}
+.nm-pill.tram{background:var(--brand-soft);color:var(--brand-text)}
+.nm-pill.fut{background:var(--corp-soft);color:var(--corp-text)}
+.nm-aviso{margin:4px 2px 0}
+/* ficha */
+.nm-head{display:grid;gap:6px;justify-items:start;background:linear-gradient(165deg,var(--corp) 0%,var(--corp-2) 100%);color:var(--corp-ink);border-radius:16px;padding:16px}
+.nm-head *{color:var(--corp-ink)}
+.nm-head .nm-c{opacity:.8}
+.nm-head h2{margin:0;font:700 23px/1.15 var(--f-display);text-wrap:balance}
+.nm-f{margin:2px 0 0;font-size:13.5px;line-height:1.4;opacity:.85}
+.nm-nota{margin:4px 0 0;padding:9px 11px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);font-size:14px;line-height:1.4}
+.nm-head .nm-pill.nueva{background:#DDF3E5;color:#14532D}
+.nm-head .nm-pill.tram{background:#FDEBD3;color:#7A3E00}
+.nm-head .nm-pill.fut{background:#E3ECF6;color:#0E3A63}
+.nm-sec .bb{display:grid;gap:8px}
+.nm-sec h3{margin:0;font:600 12.5px/1.2 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.nm-sec p{margin:0;font-size:15px;line-height:1.5}
+.nm-sec ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px;line-height:1.45}
+.nm-art{margin:0;display:grid}
+.nm-art>div{display:grid;gap:3px;padding:10px 0;border-top:1px solid var(--line)}
+.nm-art>div:first-child{border-top:0;padding-top:2px}
+.nm-art dt{font:600 13px/1.4 var(--f-mono);color:var(--corp-text)}
+.nm-art dd{margin:0;font-size:14.5px;line-height:1.45}
+.nm-acts{display:grid;gap:8px}
+.nm-boe{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.nm-boe svg{width:18px;height:18px;flex:none}
+.nm-rel{margin:6px 0 0;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;font-size:13.5px;color:var(--muted)}
+.nm-rel .linkbtn{padding:4px 0;font-size:13.5px;color:var(--corp-text);text-decoration:underline;text-underline-offset:3px;text-align:left}
+/*NORMA-CSS-END*/
 </style>
 </head>
 <body>
@@ -1125,7 +1180,7 @@ body.onb-on{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.13.0 · 06/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.14.0 · 06/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -3113,12 +3168,13 @@ function copiar() {
 
 /* ================= navigation ================= */
 function showTab(t) {
-  [['ini', '#view-ini', '#tab-ini'], ['form', '#view-form', '#tab-form'], ['hist', '#view-hist', '#tab-hist'], ['sen', '#view-sen', '#tab-sen'], ['inf', '#view-inf', '#tab-inf'], ['plan', '#view-plan', '#tab-plan'], ['cal', '#view-cal', '#tab-cal'], ['rev', '#view-rev', '#tab-rev']].forEach(([k, v, b]) => { const ev = $(v), eb = $(b); if (ev) ev.hidden = t !== k; if (eb) eb.setAttribute('aria-selected', t === k); });
+  [['ini', '#view-ini', '#tab-ini'], ['form', '#view-form', '#tab-form'], ['hist', '#view-hist', '#tab-hist'], ['sen', '#view-sen', '#tab-sen'], ['inf', '#view-inf', '#tab-inf'], ['plan', '#view-plan', '#tab-plan'], ['cal', '#view-cal', '#tab-cal'], ['rev', '#view-rev', '#tab-rev'], ['norma', '#view-norma', '#tab-norma']].forEach(([k, v, b]) => { const ev = $(v), eb = $(b); if (ev) ev.hidden = t !== k; if (eb) eb.setAttribute('aria-selected', t === k); });
   if (window.INF_API) INF_API.onTab(t);
   if (window.INI_API) INI_API.onTab(t);
   if (window.PLAN_API) PLAN_API.onTab(t);
   if (window.CAL_API) CAL_API.onTab(t);
   if (window.REV_API) REV_API.onTab(t);
+  if (window.NORMA_API) NORMA_API.onTab(t);
   $('#steps').hidden = t !== 'form'; $('#prog').hidden = t !== 'form';
   $('#wiz').hidden = t !== 'form'; document.body.classList.toggle('wiz-on', t === 'form');
   document.body.classList.remove('top-min'); renderCabecera();
@@ -3372,6 +3428,7 @@ window.appBack = () => {
   if (window.PLAN_API && PLAN_API.atras()) return true;
   if (window.CAL_API && CAL_API.atras()) return true;
   if (window.REV_API && REV_API.atras()) return true;
+  if (window.NORMA_API && NORMA_API.atras()) return true;
   const ini = $('#view-ini');
   if (!$('#view-form').hidden && paso > 0) { setStep(paso - 1); return true; }
   if (ini && ini.hidden) { showTab('ini'); return true; }
@@ -3443,8 +3500,15 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.13.0';
+const APP_VER = '1.14.0';
 const NOVEDADES = [
+  {v:'1.14.0', fecha:'06/11/2026', items:[
+    '<b>Normativa PRL</b>: en Consulta y en Inicio, una ficha por norma (33): qué regula, para qué te sirve en obra y lo más importante, artículo por artículo. Se consulta sin cobertura.',
+    '<b>Enlace al BOE</b>: cada ficha abre el texto consolidado oficial (necesita conexión). Revisadas con el BOE el 06/11/2026.',
+    '<b>Buscador y favoritas</b>: busca por palabra («andamio», «extintores», «amianto»…), filtra por bloque y marca con la estrella las que más usas.',
+    '<b>Novedades incluidas</b>: el nuevo real decreto del amianto (RD 847/2026, en vigor desde el 24/10/2026), el reglamento de máquinas que se aplica desde enero de 2027 y la reforma de la ley de prevención en tramitación.',
+    '<b>Enlazada con la app</b>: desde cada revisión vas a su norma (RIPCI, REBT, RITE, legionela…) y desde la Norma 8.3-IC a las láminas de señalización.'
+  ]},
   {v:'1.13.0', fecha:'06/11/2026', items:[
     '<b>Revisiones</b>: desde Inicio, las revisiones de instalaciones y equipos (camión pluma, extintores, aire acondicionado, puesta a tierra, legionela…). De cada una pones la última revisión y cada cuánto toca, y la app calcula cuándo vence y te avisa antes. Todo se puede cambiar.',
     '<b>Certificados</b>: sube el certificado de mantenimiento en PDF o hazle una foto. Queda guardado con su revisión y lo abres o lo envías cuando quieras. Si falta, la app lo marca.',
@@ -4405,7 +4469,7 @@ function renderHome() {
     <h2 class="ini-sec">Control y consulta</h2>
     <div class="ini-grid">
       ${tile({act:'rev', ic:IC.rev, t:'Revisiones', s:revSub(), n:revN(), bad:!!revN()})}
-      ${tile({act:'soon', ic:IC.norma, t:'Normativa PRL', s:'Consulta con enlace al BOE', soon:true})}
+      ${tile({act:'norma', ic:IC.norma, t:'Normativa PRL', s:'Fichas sin cobertura y enlace al BOE'})}
     </div>
     <button type="button" class="ini-me" data-ini="perfil"><span class="ini-av sm">${iniciales2(nom)}</span><span><b>${esc(nom || 'Mi perfil')}</b><small>${esc(p.cargo || 'Técnico de prevención')} · ${plural(p.contratos.length, 'contrato', 'contratos')}</small></span>${IC.sig}</button>
   </div>`;
@@ -4600,6 +4664,7 @@ async function onClick(e) {
   if (a === 'plan') { if (window.PLAN_API) PLAN_API.abrirInicio(); return; }
   if (a === 'cal') { if (window.CAL_API) CAL_API.abrir(); return; }
   if (a === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
+  if (a === 'norma') { if (window.NORMA_API) NORMA_API.abrir(); return; }
   if (a === 'seguir') { showTab('form'); return; }
   if (a === 'nueva') {
     if (!(await confirmLeave())) return;
@@ -4620,7 +4685,7 @@ function onInput(e) {
 }
 
 /* ---------- barra de abajo por grupos y subpestañas arriba ---------- */
-const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', sen:'con'};
+const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', sen:'con', norma:'con'};
 let tabAct = 'ini';
 function navSync(t) {
   if (t) tabAct = t;
@@ -4650,7 +4715,7 @@ function montarNav() {
   nueva('tab-plan', 'doc', IC.plan, 'Planificación').addEventListener('click', () => { if (window.PLAN_API) PLAN_API.abrirInicio(); });
   nueva('tab-evrl', 'doc', IC.evrl, 'EVRL', true).addEventListener('click', () => toast('La evaluación de riesgos (EVRL) llegará en una próxima versión.'));
   mover('tab-sen', 'con');
-  nueva('tab-norma', 'con', IC.norma, 'Normativa', true).addEventListener('click', () => toast('La normativa PRL llegará en una próxima versión.'));
+  nueva('tab-norma', 'con', IC.norma, 'Normativa').addEventListener('click', () => { if (window.NORMA_API) NORMA_API.abrir(); });
   const tin = $('.top-in'), steps = $('#steps'); tin.insertBefore(sub, steps);
   /* barra de abajo: 5 secciones */
   const ti = $('#tab-ini'); ti.dataset.grp = 'ini';
@@ -5757,7 +5822,7 @@ function renderForm() {
           <div class="rv-up"><label class="btn rv-file">${IC.clip}Subir PDF o foto<input type="file" id="rf-doc" accept="application/pdf,image/*" multiple></label><label class="btn rv-file">${IC.cam}Hacer foto<input type="file" id="rf-cam" accept="image/*" capture="environment"></label></div>`}
           ${antiguos.length ? `<details class="rv-ant"><summary>Certificados de revisiones anteriores (${antiguos.length})</summary>${antiguos.map(docHtml).join('')}</details>` : ''}
         </div>
-        <div class="field"><span class="lbl" id="rf-il">Casilla del informe cuatrimestral <i class="opc">apartado 9</i></span><div class="chips rv-chips" role="group" aria-labelledby="rf-il">${INFK.map(([k, t]) => `<button type="button" class="chip" data-inf="${k}" aria-pressed="${(ED.inf || []).includes(k)}">${esc(t)}</button>`).join('')}</div><p class="help">Su fecha pasa sola a esa casilla al pulsar «Rellenar con mis revisiones» en el informe. Si no marcas ninguna, no va al informe.</p></div>
+        <div class="field"><span class="lbl" id="rf-il">Casilla del informe cuatrimestral <i class="opc">apartado 9</i></span><div class="chips rv-chips" role="group" aria-labelledby="rf-il">${INFK.map(([k, t]) => `<button type="button" class="chip" data-inf="${k}" aria-pressed="${(ED.inf || []).includes(k)}">${esc(t)}</button>`).join('')}</div><p class="help">Su fecha pasa sola a esa casilla al pulsar «Rellenar con mis revisiones» en el informe. Si no marcas ninguna, no va al informe.</p>${window.NORMA_API ? NORMA_API.enlacesRev(ED.inf) : ''}</div>
         <div class="field"><label for="rf-no">Notas <i class="opc">opcional</i></label><textarea id="rf-no" rows="2" maxlength="600">${esc(ED.notas || '')}</textarea></div>
         ${(ED.hist || []).length ? `<div class="field"><span class="lbl">Revisiones anteriores</span><ul class="rv-hist">${[...ED.hist].sort().reverse().map(f => `<li>${esc(fFechaL(f))}${docsDe(ED, f).length ? ' · con certificado' : ''}</li>`).join('')}</ul></div>` : ''}
       </div>
@@ -5996,6 +6061,461 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 /*REV-JS-END*/
+/*NORMA-JS-START*/
+/* ================= Normativa PRL: una ficha por norma, sin cobertura, con enlace al BOE ================= */
+(() => {
+/* Fichas de normativa PRL. Revisadas con el BOE el 06/11/2026. Resumen orientativo: lo que vale es el texto del BOE. */
+const NORMA_REV = '06/11/2026';
+const NORMA_BLOQUES = [
+  ['base', 'Básica de PRL'], ['obra', 'Obras y carretera'], ['equi', 'Lugares, equipos, máquinas y EPI'],
+  ['ries', 'Riesgos específicos'], ['inst', 'Instalaciones'], ['acc', 'Accidentes, enfermedades y sanciones'], ['tram', 'En tramitación']
+];
+const ELI = p => 'https://www.boe.es/eli/es/' + p + '/con';
+const EURLEX = c => 'https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:' + c;
+const NORMAS = [
+/* ---------- básica ---------- */
+{id:'lprl', b:'base', c:'Ley 31/1995', n:'Prevención de Riesgos Laborales',
+ f:'Ley 31/1995, de 8 de noviembre, de Prevención de Riesgos Laborales.', u:ELI('l/1995/11/08/31'),
+ nota:'Texto consolidado en el BOE con modificaciones hasta el 9 de abril de 2026.',
+ q:'La ley base de la prevención: derechos y obligaciones de empresa y trabajadores, organización de la prevención, consulta y participación, y responsabilidades.',
+ o:['Base de la evaluación de riesgos y la planificación preventiva de cada contrato.', 'Presencia del recurso preventivo en obra (art. 32 bis).', 'Coordinación con subcontratas y empresas que coinciden en el tajo (art. 24).', 'Derecho del trabajador a parar ante un riesgo grave e inminente (art. 21).'],
+ a:[['Art. 14', 'Derecho a una protección eficaz: el empresario garantiza la seguridad y salud en todos los aspectos del trabajo.'],
+    ['Art. 15', 'Principios de la acción preventiva: evitar los riesgos, evaluar los que no se puedan evitar, combatirlos en su origen y anteponer la protección colectiva a la individual, entre otros.'],
+    ['Art. 16', 'Plan de prevención, evaluación de riesgos y planificación de la actividad preventiva.'],
+    ['Art. 17', 'Equipos de trabajo y equipos de protección individual.'],
+    ['Arts. 18 y 19', 'Información, consulta y formación de los trabajadores: teórica y práctica, dentro de la jornada y sin coste para ellos.'],
+    ['Art. 20', 'Medidas de emergencia: primeros auxilios, lucha contra incendios y evacuación.'],
+    ['Art. 21', 'Riesgo grave e inminente: informar, actuar y derecho a interrumpir la actividad.'],
+    ['Art. 22', 'Vigilancia de la salud.'],
+    ['Art. 23', 'Documentación que debe tener la empresa: plan, evaluación, planificación, controles, vigilancia de la salud y accidentes.'],
+    ['Art. 24', 'Coordinación de actividades empresariales (lo desarrolla el RD 171/2004).'],
+    ['Art. 29', 'Obligaciones de los trabajadores: usar bien máquinas y EPI, avisar de los riesgos y cooperar.'],
+    ['Art. 32 bis', 'Presencia de recursos preventivos: cuándo es obligatoria y quién puede serlo.'],
+    ['Arts. 35 a 38', 'Delegados de prevención y Comité de Seguridad y Salud (empresas o centros con 50 o más trabajadores).']],
+ k:'ley prevencion lprl recurso preventivo evaluacion formacion emergencia riesgo grave inminente comite delegados'},
+{id:'rsp', b:'base', c:'RD 39/1997', n:'Reglamento de los Servicios de Prevención',
+ f:'Real Decreto 39/1997, de 17 de enero, por el que se aprueba el Reglamento de los Servicios de Prevención.', u:ELI('rd/1997/01/17/39'),
+ q:'Cómo se organiza la prevención en la empresa: evaluación de riesgos, planificación, modalidades preventivas, recursos preventivos y niveles de formación.',
+ o:['Contenido y revisión de la evaluación de riesgos.', 'Qué debe llevar la planificación preventiva: medidas, plazos, responsables y medios.', 'Requisitos del recurso preventivo y funciones de nivel básico.'],
+ a:[['Art. 2', 'Plan de prevención de riesgos laborales.'],
+    ['Arts. 3 a 7', 'Evaluación de riesgos: contenido, procedimiento, revisión (art. 6) y documentación (art. 7).'],
+    ['Arts. 8 y 9', 'Planificación de la actividad preventiva: medidas, plazos, responsables y medios.'],
+    ['Arts. 10 a 22', 'Modalidades: el propio empresario, trabajadores designados, servicio de prevención propio o ajeno.'],
+    ['Art. 22 bis', 'Presencia de recursos preventivos: actividades en que es obligatoria y cómo se organiza.'],
+    ['Arts. 34 a 37', 'Funciones y niveles de cualificación: básico, intermedio y superior.'],
+    ['Anexo I', 'Actividades especialmente peligrosas.']],
+ k:'servicios prevencion planificacion evaluacion recurso preventivo nivel basico intermedio superior'},
+{id:'cae', b:'base', c:'RD 171/2004', n:'Coordinación de actividades empresariales (CAE)',
+ f:'Real Decreto 171/2004, de 30 de enero, por el que se desarrolla el artículo 24 de la Ley 31/1995, de 8 de noviembre, de Prevención de Riesgos Laborales, en materia de coordinación de actividades empresariales.', u:ELI('rd/2004/01/30/171'),
+ q:'Qué deben hacer las empresas que coinciden en un mismo centro de trabajo: informarse de sus riesgos, coordinarse y vigilar que las subcontratas cumplen.',
+ o:['Intercambio de información de riesgos con subcontratas y empresas que trabajan en el contrato.', 'Elegir los medios de coordinación: reuniones, instrucciones, recurso preventivo, coordinador…', 'En obras de construcción se aplica junto con el RD 1627/1997.'],
+ a:[['Art. 4', 'Deber de cooperación: información recíproca sobre los riesgos que puedan afectar a los demás.'],
+    ['Art. 7', 'Información que debe dar el empresario titular del centro.'],
+    ['Art. 8', 'Instrucciones del empresario titular.'],
+    ['Art. 10', 'Empresario principal: vigilar que contratas y subcontratas cumplen la normativa preventiva.'],
+    ['Arts. 11 a 14', 'Medios de coordinación y persona encargada de la coordinación.']],
+ k:'cae coordinacion actividades empresariales subcontratas concurrencia'},
+/* ---------- obras y carretera ---------- */
+{id:'rd1627', b:'obra', c:'RD 1627/1997', n:'Obras de construcción',
+ f:'Real Decreto 1627/1997, de 24 de octubre, por el que se establecen disposiciones mínimas de seguridad y de salud en las obras de construcción.', u:ELI('rd/1997/10/24/1627'),
+ q:'Seguridad y salud en obras: estudio y plan de seguridad y salud, coordinador, obligaciones de contratistas, libro de incidencias y condiciones mínimas en obra.',
+ o:['Plan de seguridad y salud del contratista: contenido, aprobación y cambios.', 'Funciones del coordinador de seguridad y salud.', 'Libro de incidencias y paralización de los trabajos.', 'Presencia de recursos preventivos en obra.', 'Condiciones mínimas en el tajo: circulación, caídas, maquinaria, señalización…'],
+ a:[['Art. 4', 'Cuándo es obligatorio el estudio de seguridad y salud y cuándo basta el estudio básico.'],
+    ['Arts. 5 y 6', 'Contenido del estudio y del estudio básico.'],
+    ['Art. 7', 'Plan de seguridad y salud: lo elabora el contratista y lo aprueba el coordinador (o la dirección facultativa).'],
+    ['Arts. 8 y 9', 'Principios generales en la obra y funciones del coordinador durante la ejecución.'],
+    ['Arts. 10 a 12', 'Obligaciones de contratistas, subcontratistas y trabajadores autónomos.'],
+    ['Art. 13', 'Libro de incidencias.'],
+    ['Art. 14', 'Paralización de los trabajos ante riesgo grave e inminente.'],
+    ['Art. 15', 'Información a los trabajadores.'],
+    ['Anexo II', 'Trabajos con riesgos especiales.'],
+    ['Anexo IV', 'Disposiciones mínimas de seguridad y salud en las obras.'],
+    ['Disp. adicional única', 'Presencia de recursos preventivos en obras de construcción.']],
+ k:'obras construccion plan seguridad salud coordinador libro incidencias recurso preventivo estudio basico'},
+{id:'ley32', b:'obra', c:'Ley 32/2006', n:'Subcontratación en la construcción',
+ f:'Ley 32/2006, de 18 de octubre, reguladora de la subcontratación en el Sector de la Construcción.', u:ELI('l/2006/10/18/32'),
+ q:'Limita la cadena de subcontratación en obra y fija los requisitos de las empresas que intervienen.',
+ o:['Comprobar que las subcontratas están en el REA y tienen organización preventiva y formación.', 'Niveles de subcontratación permitidos y límites del trabajador autónomo.', 'Libro de Subcontratación en cada obra.'],
+ a:[['Art. 4', 'Requisitos de contratistas y subcontratistas: organización preventiva, formación en PRL, inscripción en el REA y plantilla indefinida mínima.'],
+    ['Art. 5', 'Régimen de la subcontratación: niveles permitidos y excepciones.'],
+    ['Art. 6', 'Registro de Empresas Acreditadas (REA).'],
+    ['Art. 8', 'Libro de Subcontratación.']],
+ k:'subcontratacion rea libro subcontratacion autonomo niveles'},
+{id:'rd1109', b:'obra', c:'RD 1109/2007', n:'Desarrollo de la Ley de subcontratación',
+ f:'Real Decreto 1109/2007, de 24 de agosto, por el que se desarrolla la Ley 32/2006, de 18 de octubre, reguladora de la subcontratación en el Sector de la Construcción.', u:ELI('rd/2007/08/24/1109'),
+ q:'Desarrolla el Registro de Empresas Acreditadas (REA), el Libro de Subcontratación y la acreditación de la formación preventiva.',
+ o:['Cómo se acredita la inscripción en el REA.', 'Cómo se habilita y se lleva el Libro de Subcontratación.', 'Formación preventiva de los trabajadores, según el convenio del sector.'],
+ a:[['REA', 'Inscripción, validez, renovación y certificados del Registro de Empresas Acreditadas.'],
+    ['Libro de Subcontratación', 'Habilitación por la autoridad laboral, anotaciones y quién puede consultarlo.'],
+    ['Formación', 'Acreditación de la formación en prevención de los trabajadores.']],
+ k:'subcontratacion rea libro formacion'},
+{id:'ic83', b:'obra', c:'Norma 8.3-IC', n:'Señalización de obras fijas en carretera',
+ f:'Orden de 31 de agosto de 1987 sobre señalización, balizamiento, defensa, limpieza y terminación de obras fijas en vías fuera de poblado (aprueba la Instrucción 8.3-IC). BOE-A-1987-21608.', u:'https://www.boe.es/eli/es/o/1987/08/31/(2)',
+ q:'Cómo señalizar, balizar y, en su caso, defender las obras fijas en carreteras fuera de poblado, y cómo limpiar y dejar la zona al terminar.',
+ o:['Elegir el esquema de señalización según la vía, la ocupación y la visibilidad.', 'Colocar la señalización antes de empezar y retirarla al acabar, en el orden correcto.', 'Las láminas de señalización de la app se basan en esta norma.'],
+ a:[['Señalización', 'Señales de peligro, reglamentación y orientación aplicables a las obras.'],
+    ['Balizamiento', 'Elementos que marcan el límite de la zona ocupada: conos, paneles direccionales, balizas luminosas…'],
+    ['Defensas', 'Cuándo y cómo proteger la zona de obra frente a la circulación.'],
+    ['Limpieza y terminación', 'Retirar materiales, señalización y balizamiento al acabar.']],
+ rel:{lam:true}, k:'8.3 ic senalizacion balizamiento obras fijas carretera conos laminas'},
+{id:'rd485', b:'obra', c:'RD 485/1997', n:'Señalización de seguridad y salud',
+ f:'Real Decreto 485/1997, de 14 de abril, sobre disposiciones mínimas en materia de señalización de seguridad y salud en el trabajo.', u:ELI('rd/1997/04/14/485'),
+ q:'Cuándo y cómo señalizar riesgos, prohibiciones, obligaciones, salvamento y equipos contra incendios en el trabajo.',
+ o:['Señalización de naves, almacenes, talleres y oficinas del contrato.', 'Colores de seguridad y franjas amarillas y negras (o rojas y blancas) en obstáculos y zonas peligrosas.', 'Señales gestuales para guiar maniobras de maquinaria y camiones.'],
+ a:[['Art. 4', 'Criterios para usar la señalización.'],
+    ['Anexo II', 'Colores de seguridad.'],
+    ['Anexo III', 'Señales en forma de panel.'],
+    ['Anexo VI', 'Señales gestuales.'],
+    ['Anexo VII', 'Otras señalizaciones: obstáculos, lugares peligrosos y vías de circulación.']],
+ k:'senalizacion seguridad colores paneles gestuales'},
+/* ---------- lugares, equipos, máquinas y EPI ---------- */
+{id:'rd486', b:'equi', c:'RD 486/1997', n:'Lugares de trabajo',
+ f:'Real Decreto 486/1997, de 14 de abril, por el que se establecen las disposiciones mínimas de seguridad y salud en los lugares de trabajo.', u:ELI('rd/1997/04/14/486'),
+ q:'Condiciones mínimas de los lugares de trabajo: espacios, suelos, escaleras, temperatura, iluminación, aseos, locales de descanso y primeros auxilios.',
+ o:['Condiciones de naves, oficinas, almacenes y casetas del contrato.', 'Trabajo al aire libre con calor: medidas frente a fenómenos meteorológicos adversos, que pueden llegar a prohibir ciertas tareas en las horas de alerta naranja o roja (lo añadió el RDL 4/2023).', 'Material de primeros auxilios (botiquín).'],
+ a:[['Anexo I', 'Condiciones generales de seguridad: espacios, suelos, aberturas, escaleras, vías de circulación y evacuación.'],
+    ['Anexo III', 'Condiciones ambientales, incluidas las medidas para trabajos al aire libre frente a temperaturas extremas.'],
+    ['Anexo IV', 'Iluminación.'],
+    ['Anexo V', 'Servicios higiénicos y locales de descanso.'],
+    ['Anexo VI', 'Material y locales de primeros auxilios.']],
+ k:'lugares trabajo calor golpe calor temperatura alerta aemet botiquin primeros auxilios iluminacion'},
+{id:'rd1215', b:'equi', c:'RD 1215/1997', n:'Equipos de trabajo',
+ f:'Real Decreto 1215/1997, de 18 de julio, por el que se establecen las disposiciones mínimas de seguridad y salud para la utilización por los trabajadores de los equipos de trabajo (incluye los trabajos temporales en altura añadidos por el RD 2177/2004).', u:ELI('rd/1997/07/18/1215'),
+ q:'Cómo deben ser, usarse, mantenerse y comprobarse los equipos de trabajo; incluye escaleras de mano, andamios y trabajos con cuerdas.',
+ o:['Comprobaciones periódicas de equipos (camión pluma, plataformas, maquinaria) por personal competente y documentadas.', 'Los camiones grúa (grúas hidráulicas articuladas, el «camión pluma») no están en la ITC AEM-4: sus revisiones van por este real decreto y las instrucciones del fabricante.', 'Escaleras de mano, andamios y trabajos en altura.'],
+ a:[['Art. 3', 'Obligaciones generales del empresario: equipos adecuados y mantenidos.'],
+    ['Art. 4', 'Comprobación de los equipos: inicial, periódica y tras sucesos excepcionales, por personal competente y documentada.'],
+    ['Art. 5', 'Información y formación de los trabajadores.'],
+    ['Anexo I', 'Requisitos mínimos de los equipos.'],
+    ['Anexo II', 'Condiciones de utilización; apartado 4: trabajos temporales en altura (escaleras de mano, andamios y cuerdas).']],
+ rel:{rev:['elev', 'otros']}, k:'equipos trabajo maquinas camion pluma grua revision comprobacion escaleras andamios altura 2177'},
+{id:'rd773', b:'equi', c:'RD 773/1997', n:'Uso de equipos de protección individual',
+ f:'Real Decreto 773/1997, de 30 de mayo, sobre disposiciones mínimas de seguridad y salud relativas a la utilización por los trabajadores de equipos de protección individual.', u:ELI('rd/1997/05/30/773'),
+ q:'Obligaciones de empresa y trabajadores en la elección, entrega, uso y mantenimiento de los EPI.',
+ o:['Fijar en la evaluación qué puestos necesitan EPI y cuáles.', 'Entregarlos gratis, registrar la entrega, informar y formar.', 'Los EPI deben llevar marcado CE según el Reglamento (UE) 2016/425.'],
+ a:[['Art. 3', 'Obligaciones del empresario.'],
+    ['Art. 4', 'Cuándo usar EPI: si los riesgos no se pueden evitar o limitar con protección colectiva u organización del trabajo.'],
+    ['Art. 7', 'Utilización y mantenimiento.'],
+    ['Art. 8', 'Información y formación.'],
+    ['Art. 10', 'Obligaciones de los trabajadores.'],
+    ['Anexos', 'Listas indicativas de EPI y de actividades que los requieren.']],
+ k:'epi equipos proteccion individual entrega casco chaleco guantes'},
+{id:'ue2016', b:'equi', c:'Reglamento (UE) 2016/425', n:'Comercialización de EPI',
+ f:'Reglamento (UE) 2016/425 del Parlamento Europeo y del Consejo, de 9 de marzo de 2016, relativo a los equipos de protección individual.', u:EURLEX('32016R0425'),
+ q:'Requisitos que deben cumplir los EPI para venderse en la UE: categorías, marcado CE, declaración UE de conformidad e instrucciones.',
+ o:['Al comprar EPI: marcado CE, folleto en castellano y declaración UE de conformidad (o dónde consultarla).', 'Categoría III: EPI frente a riesgos muy graves, como caídas de altura o sustancias peligrosas.'],
+ a:[['Art. 8', 'Obligaciones de los fabricantes.'],
+    ['Art. 15', 'Declaración UE de conformidad.'],
+    ['Arts. 16 y 17', 'Marcado CE.'],
+    ['Anexo I', 'Categorías de riesgo de los EPI.'],
+    ['Anexo II', 'Requisitos esenciales de salud y seguridad.']],
+ k:'epi marcado ce categoria iii comercializacion'},
+{id:'rd1644', b:'equi', c:'RD 1644/2008', n:'Máquinas (comercialización)',
+ f:'Real Decreto 1644/2008, de 10 de octubre, por el que se establecen las normas para la comercialización y puesta en servicio de las máquinas.', u:ELI('rd/2008/10/10/1644'), est:'cambia',
+ nota:'Desde el 20 de enero de 2027 las máquinas nuevas pasan a regirse por el Reglamento (UE) 2023/1230.',
+ q:'Requisitos de las máquinas nuevas: marcado CE, declaración CE de conformidad y manual de instrucciones.',
+ o:['Al comprar o alquilar una máquina: marcado CE, declaración de conformidad y manual en castellano.'],
+ a:[['Art. 5', 'Obligaciones antes de comercializar o poner en servicio una máquina.'],
+    ['Anexo I', 'Requisitos esenciales de seguridad y de salud.'],
+    ['Anexo II', 'Declaración CE de conformidad.'],
+    ['Anexo III', 'Marcado CE.']],
+ k:'maquinas marcado ce declaracion conformidad manual'},
+{id:'ue2023', b:'equi', c:'Reglamento (UE) 2023/1230', n:'Nuevo reglamento de máquinas', est:'futuro',
+ f:'Reglamento (UE) 2023/1230 del Parlamento Europeo y del Consejo, de 14 de junio de 2023, relativo a las máquinas.', u:EURLEX('32023R1230'),
+ nota:'Se aplica desde el 20 de enero de 2027 y sustituye a la Directiva 2006/42/CE (RD 1644/2008).',
+ q:'Nuevas reglas para comercializar máquinas en la UE, con requisitos para máquinas con software o funciones autónomas y la posibilidad de dar las instrucciones en formato digital.',
+ o:['Para las máquinas que se compren a partir del 20/01/2027.', 'Si las instrucciones vienen en digital, el comprador puede pedirlas en papel sin coste.'],
+ a:[['Aplicación', 'Desde el 20 de enero de 2027; hasta entonces sigue el RD 1644/2008.'],
+    ['Instrucciones', 'Pueden darse en formato digital; se pueden pedir en papel sin coste.'],
+    ['Anexo III', 'Requisitos esenciales de salud y seguridad.']],
+ k:'maquinas reglamento 2023 2027 marcado ce'},
+{id:'aem4', b:'equi', c:'RD 837/2003', n:'Grúas móviles autopropulsadas (ITC AEM-4)',
+ f:'Real Decreto 837/2003, de 27 de junio, por el que se aprueba el nuevo texto modificado y refundido de la instrucción técnica complementaria «MIE-AEM-4» del Reglamento de aparatos de elevación y manutención, referente a grúas móviles autopropulsadas.', u:ELI('rd/2003/06/27/837'),
+ q:'Grúas móviles autopropulsadas: puesta en servicio, mantenimiento, inspecciones periódicas por organismo de control y carné de operador.',
+ o:['Al contratar una grúa móvil: operador con carné y grúa con sus inspecciones al día.', 'No se aplica a los camiones grúa (grúas hidráulicas articuladas, el «camión pluma»): esos van por el RD 1215/1997 y las instrucciones del fabricante.'],
+ a:[['ITC AEM-4', 'Ámbito, puesta en servicio, mantenimiento e inspecciones periódicas de la grúa.'],
+    ['Carné de operador', 'Necesario para manejar grúas móviles autopropulsadas (categorías A y B).']],
+ rel:{rev:['elev']}, k:'grua movil autopropulsada aem 4 carne operador camion grua'},
+/* ---------- riesgos específicos ---------- */
+{id:'rd614', b:'ries', c:'RD 614/2001', n:'Riesgo eléctrico',
+ f:'Real Decreto 614/2001, de 8 de junio, sobre disposiciones mínimas para la protección de la salud y seguridad de los trabajadores frente al riesgo eléctrico.', u:ELI('rd/2001/06/08/614'),
+ q:'Cómo trabajar sin tensión, en tensión o cerca de instalaciones eléctricas, y quién puede hacerlo (trabajador autorizado o cualificado).',
+ o:['Trabajos cerca de líneas aéreas (camión pluma, plataformas): distancias de seguridad.', 'Las cinco reglas de oro para dejar una instalación sin tensión.', 'Trabajos en cuadros, alumbrado y semáforos.'],
+ a:[['Art. 4', 'Técnicas y procedimientos de trabajo.'],
+    ['Anexo I', 'Distancias límite de las zonas de trabajo.'],
+    ['Anexo II', 'Trabajos sin tensión: las cinco reglas de oro.'],
+    ['Anexo III', 'Trabajos en tensión.'],
+    ['Anexo V', 'Trabajos en proximidad.']],
+ k:'electrico tension lineas aereas cinco reglas oro autorizado cualificado'},
+{id:'rd374', b:'ries', c:'RD 374/2001', n:'Agentes químicos',
+ f:'Real Decreto 374/2001, de 6 de abril, sobre la protección de la salud y seguridad de los trabajadores contra los riesgos relacionados con los agentes químicos durante el trabajo.', u:ELI('rd/2001/04/06/374'),
+ q:'Protección frente a los agentes químicos: evaluación, medidas, valores límite y vigilancia de la salud.',
+ o:['Pinturas de marcas viales, betunes, emulsiones, disolventes, combustibles y herbicidas.', 'Tener a mano las fichas de datos de seguridad de cada producto.', 'Valores límite de referencia: «Límites de exposición profesional» del INSST.'],
+ a:[['Art. 3', 'Evaluación de los riesgos.'],
+    ['Art. 4', 'Principios generales de prevención.'],
+    ['Art. 5', 'Medidas específicas de prevención y protección.'],
+    ['Art. 6', 'Vigilancia de la salud.'],
+    ['Art. 9', 'Información y formación de los trabajadores.']],
+ k:'quimicos productos pintura betun disolvente herbicida ficha datos seguridad vla'},
+{id:'rd665', b:'ries', c:'RD 665/1997', n:'Agentes cancerígenos',
+ f:'Real Decreto 665/1997, de 12 de mayo, sobre la protección de los trabajadores contra los riesgos relacionados con la exposición a agentes cancerígenos durante el trabajo.', u:ELI('rd/1997/05/12/665'),
+ q:'Protección frente a cancerígenos y mutágenos: sustitución, reducción de la exposición, registro de expuestos y vigilancia de la salud.',
+ o:['Polvo de sílice cristalina respirable al cortar, fresar o perforar hormigón y piedra: está incluido como proceso cancerígeno.', 'Humos de motores diésel en túneles y espacios cerrados.'],
+ a:[['Art. 4', 'Sustitución de los agentes cancerígenos.'],
+    ['Art. 5', 'Prevención y reducción de la exposición.'],
+    ['Art. 8', 'Vigilancia de la salud.'],
+    ['Art. 9', 'Documentación: lista de trabajadores expuestos, que se conserva 40 años.'],
+    ['Anexo I', 'Procesos considerados cancerígenos (incluye la sílice cristalina respirable y las emisiones de motores diésel).'],
+    ['Anexo III', 'Valores límite de exposición.']],
+ k:'cancerigenos silice cristalina polvo corte hormigon diesel tunel'},
+{id:'amianto', b:'ries', c:'RD 847/2026', n:'Amianto', est:'nueva',
+ f:'Real Decreto 847/2026, de 21 de octubre, por el que se establecen las disposiciones mínimas de seguridad y salud aplicables a los trabajos con riesgo de exposición al amianto.', u:ELI('rd/2026/10/21/847'),
+ nota:'En vigor desde el 24 de octubre de 2026. Sustituye al RD 396/2006.',
+ q:'Trabajos con riesgo de exposición al amianto: valor límite, identificación previa, registro de empresas (RERA), plan de trabajo, formación y protección.',
+ o:['Antes de demoler, mantener o rehabilitar edificios o elementos anteriores a la prohibición hay que identificar si tienen amianto (cubiertas y tuberías de fibrocemento, casetas…).', 'Solo pueden retirarlo empresas inscritas en el RERA y con plan de trabajo aprobado.', 'El valor límite es diez veces menor que antes.'],
+ a:[['Valor límite', '0,01 fibras/cm³ como media ponderada en 8 horas.'],
+    ['Identificación previa', 'Obligatoria antes de demoliciones, mantenimiento o rehabilitación; si no hay información, la hace un operador cualificado.'],
+    ['RERA', 'Inscripción antes de empezar la actividad, válida tres años.'],
+    ['Plan de trabajo', 'Antes de cada trabajo; la autoridad laboral resuelve en 45 días (si no contesta, se entiende aprobado).'],
+    ['Comunicación', 'Del inicio de los trabajos, al menos siete días hábiles antes, salvo los no programables.'],
+    ['Protección respiratoria', 'Pruebas de ajuste y uso no superior a cuatro horas al día.'],
+    ['Aseo', 'Diez minutos antes de cada comida y diez antes de salir, dentro de la jornada.']],
+ k:'amianto fibrocemento uralita rera plan trabajo 396'},
+{id:'rd286', b:'ries', c:'RD 286/2006', n:'Ruido',
+ f:'Real Decreto 286/2006, de 10 de marzo, sobre la protección de la salud y la seguridad de los trabajadores contra los riesgos relacionados con la exposición al ruido.', u:ELI('rd/2006/03/10/286'),
+ q:'Protección frente al ruido: valores que obligan a actuar, valores límite, mediciones, protectores auditivos y vigilancia de la salud.',
+ o:['Desbrozadoras, martillos, cortadoras, fresadoras y maquinaria de obra.', 'Desde 80 dB(A): informar, formar y poner protectores a disposición. Desde 85 dB(A): uso obligatorio y señalizar.'],
+ a:[['Art. 5', 'Valores: inferior de acción 80 dB(A) y pico 135 dB(C); superior de acción 85 dB(A) y pico 137 dB(C); límite 87 dB(A) y pico 140 dB(C).'],
+    ['Art. 6', 'Evaluación y medición.'],
+    ['Art. 11', 'Vigilancia de la salud.']],
+ k:'ruido decibelios protectores auditivos desbrozadora martillo'},
+{id:'rd1311', b:'ries', c:'RD 1311/2005', n:'Vibraciones mecánicas',
+ f:'Real Decreto 1311/2005, de 4 de noviembre, sobre la protección de la salud y la seguridad de los trabajadores frente a los riesgos derivados o que puedan derivarse de la exposición a vibraciones mecánicas.', u:ELI('rd/2005/11/04/1311'),
+ q:'Protección frente a las vibraciones mano-brazo y de cuerpo entero.',
+ o:['Martillos, compactadoras y desbrozadoras (mano-brazo).', 'Conducción de maquinaria y camiones (cuerpo entero).'],
+ a:[['Art. 3', 'Para 8 horas: mano-brazo, acción 2,5 m/s² y límite 5 m/s²; cuerpo entero, acción 0,5 m/s² y límite 1,15 m/s².'],
+    ['Art. 4', 'Evaluación y medición.'],
+    ['Art. 5', 'Medidas para evitar o reducir la exposición.'],
+    ['Art. 8', 'Vigilancia de la salud.']],
+ k:'vibraciones mano brazo cuerpo entero compactadora martillo'},
+{id:'rd487', b:'ries', c:'RD 487/1997', n:'Manipulación manual de cargas',
+ f:'Real Decreto 487/1997, de 14 de abril, sobre disposiciones mínimas de seguridad y salud relativas a la manipulación manual de cargas que entrañe riesgos, en particular dorsolumbares, para los trabajadores.', u:ELI('rd/1997/04/14/487'),
+ q:'Evitar o reducir los riesgos, sobre todo de espalda, al mover cargas a mano.',
+ o:['Carga y descarga de señales, conos, sacos y material.', 'La Guía técnica del INSST recomienda no pasar de 25 kg en general y de 15 kg para proteger a la mayoría de la población.'],
+ a:[['Art. 3', 'Obligaciones generales: usar medios mecánicos y organizar el trabajo para evitar la manipulación manual.'],
+    ['Art. 4', 'Formación e información.'],
+    ['Anexo', 'Factores de riesgo: la carga, el esfuerzo, el entorno y la tarea.']],
+ k:'cargas espalda dorsolumbar peso kg'},
+{id:'rd488', b:'ries', c:'RD 488/1997', n:'Pantallas de visualización',
+ f:'Real Decreto 488/1997, de 14 de abril, sobre disposiciones mínimas de seguridad y salud relativas al trabajo con equipos que incluyen pantallas de visualización.', u:ELI('rd/1997/04/14/488'),
+ q:'Condiciones de los puestos con ordenador: equipo, entorno, pausas y vigilancia de la salud.',
+ o:['Puestos de oficina del contrato.'],
+ a:[['Art. 3', 'Obligaciones generales y evaluación del puesto.'],
+    ['Art. 4', 'Vigilancia de la salud, incluida la vista.'],
+    ['Anexo', 'Pantalla, teclado, mesa, silla, iluminación y programas.']],
+ k:'pantallas ordenador oficina pvd'},
+{id:'rd664', b:'ries', c:'RD 664/1997', n:'Agentes biológicos',
+ f:'Real Decreto 664/1997, de 12 de mayo, sobre la protección de los trabajadores contra los riesgos relacionados con la exposición a agentes biológicos durante el trabajo.', u:ELI('rd/1997/05/12/664'),
+ q:'Protección frente a agentes biológicos: evaluación, medidas higiénicas, vacunación y vigilancia de la salud.',
+ o:['Retirada de animales muertos de la calzada, limpieza de cunetas y obras de drenaje, picaduras y garrapatas.', 'Ofrecer vacunación cuando exista una vacuna eficaz (por ejemplo, tétanos).'],
+ a:[['Art. 4', 'Identificación y evaluación de riesgos.'],
+    ['Art. 7', 'Medidas higiénicas.'],
+    ['Art. 8', 'Vigilancia de la salud y vacunación.'],
+    ['Anexo II', 'Clasificación de los agentes biológicos.']],
+ k:'biologicos animales muertos garrapatas vacuna tetanos'},
+/* ---------- instalaciones ---------- */
+{id:'ripci', b:'inst', c:'RD 513/2017', n:'RIPCI · protección contra incendios',
+ f:'Real Decreto 513/2017, de 22 de mayo, por el que se aprueba el Reglamento de instalaciones de protección contra incendios.', u:ELI('rd/2017/05/22/513'),
+ q:'Diseño, instalación, mantenimiento e inspección de los equipos contra incendios: extintores, BIE, detección, alarma…',
+ o:['Programa de mantenimiento de extintores y BIE de naves y oficinas.', 'Las actas de la empresa mantenedora son el certificado que subes en Revisiones.'],
+ a:[['Anexo II', 'Mantenimiento mínimo de las instalaciones.'],
+    ['Extintores', 'Cada 3 meses, revisión por el titular o el mantenedor; cada año, por empresa mantenedora; cada 5 años, retimbrado (prueba de presión); vida útil máxima de 20 años desde su fabricación.'],
+    ['Inspecciones', 'Inspecciones periódicas por organismo de control en los casos que fija el reglamento.']],
+ rel:{rev:['pci']}, k:'ripci incendios extintores bie mantenimiento retimbrado'},
+{id:'rebt', b:'inst', c:'RD 842/2002', n:'REBT · baja tensión y puesta a tierra',
+ f:'Real Decreto 842/2002, de 2 de agosto, por el que se aprueba el Reglamento electrotécnico para baja tensión.', u:ELI('rd/2002/08/02/842'),
+ q:'Reglamento Electrotécnico para Baja Tensión y sus instrucciones (ITC-BT): diseño, ejecución, mantenimiento e inspecciones de las instalaciones eléctricas.',
+ o:['Revisión anual de la puesta a tierra, en la época en que el terreno esté más seco.', 'Inspección periódica cada 5 años por organismo de control en las instalaciones que la exigen.', 'Instalaciones provisionales de obra.'],
+ a:[['ITC-BT-05', 'Verificaciones e inspecciones: iniciales y periódicas (cada 5 años en las instalaciones que lo exigen).'],
+    ['ITC-BT-18', 'Instalaciones de puesta a tierra; revisión al menos anual por personal técnicamente competente.'],
+    ['ITC-BT-33', 'Instalaciones provisionales y temporales de obras.']],
+ rel:{rev:['bt', 'tierra']}, k:'rebt baja tension puesta tierra electrica inspeccion oca'},
+{id:'rite', b:'inst', c:'RD 1027/2007', n:'RITE · instalaciones térmicas',
+ f:'Real Decreto 1027/2007, de 20 de julio, por el que se aprueba el Reglamento de Instalaciones Térmicas en los Edificios.', u:ELI('rd/2007/07/20/1027'),
+ q:'Calefacción, climatización y agua caliente sanitaria de los edificios: uso, mantenimiento e inspecciones.',
+ o:['Mantenimiento del aire acondicionado y la calefacción de oficinas y naves.', 'El mantenimiento lo hace una empresa habilitada y queda registrado.'],
+ a:[['IT 3', 'Mantenimiento y uso: programa de mantenimiento preventivo y periodicidades según la potencia.'],
+    ['IT 4', 'Inspección periódica de eficiencia energética.']],
+ rel:{rev:['aire']}, k:'rite aire acondicionado climatizacion calefaccion termicas'},
+{id:'legio', b:'inst', c:'RD 487/2022', n:'Legionela',
+ f:'Real Decreto 487/2022, de 21 de junio, por el que se establecen los requisitos sanitarios para la prevención y el control de la legionelosis.', u:ELI('rd/2022/06/21/487'),
+ q:'Requisitos sanitarios para prevenir y controlar la legionela en las instalaciones de riesgo: agua caliente sanitaria, torres de refrigeración, etc.',
+ o:['Plan de Prevención y Control de Legionella (PPCL) de las instalaciones, o el Plan Sanitario frente a Legionella (PSL).', 'Revisiones, limpieza, desinfección y toma de muestras según el plan.', 'Agua caliente sanitaria: acumulador a 60 °C como mínimo y 50 °C en los puntos terminales.'],
+ a:[['Ámbito', 'Instalaciones clasificadas según su probabilidad de proliferación y dispersión de la bacteria.'],
+    ['PSL y PPCL', 'Plan Sanitario frente a Legionella o Plan de Prevención y Control de cada instalación.'],
+    ['Anexos', 'Mantenimiento, limpieza, desinfección y muestreo por tipo de instalación.']],
+ rel:{rev:['legio']}, k:'legionela legionella ppcl psl agua caliente'},
+{id:'rd2060', b:'inst', c:'RD 2060/2008', n:'Equipos a presión',
+ f:'Real Decreto 2060/2008, de 12 de diciembre, por el que se aprueba el Reglamento de equipos a presión y sus instrucciones técnicas complementarias.', u:ELI('rd/2008/12/12/2060'),
+ q:'Instalación, puesta en servicio, inspecciones periódicas y reparación de equipos a presión (compresores, calderines, depósitos de aire).',
+ o:['Compresores y calderines de talleres y maquinaria.', 'Placa e inspecciones periódicas según la categoría del equipo.'],
+ a:[['Inspecciones periódicas', 'Niveles, plazos y quién las hace según el tipo y la categoría del equipo.']],
+ rel:{rev:['otros']}, k:'presion compresor calderin'},
+/* ---------- accidentes, enfermedades y sanciones ---------- */
+{id:'delta', b:'acc', c:'Orden TAS/2926/2002', n:'Partes de accidente (Delt@)',
+ f:'Orden TAS/2926/2002, de 19 de noviembre, por la que se establecen nuevos modelos para la notificación de los accidentes de trabajo y se posibilita su transmisión por procedimiento electrónico.', u:ELI('o/2002/11/19/tas2926'),
+ q:'Modelos y procedimiento electrónico (sistema Delt@) para notificar los accidentes de trabajo.',
+ o:['Se tramita en Delt@ por la empresa o quien la represente.'],
+ a:[['Con baja', 'Parte de accidente en 5 días hábiles desde el accidente o la baja médica.'],
+    ['Sin baja', 'Relación mensual, en los 5 primeros días hábiles del mes siguiente.'],
+    ['Graves y mortales', 'Accidentes graves, muy graves, mortales o que afecten a más de cuatro trabajadores: comunicarlos además a la autoridad laboral en 24 horas.']],
+ k:'accidente parte delta notificacion grave mortal 24 horas'},
+{id:'ep', b:'acc', c:'RD 1299/2006', n:'Enfermedades profesionales',
+ f:'Real Decreto 1299/2006, de 10 de noviembre, por el que se aprueba el cuadro de enfermedades profesionales en el sistema de la Seguridad Social y se establecen criterios para su notificación y registro.', u:ELI('rd/2006/11/10/1299'),
+ q:'Cuadro de enfermedades profesionales de la Seguridad Social y criterios para notificarlas.',
+ o:['Saber qué patologías por ruido, vibraciones, posturas o agentes químicos se reconocen como enfermedad profesional.', 'La comunicación la hace la entidad gestora (mutua) por CEPROSS.'],
+ a:[['Anexo 1', 'Cuadro de enfermedades profesionales (6 grupos).'],
+    ['Anexo 2', 'Lista complementaria de enfermedades cuyo origen profesional se sospecha.']],
+ k:'enfermedad profesional cuadro cepross'},
+{id:'lisos', b:'acc', c:'RDLeg 5/2000', n:'LISOS · infracciones y sanciones',
+ f:'Real Decreto Legislativo 5/2000, de 4 de agosto, por el que se aprueba el texto refundido de la Ley sobre Infracciones y Sanciones en el Orden Social.', u:ELI('rdlg/2000/08/04/5'),
+ q:'Infracciones y sanciones en el orden social; en PRL, las leves, graves y muy graves, y cómo se gradúan.',
+ o:['Saber qué incumplimientos son graves o muy graves (por ejemplo, no evaluar riesgos, no formar o no coordinar).', 'Responsabilidad solidaria del empresario principal con contratas y subcontratas.'],
+ a:[['Arts. 11 a 13', 'Infracciones leves, graves y muy graves en prevención de riesgos laborales.'],
+    ['Art. 39', 'Criterios para graduar las sanciones.'],
+    ['Art. 40', 'Cuantía de las sanciones.'],
+    ['Art. 42', 'Responsabilidades empresariales, incluida la solidaria del empresario principal.']],
+ k:'lisos infracciones sanciones multas inspeccion trabajo'},
+/* ---------- en tramitación ---------- */
+{id:'reforma', b:'tram', c:'Reforma de la Ley 31/1995', n:'Reforma de la Ley de Prevención', est:'tram',
+ f:'Anteproyecto de ley aprobado por el Consejo de Ministros el 28 de abril de 2026. Modificaría la Ley 31/1995, el Reglamento de los Servicios de Prevención y el Estatuto de los Trabajadores.', u:'https://www.legaltoday.com/actualidad-juridica/noticias-de-derecho/el-gobierno-aprueba-la-reforma-de-la-ley-de-riesgos-laborales-para-que-nadie-enferme-ni-muera-en-el-trabajo-2026-04-28/', ul:'Leer la noticia',
+ nota:'No está en vigor: sigue su tramitación. Se actualizará cuando se publique en el BOE.',
+ q:'Cambios previstos en la ley de prevención: riesgos psicosociales y climáticos, acoso, delegados de prevención y retorno al trabajo.',
+ o:['La evaluación de riesgos tendría que incluir riesgos psicosociales y climáticos, la perspectiva de género y la edad, y hacerse con visitas presenciales.', 'Más protección frente al acoso y la violencia, incluido el ciberacoso.', 'Delegados de prevención con un 20 % más de crédito horario y formación básica.', 'Procedimientos de vuelta al trabajo tras ausencias largas por motivos de salud.'],
+ a:[['Estado', 'Anteproyecto aprobado el 28/04/2026; tiene que pasar por las Cortes.']],
+ k:'reforma ley prevencion psicosocial clima acoso delegados'}
+];
+/* casilla de Revisiones → normas que la regulan */
+const NORMA_REV_MAP = {pci:['ripci'], tierra:['rebt'], bt:['rebt'], aire:['rite'], legio:['legio'], elev:['rd1215', 'aem4'], otros:['rd1215']};
+
+const BL = Object.fromEntries(NORMA_BLOQUES);
+const POR_ID = new Map(NORMAS.map(n => [n.id, n]));
+let filtro = '', busca = '', ficha = null;
+const favs = () => { try { const a = JSON.parse(lsGet('norma-fav') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } };
+const setFavs = a => lsSet('norma-fav', JSON.stringify(a));
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const IDX = new Map(NORMAS.map(n => [n.id, norm([n.c, n.n, n.f, n.q, n.k, (n.o || []).join(' '), (n.a || []).map(x => x.join(' ')).join(' ')].join(' '))]));
+const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg>';
+const EXT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+function pill(n) {
+  if (n.est === 'nueva') return '<span class="nm-pill nueva">Nueva</span>';
+  if (n.est === 'tram') return '<span class="nm-pill tram">En tramitación</span>';
+  if (n.est === 'futuro') return '<span class="nm-pill fut">Desde 20/01/2027</span>';
+  if (n.est === 'cambia') return '<span class="nm-pill fut">Cambia en 2027</span>';
+  return '';
+}
+function encontrar() {
+  const f = favs(), q = norm(busca).split(/\s+/).filter(Boolean);
+  return NORMAS.filter(n => (filtro === 'fav' ? f.includes(n.id) : !filtro || n.b === filtro) && q.every(w => IDX.get(n.id).includes(w)));
+}
+function fila(n) {
+  const fav = favs().includes(n.id);
+  return `<div class="nm-item"><button type="button" class="nm-row" data-ver="${n.id}"><span class="nm-c">${esc(n.c)}</span><b>${esc(n.n)}</b><span class="nm-q">${esc(n.q)}</span>${pill(n)}</button><button type="button" class="nm-star" data-fav="${n.id}" aria-pressed="${fav}" aria-label="${fav ? 'Quitar de favoritas' : 'Añadir a favoritas'}: ${esc(n.c)}">${STAR}</button></div>`;
+}
+function resultados() {
+  const l = encontrar();
+  if (!l.length) return filtro === 'fav' && !busca ? '<div class="empty"><b>Aún no tienes favoritas</b><span>Pulsa la estrella de una norma para tenerla aquí a mano.</span></div>' : `<div class="empty"><b>Nada con «${esc(busca)}»</b><span>Prueba con otra palabra: «andamio», «extintores», «amianto», «recurso preventivo»…</span></div>`;
+  if (busca || filtro) return `<p class="nm-n">${plural(l.length, 'norma', 'normas')}</p><div class="nm-list">${l.map(fila).join('')}</div>`;
+  return NORMA_BLOQUES.map(([b, t]) => { const g = l.filter(n => n.b === b); return g.length ? `<h3 class="nm-gh">${esc(t)}<i>${g.length}</i></h3><div class="nm-list">${g.map(fila).join('')}</div>` : ''; }).join('');
+}
+function renderMain() {
+  const M = $('#nm-main'); if (!M) return;
+  const nf = favs().length;
+  M.innerHTML = `<section class="pl-hero nm-hero">
+      <p class="pl-eb">Consulta</p>
+      <h2>Normativa PRL</h2>
+      <p class="pl-ctr">${NORMAS.length} normas · revisadas con el BOE el ${esc(NORMA_REV)}</p>
+    </section>
+    <div class="nm-buscar"><label for="nm-q" class="vh">Buscar en la normativa</label><input id="nm-q" type="search" placeholder="Buscar: andamio, extintores, recurso preventivo…" value="${esc(busca)}" autocomplete="off" enterkeyhint="search"></div>
+    <div class="chips nm-filtros" role="group" aria-label="Filtrar normas">
+      <button type="button" class="chip" data-filtro="" aria-pressed="${!filtro}">Todas</button>
+      <button type="button" class="chip" data-filtro="fav" aria-pressed="${filtro === 'fav'}">★ Favoritas${nf ? ` (${nf})` : ''}</button>
+      ${NORMA_BLOQUES.map(([b, t]) => `<button type="button" class="chip" data-filtro="${b}" aria-pressed="${filtro === b}">${esc(t)}</button>`).join('')}
+    </div>
+    <div id="nm-res">${resultados()}</div>
+    <p class="help nm-aviso">Resúmenes orientativos para consultar en obra. Lo que vale es el texto publicado en el BOE: cada ficha tiene el enlace.</p>`;
+  vista('main');
+}
+function renderFicha(id) {
+  const n = POR_ID.get(id), F = $('#nm-ficha'); if (!n || !F) return;
+  const fav = favs().includes(n.id);
+  const rel = [];
+  if (n.rel && n.rel.rev && window.REV_API) rel.push('<button type="button" class="btn" data-nma="rev">Ver mis revisiones</button>');
+  if (n.rel && n.rel.lam) rel.push('<button type="button" class="btn" data-nma="lam">Ver láminas de señalización</button>');
+  const eur = /eur-lex/.test(n.u);
+  F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-nma="volver">‹ Normativa</button><button type="button" class="nm-star big" data-fav="${n.id}" aria-pressed="${fav}" aria-label="${fav ? 'Quitar de favoritas' : 'Añadir a favoritas'}">${STAR}</button></div>
+    <section class="nm-head">
+      <p class="nm-c">${esc(n.c)} · ${esc(BL[n.b])}</p>
+      <h2>${esc(n.n)}</h2>
+      ${pill(n)}
+      <p class="nm-f">${esc(n.f)}</p>
+      ${n.nota ? `<p class="nm-nota">${esc(n.nota)}</p>` : ''}
+    </section>
+    <section class="block nm-sec"><div class="bb"><h3>Qué regula</h3><p>${esc(n.q)}</p></div></section>
+    ${n.o && n.o.length ? `<section class="block nm-sec"><div class="bb"><h3>Para qué te sirve en obra</h3><ul>${n.o.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div></section>` : ''}
+    ${n.a && n.a.length ? `<section class="block nm-sec"><div class="bb"><h3>Lo más importante</h3><dl class="nm-art">${n.a.map(([r, t]) => `<div><dt>${esc(r)}</dt><dd>${esc(t)}</dd></div>`).join('')}</dl></div></section>` : ''}
+    <div class="nm-acts">
+      <a class="btn primary nm-boe" href="${esc(n.u)}" target="_blank" rel="noopener">${EXT}${esc(n.ul || (eur ? 'Abrir el texto en EUR-Lex' : 'Abrir el texto consolidado en el BOE'))}</a>
+      ${rel.join('')}
+    </div>
+    <p class="help nm-aviso">Necesita conexión para abrir el ${eur ? 'texto oficial' : 'BOE'}. El resumen de esta ficha se puede consultar sin cobertura y es orientativo: lo que vale es el texto oficial.</p>`;
+  vista('ficha'); window.scrollTo({top:0});
+}
+function vista(q) { const m = $('#nm-main'), f = $('#nm-ficha'); if (m) m.hidden = q !== 'main'; if (f) f.hidden = q !== 'ficha'; }
+function toggleFav(id) {
+  const a = favs(), i = a.indexOf(id); if (i >= 0) a.splice(i, 1); else a.push(id); setFavs(a);
+  document.querySelectorAll(`[data-fav="${id}"]`).forEach(b => { b.setAttribute('aria-pressed', i < 0); b.setAttribute('aria-label', (i < 0 ? 'Quitar de favoritas' : 'Añadir a favoritas') + (b.classList.contains('big') ? '' : ': ' + POR_ID.get(id).c)); });
+  const fb = document.querySelector('[data-filtro="fav"]'); if (fb) fb.textContent = '★ Favoritas' + (a.length ? ` (${a.length})` : '');
+  if (filtro === 'fav' && !ficha) { const r = $('#nm-res'); if (r) r.innerHTML = resultados(); }
+  toast(i < 0 ? 'Añadida a favoritas.' : 'Quitada de favoritas.');
+}
+function onClick(e) {
+  const fv = e.target.closest('[data-fav]'); if (fv) { toggleFav(fv.dataset.fav); return; }
+  const v = e.target.closest('[data-ver]'); if (v) { ficha = v.dataset.ver; renderFicha(ficha); return; }
+  const fl = e.target.closest('[data-filtro]'); if (fl) { filtro = fl.dataset.filtro; document.querySelectorAll('[data-filtro]').forEach(b => b.setAttribute('aria-pressed', b.dataset.filtro === filtro)); $('#nm-res').innerHTML = resultados(); return; }
+  const a = e.target.closest('[data-nma]'); if (!a) return;
+  const k = a.dataset.nma;
+  if (k === 'volver') { ficha = null; renderMain(); return; }
+  if (k === 'lam') { const b = $('#tab-sen'); if (b) b.click(); return; }
+  if (k === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
+}
+function montar() {
+  const main = document.createElement('main');
+  main.id = 'view-norma'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
+  main.innerHTML = '<div id="nm-main"></div><div id="nm-ficha" hidden></div>';
+  const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
+  main.addEventListener('click', onClick);
+  main.addEventListener('input', e => { if (e.target.id === 'nm-q') { busca = e.target.value; $('#nm-res').innerHTML = resultados(); } });
+  main.addEventListener('keydown', e => { if (e.target.id === 'nm-q' && e.key === 'Enter') e.target.blur(); });
+  /* enlaces a una norma desde otros apartados (Revisiones, señalización) */
+  document.addEventListener('click', e => { const b = e.target.closest('[data-norma]'); if (b && window.NORMA_API) { e.preventDefault(); NORMA_API.abrir(b.dataset.norma); } });
+  renderMain();
+}
+window.NORMA_API = {
+  lista: () => NORMAS,
+  abrir(id) { showTab('norma'); if (id && POR_ID.has(id)) { ficha = id; renderFicha(id); } else { ficha = null; renderMain(); } },
+  /* botones a las normas de las casillas marcadas en una revisión */
+  enlacesRev(cats) {
+    const ids = [...new Set((cats || []).flatMap(c => NORMA_REV_MAP[c] || []))];
+    return ids.length ? `<p class="nm-rel">Normativa: ${ids.map(id => `<button type="button" class="linkbtn" data-norma="${id}">${esc(POR_ID.get(id).c)} · ${esc(POR_ID.get(id).n)}</button>`).join('')}</p>` : '';
+  },
+  atras() { const v = $('#view-norma'); if (!v || v.hidden || !ficha) return false; ficha = null; renderMain(); return true; },
+  onTab(t) { if (t === 'norma' && !ficha) { const r = $('#nm-res'); if (r) r.innerHTML = resultados(); } }
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
+})();
+
+/*NORMA-JS-END*/
 initSen();
 initInstall();
 })();
