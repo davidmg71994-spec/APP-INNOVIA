@@ -79,3 +79,12 @@
 .rv-ibox .btn{justify-self:start}
 #rev-form .cal-fbtns .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
 #rev-form .cal-fbtns .btn svg{width:18px;height:18px;flex:none}
+/* pestaña «+ Añadir» */
+.rv-modo{grid-template-columns:1fr 1fr 1fr}
+.rv-modo button[data-rmodo="nueva"]{color:var(--brand-text)}
+.rv-modo button[data-rmodo="nueva"][aria-pressed="true"]{color:var(--brand-text)}
+.rv-tabh{margin:-2px 16px 12px}
+.rv-rec{display:grid;gap:8px}
+.rv-recl{display:grid;gap:6px}
+.rv-reci{appearance:none;display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;min-width:0}
+.rv-reci b{font-size:14.5px;font-weight:600;min-width:0;overflow-wrap:anywhere}

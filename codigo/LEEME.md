@@ -145,3 +145,6 @@ En el PDF, el registro mantiene el orden del formulario original; la tabla de tr
 - Al actualizar: revisar el código electrónico «Prevención de riesgos laborales» del BOE y cambiar `NORMA_REV`. Incluye el RD 847/2026 de amianto (en vigor el 24/10/2026, deroga el RD 396/2006) y el Reglamento (UE) 2023/1230 (desde el 20/01/2027). Ojo: los camiones grúa no están en la ITC AEM-4.
 - Código: `/home/claude/pwa/norma/` (`datos.js`, `norma.js`, `norma.css`, `inject.py`, después de `rev/inject.py`). Prueba: `test-norma.js`.
 - GitHub Pages publica desde la carpeta `docs/` (la web: `docs/VisitasPRL.html`, `docs/index.html`, `docs/sw.js`); la raíz redirige a `docs/`.
+
+## Revisiones › + Añadir (versión 1.14.1)
+- Tercera pestaña en Revisiones (`modo = 'nueva'`, no se recuerda entre sesiones): el formulario de alta va dentro de la pantalla, bajo la cabecera. «Añadir y seguir» guarda y abre otro en blanco con el mismo contrato y centro (`enBlanco(r)`); debajo, «Añadidas ahora» (`recientes`). Al cambiar de pestaña, filtro o salir, lo escrito se guarda en `borrador` (`aparcar()`). «Vaciar el formulario» borra también los certificados subidos sin guardar. El botón de abajo «+ Nueva revisión» abre esta pestaña. Atrás de Android: vuelve a Lista o Tabla.

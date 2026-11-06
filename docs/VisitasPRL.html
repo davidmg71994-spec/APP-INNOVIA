@@ -976,6 +976,15 @@ body.onb-on{overflow:hidden}
 .rv-ibox .btn{justify-self:start}
 #rev-form .cal-fbtns .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
 #rev-form .cal-fbtns .btn svg{width:18px;height:18px;flex:none}
+/* pestaña «+ Añadir» */
+.rv-modo{grid-template-columns:1fr 1fr 1fr}
+.rv-modo button[data-rmodo="nueva"]{color:var(--brand-text)}
+.rv-modo button[data-rmodo="nueva"][aria-pressed="true"]{color:var(--brand-text)}
+.rv-tabh{margin:-2px 16px 12px}
+.rv-rec{display:grid;gap:8px}
+.rv-recl{display:grid;gap:6px}
+.rv-reci{appearance:none;display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;min-width:0}
+.rv-reci b{font-size:14.5px;font-weight:600;min-width:0;overflow-wrap:anywhere}
 /*REV-CSS-END*/
 /*NORMA-CSS-START*/
 /* Normativa: cabecera azul de la casa; lista por bloques con el código de la norma en monoespaciada y fichas tipo nota técnica */
@@ -1180,7 +1189,7 @@ body.onb-on{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.14.0 · 06/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.14.1 · 06/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -3500,8 +3509,12 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.14.0';
+const APP_VER = '1.14.1';
 const NOVEDADES = [
+  {v:'1.14.1', fecha:'06/11/2026', items:[
+    '<b>Revisiones › + Añadir</b>: nueva pestaña junto a Lista y Tabla para dar de alta instalaciones y equipos una detrás de otra. «Añadir y seguir» guarda y deja el formulario listo para la siguiente, con el mismo contrato y centro, y debajo ves las que llevas añadidas.',
+    'Si cambias de pestaña a medio rellenar, lo escrito se queda guardado hasta que vuelvas.'
+  ]},
   {v:'1.14.0', fecha:'06/11/2026', items:[
     '<b>Normativa PRL</b>: en Consulta y en Inicio, una ficha por norma (33): qué regula, para qué te sirve en obra y lo más importante, artículo por artículo. Se consulta sin cobertura.',
     '<b>Enlace al BOE</b>: cada ficha abre el texto consolidado oficial (necesita conexión). Revisadas con el BOE el 06/11/2026.',
@@ -5661,6 +5674,8 @@ const rdb = (() => {
   };
 })();
 let REVS = [], DOCS = [], ED = null, modo = lsGet('rev-modo') === 'tabla' ? 'tabla' : 'lista', fctr = '', nuevosDocs = [];
+/* pestaña «Añadir»: lo que estabas escribiendo si cambias de pestaña, y lo añadido en esta sesión */
+let borrador = null, recientes = [];
 async function cargar() {
   try { REVS = await rdb.all('revs') || []; } catch (e) { REVS = []; }
   /* de los certificados solo se carga la ficha; el archivo se lee al abrirlo */
@@ -5756,9 +5771,24 @@ function ctrsHtml() {
   const b = (id, txt) => `<button type="button" class="chip" data-fc="${esc(id)}" aria-pressed="${fctr === id}">${esc(txt)}</button>`;
   return `<div class="chips rv-ctrs" role="group" aria-label="Filtrar por contrato">${b('', 'Todos')}${cs.map(c => b(c.id, ctrCorto(c))).join('')}${sin ? b('-', 'Sin contrato') : ''}</div>`;
 }
+function cabeceraHtml() {
+  const s = resumen(), c = fctr && fctr !== '-' ? contratoPorId(fctr) : null;
+  return `<div class="ihead"><button type="button" class="linkbtn" data-ra="ini">‹ Inicio</button></div>
+    <section class="pl-hero rv-hero">
+      <p class="pl-eb">Revisiones</p>
+      <h2>Instalaciones y equipos</h2>
+      <p class="pl-ctr">${c ? esc(nombreContrato(c)) : fctr === '-' ? 'Sin contrato' : 'Todos tus contratos'}</p>
+      <div class="pl-kpis"><div class="${s.bad ? 'bad' : ''}"><b>${s.bad}</b><span>Vencidas</span></div><div><b>${s.warn}</b><span>Vencen ya</span></div><div><b>${s.soon}</b><span>En 60 días</span></div><div class="ok"><b>${s.ok}</b><span>Vigentes</span></div></div>
+    </section>
+    ${REVS.length ? ctrsHtml() : ''}
+    <div class="pl-modo rv-modo" role="group" aria-label="Revisiones"><button type="button" data-rmodo="lista" aria-pressed="${modo === 'lista'}">Lista</button><button type="button" data-rmodo="tabla" aria-pressed="${modo === 'tabla'}">Tabla</button><button type="button" data-rmodo="nueva" aria-pressed="${modo === 'nueva'}">+ Añadir</button></div>`;
+}
+/* guarda lo escrito en la pestaña «Añadir» antes de cambiar de vista */
+function aparcar() { if (ED && ED.tab) { leerForm(); borrador = ED; ED = null; } }
 function renderMain() {
   const M = $('#rev-main'); if (!M) return;
   if (fctr && fctr !== '-' && !contratoPorId(fctr)) fctr = '';
+  if (modo === 'nueva') { abrirTab(); return; }
   const l = orden(REVS.filter(delFiltro)), s = resumen(), c = fctr && fctr !== '-' ? contratoPorId(fctr) : null;
   M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ra="ini">‹ Inicio</button></div>
     <section class="pl-hero rv-hero">
@@ -5767,10 +5797,11 @@ function renderMain() {
       <p class="pl-ctr">${c ? esc(nombreContrato(c)) : fctr === '-' ? 'Sin contrato' : 'Todos tus contratos'}</p>
       <div class="pl-kpis"><div class="${s.bad ? 'bad' : ''}"><b>${s.bad}</b><span>Vencidas</span></div><div><b>${s.warn}</b><span>Vencen ya</span></div><div><b>${s.soon}</b><span>En 60 días</span></div><div class="ok"><b>${s.ok}</b><span>Vigentes</span></div></div>
     </section>
-    ${!REVS.length ? `<div class="empty rv-blank"><b>Aún no tienes revisiones</b><span>Añade las instalaciones y equipos que hay que revisar: camión pluma, extintores, aire acondicionado, puesta a tierra, legionela… La app calcula cuándo vence cada una, te avisa antes y guarda su certificado. Las fechas pasan solas al informe cuatrimestral.</span><button type="button" class="btn primary" data-nueva="1">+ Añadir la primera</button></div>` : `
+    ${!REVS.length ? `<div class="pl-modo rv-modo" role="group" aria-label="Revisiones"><button type="button" data-rmodo="lista" aria-pressed="true">Lista</button><button type="button" data-rmodo="tabla" aria-pressed="false">Tabla</button><button type="button" data-rmodo="nueva" aria-pressed="false">+ Añadir</button></div>
+    <div class="empty rv-blank"><b>Aún no tienes revisiones</b><span>Añade las instalaciones y equipos que hay que revisar: camión pluma, extintores, aire acondicionado, puesta a tierra, legionela… La app calcula cuándo vence cada una, te avisa antes y guarda su certificado. Las fechas pasan solas al informe cuatrimestral.</span><button type="button" class="btn primary" data-nueva="1">+ Añadir la primera</button></div>` : `
     ${ctrsHtml()}
     ${s.sinCert ? `<p class="rv-aviso">${plural(s.sinCert, 'revisión sin certificado', 'revisiones sin certificado')}. Súbelo desde la ficha de cada una.</p>` : ''}
-    <div class="pl-modo" role="group" aria-label="Cómo verlas"><button type="button" data-rmodo="lista" aria-pressed="${modo === 'lista'}">Lista</button><button type="button" data-rmodo="tabla" aria-pressed="${modo === 'tabla'}">Tabla</button></div>
+    <div class="pl-modo rv-modo" role="group" aria-label="Revisiones"><button type="button" data-rmodo="lista" aria-pressed="${modo === 'lista'}">Lista</button><button type="button" data-rmodo="tabla" aria-pressed="${modo === 'tabla'}">Tabla</button><button type="button" data-rmodo="nueva" aria-pressed="false">+ Añadir</button></div>
     ${l.length ? (modo === 'tabla' ? tablaHtml(l) : `<div class="rv-list">${l.map(tarjeta).join('')}</div>`) : '<div class="empty"><b>Nada en este contrato</b><span>Pulsa «Todos» para ver el resto.</span></div>'}`}`;
   vista('main');
 }
@@ -5780,9 +5811,15 @@ function vista(q) {
 }
 
 /* ---------- ficha ---------- */
+const enBlanco = base => ({id:nid('r'), nombre:'', ident:'', ctr:base ? base.ctr : (fctr === '-' ? null : (fctr ? snapContrato(contratoPorId(fctr)) : snapContrato())), centro:base ? base.centro : '', empresa:'', cada:12, ultima:'', aviso:30, inf:[], infTocado:false, notas:'', hist:[], nueva:true});
+function abrirTab() {
+  ED = borrador || {...enBlanco(), tab:true}; borrador = null;
+  if (!ED.tab) ED.tab = true;
+  renderForm(); vista('form');
+}
 function abrirForm(id, enfocar) {
   const r = id ? REVS.find(x => x.id === id) : null;
-  ED = r ? JSON.parse(JSON.stringify(r)) : {id:nid('r'), nombre:'', ident:'', ctr:fctr === '-' ? null : (fctr ? snapContrato(contratoPorId(fctr)) : snapContrato()), centro:'', empresa:'', cada:12, ultima:'', aviso:30, inf:[], infTocado:false, notas:'', hist:[], nueva:true};
+  ED = r ? JSON.parse(JSON.stringify(r)) : enBlanco();
   nuevosDocs = [];
   renderForm(); vista('form'); window.scrollTo({top:0});
   if (enfocar) setTimeout(() => { const e = $(enfocar); if (e) e.scrollIntoView({block:'center'}); }, 60);
@@ -5799,9 +5836,12 @@ function renderForm() {
   const mes = /^\d{4}-\d{2}$/.test(ED.ultima || '');
   const e = estado(ED);
   const actuales = ED.ultima ? docsDe(ED, ED.ultima) : [], antiguos = DOCS.filter(d => d.rev === ED.id && d.fecha !== ED.ultima).sort((a, b) => (b.fecha || '') < (a.fecha || '') ? -1 : 1);
-  F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ra="volver">‹ Revisiones</button>${ED.nueva ? '' : `<span class="rv-st ${e.k}">${esc(e.t)}</span>`}</div>
-    <section class="block">
+  const tab = !!ED.tab;
+  const rec = recientes.map(id => REVS.find(r => r.id === id)).filter(Boolean);
+  F.innerHTML = `${tab ? cabeceraHtml() : `<div class="ihead"><button type="button" class="linkbtn" data-ra="volver">‹ Revisiones</button>${ED.nueva ? '' : `<span class="rv-st ${e.k}">${esc(e.t)}</span>`}</div>`}
+    <section class="block" id="rf-blk">
       <header class="bh"><h2>${ED.nueva ? 'Nueva revisión' : 'Ficha de la revisión'}</h2></header>
+      ${tab ? '<p class="help rv-tabh">Rellena y pulsa «Añadir y seguir»: se guarda y el formulario queda listo para la siguiente, con el mismo contrato y centro.</p>' : ''}
       <div class="bb rv-ff">
         <div class="field"><label for="rf-n">Instalación o equipo</label><input id="rf-n" maxlength="120" value="${esc(ED.nombre)}" placeholder="Ej.: Camión pluma"></div>
         ${ED.nueva ? `<details class="cal-sug"><summary>Ideas rápidas <small>las revisiones habituales</small></summary><div class="chips">${SUG.map((s, i) => `<button type="button" class="chip" data-sug="${i}">${esc(s[0])}</button>`).join('')}</div></details>` : ''}
@@ -5828,10 +5868,11 @@ function renderForm() {
       </div>
     </section>
     <div class="cal-fbtns">
-      <button type="button" class="btn primary" data-ra="guardar">${ED.nueva ? 'Añadir revisión' : 'Guardar cambios'}</button>
+      <button type="button" class="btn primary" data-ra="guardar">${tab ? 'Añadir y seguir' : ED.nueva ? 'Añadir revisión' : 'Guardar cambios'}</button>
       ${ED.nueva ? '' : `<button type="button" class="btn" data-hecha="${esc(ED.id)}">${IC.ok}Registrar revisión nueva</button><button type="button" class="btn danger-t" data-ra="borrar">Eliminar</button>`}
-      <button type="button" class="btn" data-ra="volver">Cancelar</button>
-    </div>`;
+      <button type="button" class="btn" data-ra="${tab ? 'vaciar' : 'volver'}">${tab ? 'Vaciar el formulario' : 'Cancelar'}</button>
+    </div>
+    ${tab && rec.length ? `<section class="rv-rec"><h3 class="cal-gh">Añadidas ahora<i>${rec.length}</i></h3><div class="rv-recl">${rec.map(r => { const es = estado(r); return `<button type="button" class="rv-reci" data-edit="${esc(r.id)}"><b>${esc(titulo(r))}</b><span class="rv-st ${es.k}">${esc(es.t)}</span></button>`; }).join('')}</div></section>` : ''}`;
   pintaMiniaturas();
 }
 function venceAyuda() {
@@ -5857,14 +5898,28 @@ function leerForm() {
 async function guardarForm() {
   leerForm();
   if (!ED.nombre) { toast('Escribe qué instalación o equipo es.'); $('#rf-n').focus(); return; }
-  const nueva = !!ED.nueva; delete ED.nueva; delete ED.infTocado;
+  const nueva = !!ED.nueva, tab = !!ED.tab; delete ED.nueva; delete ED.infTocado; delete ED.tab;
   if (nueva) ED.creado = Date.now();
   /* los certificados subidos antes de cambiar la fecha pasan a la fecha nueva */
   for (const id of nuevosDocs) { const d = DOCS.find(x => x.id === id); if (d && d.fecha !== ED.ultima && ED.ultima) { const full = await rdb.get('docs', id); if (full) { full.fecha = ED.ultima; await rdb.put('docs', full); d.fecha = ED.ultima; } } }
   nuevosDocs = [];
   const r = ED; ED = null;
-  await guardarRev(r); renderMain(); window.scrollTo({top:0});
+  await guardarRev(r);
+  if (tab) {
+    recientes.unshift(r.id);
+    ED = {...enBlanco(r), tab:true}; renderForm(); vista('form');
+    const blk = $('#rf-blk'); if (blk) blk.scrollIntoView({block:'start'});
+    setTimeout(() => { const i = $('#rf-n'); if (i) i.focus({preventScroll:true}); }, 60);
+    toast(`«${titulo(r)}» añadida. Sigue con la siguiente.`);
+    return;
+  }
+  renderMain(); window.scrollTo({top:0});
   toast(nueva ? 'Revisión añadida.' : 'Cambios guardados.');
+}
+async function vaciar() {
+  if (!ED || !ED.tab) return;
+  for (const id of nuevosDocs) { try { await rdb.del('docs', id); } catch (e) {} DOCS = DOCS.filter(d => d.id !== id); }
+  nuevosDocs = []; ED = {...enBlanco(), tab:true}; renderForm(); toast('Formulario vacío.');
 }
 async function cancelar() {
   /* si era nueva, los certificados subidos se borran */
@@ -5973,13 +6028,14 @@ function paraInforme(inf) {
 /* ---------- eventos ---------- */
 async function onClick(e) {
   const hc = e.target.closest('[data-hecha]'); if (hc) { revisionHecha(hc.dataset.hecha); return; }
-  const ed = e.target.closest('[data-edit]'); if (ed) { abrirForm(ed.dataset.edit); return; }
-  const nv = e.target.closest('[data-nueva]'); if (nv) { abrirForm(null); return; }
-  const md = e.target.closest('[data-rmodo]'); if (md) { modo = md.dataset.rmodo; lsSet('rev-modo', modo); renderMain(); return; }
-  const fc = e.target.closest('[data-fc]'); if (fc) { fctr = fc.dataset.fc; renderMain(); return; }
+  const ed = e.target.closest('[data-edit]'); if (ed) { aparcar(); abrirForm(ed.dataset.edit); return; }
+  const nv = e.target.closest('[data-nueva]'); if (nv) { modo = 'nueva'; renderMain(); window.scrollTo({top:0}); return; }
+  const md = e.target.closest('[data-rmodo]'); if (md) { aparcar(); modo = md.dataset.rmodo; if (modo !== 'nueva') lsSet('rev-modo', modo); renderMain(); return; }
+  const fc = e.target.closest('[data-fc]'); if (fc) { aparcar(); fctr = fc.dataset.fc; renderMain(); return; }
   const vd = e.target.closest('[data-ver]'); if (vd) { verDoc(vd.dataset.ver); return; }
   const qd = e.target.closest('[data-quitar]'); if (qd) { quitarDoc(qd.dataset.quitar); return; }
   if (!ED) { const b0 = e.target.closest('[data-ra]'); if (b0 && b0.dataset.ra === 'ini') showTab('ini'); return; }
+  { const b0 = e.target.closest('[data-ra="ini"]'); if (b0) { aparcar(); showTab('ini'); return; } }
   const sg = e.target.closest('[data-sug]');
   if (sg) { const s = SUG[+sg.dataset.sug]; leerForm(); ED.nombre = s[0]; ED.cada = s[1]; ED.inf = [...s[2]]; ED.infTocado = true; ED.aviso = s[1] >= 12 ? 30 : s[1] >= 6 ? 15 : 7; renderForm(); toast('Pon la fecha de la última revisión y guarda.'); const u = $('#rf-u'); if (u) u.focus(); return; }
   const cd = e.target.closest('[data-cada]'); if (cd) { leerForm(); ED.cada = +cd.dataset.cada; marca('[data-cada]', 'cada', ED.cada); $('#rf-vh').textContent = venceAyuda(); return; }
@@ -5992,6 +6048,7 @@ async function onClick(e) {
   if (a === 'volver') return cancelar();
   if (a === 'guardar') return guardarForm();
   if (a === 'borrar') return borrar();
+  if (a === 'vaciar') return vaciar();
 }
 function marca(sel, k, v) { document.querySelectorAll('#rev-form ' + sel).forEach(b => b.setAttribute('aria-pressed', +b.dataset[k] === v)); }
 function onInput(e) {
@@ -6033,7 +6090,7 @@ function montar() {
 }
 window.REV_API = {
   lista: () => REVS,
-  abrir() { if (ED) { ED = null; nuevosDocs = []; } showTab('rev'); renderMain(); },
+  abrir() { if (ED && ED.tab) aparcar(); else if (ED) { ED = null; nuevosDocs = []; } showTab('rev'); renderMain(); },
   resumen: () => resumen(true),
   paraInforme,
   async exportar() {
@@ -6052,6 +6109,7 @@ window.REV_API = {
   },
   atras() {
     const v = $('#view-rev'); if (!v || v.hidden) return false;
+    if (ED && ED.tab) { aparcar(); modo = lsGet('rev-modo') === 'tabla' ? 'tabla' : 'lista'; renderMain(); return true; }
     if (ED) { cancelar(); return true; }
     showTab('ini'); return true;
   },

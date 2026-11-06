@@ -48,6 +48,7 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 | 1.12.0 | 16 | 06/11/2026 | Calendario PRL desde Inicio: empieza en blanco y cada técnico añade sus tareas (sueltas o que se repiten cada semana, mes, 3, 4 o 6 meses o año), con contrato y tipo; agenda con vencidas, hoy, 7 días y 30 días; vista de mes; marcar hechas; ideas rápidas; entra en la copia de seguridad. |
 | 1.13.0 | 17 | 06/11/2026 | Revisiones de instalaciones y equipos desde Inicio: editables, con periodicidad, vencimiento, aviso y estado; certificados en PDF o foto; «Revisión hecha» con historial; lista o tabla; «Rellenar con mis revisiones» en el apartado 9 del informe cuatrimestral; entran en la copia de seguridad. |
 | 1.14.0 | 18 | 06/11/2026 | Normativa PRL: 33 fichas por norma (qué regula, para qué sirve en obra, lo más importante), sin cobertura, con enlace al texto consolidado del BOE; buscador, bloques y favoritas; enlazada con Revisiones y con las láminas de señalización. |
+| 1.14.1 | 19 | 06/11/2026 | Revisiones: pestaña «+ Añadir» junto a Lista y Tabla para dar de alta una detrás de otra («Añadir y seguir», mismo contrato y centro, lista de añadidas y borrador si cambias de pestaña). |
 
 ## Cómo funciona en el móvil
 - **PDF y copias de seguridad**: «Compartir» los envía por WhatsApp, correo, Drive…; «Guardar» los deja en **Descargas › Visitas PRL**. Con el PDF el botón es **«Guardar y abrir»**: lo guarda y lo abre con el visor del móvil para revisarlo.
@@ -93,3 +94,6 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 - Al actualizar: revisar el código electrónico «Prevención de riesgos laborales» del BOE y cambiar `NORMA_REV`. Incluye el RD 847/2026 de amianto (en vigor el 24/10/2026, deroga el RD 396/2006) y el Reglamento (UE) 2023/1230 (desde el 20/01/2027). Ojo: los camiones grúa no están en la ITC AEM-4.
 - Código: `/home/claude/pwa/norma/` (`datos.js`, `norma.js`, `norma.css`, `inject.py`, después de `rev/inject.py`). Prueba: `test-norma.js`.
 - GitHub Pages publica desde la carpeta `docs/` (la web: `docs/VisitasPRL.html`, `docs/index.html`, `docs/sw.js`); la raíz redirige a `docs/`.
+
+## Revisiones › + Añadir (versión 1.14.1)
+- Tercera pestaña en Revisiones (`modo = 'nueva'`, no se recuerda entre sesiones): el formulario de alta va dentro de la pantalla, bajo la cabecera. «Añadir y seguir» guarda y abre otro en blanco con el mismo contrato y centro (`enBlanco(r)`); debajo, «Añadidas ahora» (`recientes`). Al cambiar de pestaña, filtro o salir, lo escrito se guarda en `borrador` (`aparcar()`). «Vaciar el formulario» borra también los certificados subidos sin guardar. El botón de abajo «+ Nueva revisión» abre esta pestaña. Atrás de Android: vuelve a Lista o Tabla.

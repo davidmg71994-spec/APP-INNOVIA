@@ -38,5 +38,14 @@ if "{v:'1.14.0'" not in h:
   ]},
 """)
     h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.14.0 · 06/11/2026",h,count=1)
+if "{v:'1.14.1'" not in h:
+    h=re.sub(r"const APP_VER = '[^']+';","const APP_VER = '1.14.1';",h,count=1)
+    rep("const NOVEDADES = [\n","""const NOVEDADES = [
+  {v:'1.14.1', fecha:'06/11/2026', items:[
+    '<b>Revisiones › + Añadir</b>: nueva pestaña junto a Lista y Tabla para dar de alta instalaciones y equipos una detrás de otra. «Añadir y seguir» guarda y deja el formulario listo para la siguiente, con el mismo contrato y centro, y debajo ves las que llevas añadidas.',
+    'Si cambias de pestaña a medio rellenar, lo escrito se queda guardado hasta que vuelvas.'
+  ]},
+""")
+    h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.14.1 · 06/11/2026",h,count=1)
 open(IDX,'w',encoding='utf-8').write(h)
 print('ok', len(h))
