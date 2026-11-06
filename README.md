@@ -9,7 +9,7 @@ App para los técnicos de PRL de Innovia: registro de comprobación del recurso 
 | Dónde | Cómo |
 |---|---|
 | **Android** | Descarga [`VisitasPRL.apk`](VisitasPRL.apk) e instálala (si ya la tienes, se instala encima y no se pierde nada). |
-| **iPhone, tablet u ordenador** | Abre [`VisitasPRL.html`](VisitasPRL.html) en el navegador. Con GitHub Pages activado, la dirección es `https://davidmg71994-spec.github.io/app-innovia/`. |
+| **iPhone, tablet u ordenador** | Abre **https://davidmg71994-spec.github.io/APP-INNOVIA/** en el navegador (funciona también sin conexión una vez abierta). |
 
 Los datos (visitas, informes, planificaciones, calendario, revisiones con sus certificados y perfil) se guardan **solo en el móvil** de cada técnico. Para cambiar de móvil o pasar datos: *Visitas › Historial › Exportar copia* e *Importar copia*.
 
@@ -30,8 +30,7 @@ Los datos (visitas, informes, planificaciones, calendario, revisiones con sus ce
 
 | Ruta | Qué es |
 |---|---|
-| `VisitasPRL.html` | La app web en un solo archivo (funciona sin conexión). |
-| `index.html`, `sw.js` | Entrada para GitHub Pages y caché sin conexión. |
+| `docs/` | La web que publica GitHub Pages: `VisitasPRL.html` (la app en un solo archivo), `index.html` (entrada) y `sw.js` (caché sin conexión). |
 | `VisitasPRL.apk` | La app de Android firmada. |
 | `codigo/app-web/` | Código fuente de la app web (`index.html` con todos los módulos ya integrados). |
 | `codigo/informe/`, `codigo/inicio/`, `codigo/plan/`, `codigo/cal/`, `codigo/rev/` | Fuentes de cada módulo y sus scripts `inject.py` (se ejecutan en ese orden: informe, inicio, plan, cal, rev). |
