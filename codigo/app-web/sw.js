@@ -1,7 +1,6 @@
 /* Registros Visitas Técnicos PRL · service worker: keeps the app working without connection. */
-const VERSION = 'registro-rp-v29';
+const VERSION = 'registro-rp-v30';
 const SENAL = 'registro-rp-senal';
-const FONTS = 'registro-rp-fonts';
 const FILES = ['./', './index.html', './pdf-lib.min.js', './pdfjs/pdf.min.js', './pdfjs/pdf.worker.min.js', './pdfjs/wasm/openjpeg.wasm', './pdfjs/wasm/jbig2.wasm', './pdfjs/wasm/qcms_bg.wasm', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png', './icons/favicon-64.png',
   './icons/logo-innovia.png', './icons/logo-innovia-dark.png'];
@@ -11,7 +10,7 @@ self.addEventListener('install', e => {
 });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== FONTS && k !== SENAL).map(k => caches.delete(k))))
+    .then(keys => Promise.all(keys.filter(k => k !== VERSION && k !== SENAL).map(k => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
 self.addEventListener('fetch', e => {
@@ -41,11 +40,5 @@ self.addEventListener('fetch', e => {
       return res;
     })));
     return;
-  }
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
-    e.respondWith(caches.open(FONTS).then(c => c.match(req).then(hit => {
-      const net = fetch(req).then(res => { c.put(req, res.clone()); return res; }).catch(() => hit);
-      return hit || net;
-    })));
   }
 });

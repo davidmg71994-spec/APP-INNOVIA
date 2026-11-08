@@ -1,6 +1,7 @@
 package es.visitasprl.registro;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -10,14 +11,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.hardware.biometrics.BiometricManager;
+import android.hardware.biometrics.BiometricPrompt;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CancellationSignal;
+import android.os.SystemClock;
 import android.os.Environment;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -35,22 +41,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Visitas PRL: la app web (index.html y sus archivos) va dentro del APK, en assets/www.
  * Se sirve en una dirección https propia que nunca sale a internet, para que el navegador
  * del sistema la trate como una web segura (guardar registros, cámara, etc.).
+ *
+ * Seguridad (1.18.0):
+ *  - Cualquier petición a otro servidor se bloquea aquí (la app no puede enviar datos fuera).
+ *    Los enlaces que pulsa el usuario (BOE, normativa) se abren en el navegador, fuera de la app.
+ *  - Bloqueo de la app con el bloqueo del propio móvil (BiometricPrompt / KeyguardManager).
+ *  - Opción de impedir capturas de pantalla (FLAG_SECURE).
  */
 public class MainActivity extends Activity {
 
     static final String HOST = "app.visitasprl.local";
     static final String START = "https://" + HOST + "/index.html";
     static final int REQ_ARCHIVO = 1;
+    static final int REQ_DESBLOQUEO = 2;
 
     private WebView web;
     private ValueCallback<Uri[]> archivoCallback;
     private Uri fotoUri;
+    private long paradaMs = 0;
 
     @Override
     protected void onCreate(Bundle saved) {
@@ -63,15 +82,23 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);
         s.setDatabaseEnabled(true);
         s.setAllowFileAccess(false);
+        s.setAllowFileAccessFromFileURLs(false);
+        s.setAllowUniversalAccessFromFileURLs(false);
         s.setAllowContentAccess(true);
+        s.setGeolocationEnabled(false);
+        s.setSaveFormData(false);
         s.setTextZoom(100);
         s.setMediaPlaybackRequiresUserGesture(true);
+        if (Build.VERSION.SDK_INT >= 26) s.setSafeBrowsingEnabled(true);
 
         web.setWebViewClient(new WebViewClient() {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
                 if (HOST.equals(u.getHost())) return servir(u.getPath());
+                // nada sale a internet: cualquier otra petición de red se corta aquí
+                String sc = u.getScheme() == null ? "" : u.getScheme().toLowerCase();
+                if (sc.equals("http") || sc.equals("https") || sc.equals("ws") || sc.equals("wss") || sc.equals("ftp")) return bloqueado();
                 return null;
             }
 
@@ -139,6 +166,11 @@ public class MainActivity extends Activity {
         }
     }
 
+    private WebResourceResponse bloqueado() {
+        return new WebResourceResponse("text/plain", "UTF-8", 403, "Forbidden",
+                new HashMap<String, String>(), new ByteArrayInputStream(new byte[0]));
+    }
+
     private WebResourceResponse noEncontrado() {
         return new WebResourceResponse("text/plain", "UTF-8", 404, "Not Found",
                 new HashMap<String, String>(), new ByteArrayInputStream(new byte[0]));
@@ -186,9 +218,84 @@ public class MainActivity extends Activity {
         return true;
     }
 
+    /* ---------- bloqueo de la app con el bloqueo del móvil ---------- */
+
+    boolean dispositivoSeguro() {
+        KeyguardManager km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        return km != null && km.isDeviceSecure();
+    }
+
+    void pedirDesbloqueo() {
+        if (!dispositivoSeguro()) { resultadoDesbloqueo(true, ""); return; }
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                BiometricPrompt.Builder b = new BiometricPrompt.Builder(this)
+                        .setTitle("Visitas PRL")
+                        .setSubtitle("Desbloquea para ver tus registros");
+                if (Build.VERSION.SDK_INT >= 30) {
+                    b.setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK
+                            | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
+                } else {
+                    b.setDeviceCredentialAllowed(true);
+                }
+                b.build().authenticate(new CancellationSignal(), getMainExecutor(),
+                        new BiometricPrompt.AuthenticationCallback() {
+                            @Override
+                            public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult r) {
+                                resultadoDesbloqueo(true, "");
+                            }
+
+                            @Override
+                            public void onAuthenticationError(int codigo, CharSequence msg) {
+                                resultadoDesbloqueo(false, msg == null ? "" : msg.toString());
+                            }
+                        });
+                return;
+            } catch (Exception e) {
+                // si falla, se usa la pantalla de bloqueo del sistema
+            }
+        }
+        KeyguardManager km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        Intent i = km == null ? null : km.createConfirmDeviceCredentialIntent("Visitas PRL", "Desbloquea para ver tus registros");
+        if (i == null) { resultadoDesbloqueo(true, ""); return; }
+        try {
+            startActivityForResult(i, REQ_DESBLOQUEO);
+        } catch (Exception e) {
+            resultadoDesbloqueo(false, "No se pudo abrir el desbloqueo del móvil");
+        }
+    }
+
+    void resultadoDesbloqueo(final boolean ok, final String msg) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                if (web != null) web.evaluateJavascript("window.SEG_API&&SEG_API.resultado(" + ok + "," + JSONObject.quote(msg) + ")", null);
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        paradaMs = SystemClock.elapsedRealtime();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (paradaMs > 0 && web != null) {
+            long fuera = SystemClock.elapsedRealtime() - paradaMs;
+            paradaMs = 0;
+            web.evaluateJavascript("window.SEG_API&&SEG_API.vuelve(" + fuera + ")", null);
+        }
+    }
+
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
+        if (req == REQ_DESBLOQUEO) {
+            resultadoDesbloqueo(res == RESULT_OK, res == RESULT_OK ? "" : "No se ha desbloqueado");
+            return;
+        }
         if (req != REQ_ARCHIVO || archivoCallback == null) return;
         Uri[] r = null;
         if (res == RESULT_OK) {
@@ -352,6 +459,71 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 return false;
             }
+        }
+
+        /**
+         * Borra de Descargas/Visitas PRL/Copias las copias automáticas que hizo esta app y que ya no
+         * están en la lista (registros borrados). Con "[]" las borra todas. Devuelve cuántas ha borrado.
+         */
+        @JavascriptInterface
+        public int copiasLimpiar(String nombresJson) {
+            if (Build.VERSION.SDK_INT < 29) return 0;
+            int n = 0;
+            try {
+                Set<String> quedan = new HashSet<String>();
+                JSONArray arr = new JSONArray(nombresJson == null ? "[]" : nombresJson);
+                for (int i = 0; i < arr.length(); i++) quedan.add(limpio(arr.optString(i)));
+                String carpeta = Environment.DIRECTORY_DOWNLOADS + "/Visitas PRL/Copias/";
+                ContentResolver cr = a.getContentResolver();
+                Uri col = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
+                Cursor c = cr.query(col, new String[]{MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DISPLAY_NAME},
+                        MediaStore.MediaColumns.RELATIVE_PATH + "=?", new String[]{carpeta}, null);
+                if (c == null) return 0;
+                try {
+                    while (c.moveToNext()) {
+                        String nombre = c.getString(1);
+                        if (nombre != null && !quedan.contains(nombre)) {
+                            try {
+                                if (cr.delete(ContentUris.withAppendedId(col, c.getLong(0)), null, null) > 0) n++;
+                            } catch (Exception e) {
+                                // archivo de otra instalación: no se puede borrar sin permiso
+                            }
+                        }
+                    }
+                } finally {
+                    c.close();
+                }
+            } catch (Exception e) {
+                return n;
+            }
+            return n;
+        }
+
+        /** true si el móvil tiene bloqueo de pantalla (PIN, patrón, contraseña o huella). */
+        @JavascriptInterface
+        public boolean bloqueoDisponible() {
+            return a.dispositivoSeguro();
+        }
+
+        /** Pide el desbloqueo del móvil; el resultado llega a SEG_API.resultado(ok, mensaje). */
+        @JavascriptInterface
+        public void desbloquear() {
+            a.runOnUiThread(new Runnable() {
+                public void run() {
+                    a.pedirDesbloqueo();
+                }
+            });
+        }
+
+        /** Impide (o vuelve a permitir) las capturas de pantalla y la vista previa en apps recientes. */
+        @JavascriptInterface
+        public void pantallaSegura(final boolean on) {
+            a.runOnUiThread(new Runnable() {
+                public void run() {
+                    if (on) a.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                    else a.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+            });
         }
 
         @JavascriptInterface

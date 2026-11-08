@@ -274,6 +274,7 @@ function renderPerfil() {
         <button type="button" class="btn ini-add" data-ini="nuevo">${IC.mas}Añadir contrato</button>
       </div>
     </section>
+    ${window.SEG_API ? SEG_API.perfilHtml() : ''}
   </div>`;
 }
 function verPerfil(on) {
@@ -465,7 +466,7 @@ function onInput(e) {
 }
 
 /* ---------- barra de abajo por grupos y subpestañas arriba ---------- */
-const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', evrl:'doc', sen:'con', norma:'con', pss:'con'};
+const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', evrl:'doc', sen:'con', norma:'con', pss:'con', seg:'pf'};
 let tabAct = 'ini';
 function navSync(t) {
   if (t) tabAct = t;

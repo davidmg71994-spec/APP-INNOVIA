@@ -63,7 +63,7 @@ async function abrirPdf(id) {
   const rec = await pdb.get('pdf', id);
   if (!rec || !rec.blob) throw new Error('sinpdf');
   const data = new Uint8Array(await rec.blob.arrayBuffer());
-  const opts = {data, useSystemFonts:true, enableXfa:false};
+  const opts = {data, useSystemFonts:true, enableXfa:false, isEvalSupported:false};
   if (!EMB()) opts.wasmUrl = new URL('pdfjs/wasm/', document.baseURI).href;
   const pdf = await lib.getDocument(opts).promise;
   ABI = {id, pdf}; return pdf;
