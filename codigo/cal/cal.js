@@ -293,6 +293,18 @@ window.CAL_API = {
   abrir() { ED = null; showTab('cal'); renderMain(); },
   /* para el Inicio: todos los contratos */
   resumen: () => resumen(true),
+  /* para «Hoy y vencidas» del Inicio: una línea por tarea, con la fecha más antigua sin marcar */
+  pendientes() {
+    const h = hoy(), m = new Map();
+    ocurr(masDias(h, -400), h, true).filter(o => !o.ok).forEach(o => { const x = m.get(o.t.id); if (x) x.n++; else m.set(o.t.id, {id:o.t.id, t:o.t.t || '', k:o.t.k || 'otr', ctr:o.t.ctr || null, d:o.d, n:1}); });
+    return [...m.values()];
+  },
+  /* visitas a tajo previstas este mes (tareas de «Visitas» con «visita» en el nombre) */
+  visitasMes(ctrId) {
+    const ym = hoy().slice(0, 7);
+    return ocurr(ym + '-01', ym + '-31', true).filter(o => o.t.k === 'vis' && /visita/i.test(o.t.t || '') && (!ctrId || !(o.t.ctr && o.t.ctr.id) || o.t.ctr.id === ctrId)).length;
+  },
+  editar(id, d) { showTab('cal'); if (TAREAS.some(x => x.id === id)) abrirForm(id, d); },
   async importar(arr) {
     const act = new Map(TAREAS.map(x => [x.id, x])); let n = 0;
     for (const x of arr) { if (x && x.id && x.t && x.f && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await cdb.put(x); n++; } }

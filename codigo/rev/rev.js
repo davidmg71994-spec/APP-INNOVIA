@@ -456,6 +456,17 @@ window.REV_API = {
   lista: () => REVS,
   abrir() { if (ED && ED.tab) aparcar(); else if (ED) { ED = null; nuevosDocs = []; } showTab('rev'); renderMain(); },
   resumen: () => resumen(true),
+  /* para «Hoy y vencidas» del Inicio */
+  pendientes: () => REVS.map(r => ({r, e:estado(r)})).filter(x => x.e.k === 'bad' || x.e.k === 'warn').map(({r, e}) => ({id:r.id, t:r.nombre || '', ident:r.ident || '', ctr:r.ctr || null, k:e.k, v:e.v, n:e.n})),
+  /* anillo del Inicio: las del contrato (y las sin contrato) que no están vencidas */
+  alDia(ctrId) {
+    const l = REVS.filter(r => !ctrId || !(r.ctr && r.ctr.id) || r.ctr.id === ctrId).map(r => estado(r).k).filter(k => k !== 'none');
+    return {n:l.length, ok:l.filter(k => k !== 'bad').length};
+  },
+  editar(id) {
+    if (ED && ED.tab) aparcar(); else if (ED) { ED = null; nuevosDocs = []; }
+    showTab('rev'); if (REVS.some(x => x.id === id)) abrirForm(id); else renderMain();
+  },
   paraInforme,
   async exportar() {
     const docs = [];

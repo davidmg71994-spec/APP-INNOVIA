@@ -433,6 +433,24 @@ window.PLAN_API = {
     const pl = PLANES.find(x => x.anio === y && (!a || (x.contrato && x.contrato.id === a))) || null;
     return pl ? {...resumen(pl), anio:pl.anio} : null;
   },
+  /* para «Hoy y vencidas» del Inicio: medidas vencidas o que vencen en 30 días, de las planificaciones de este año */
+  pendientes() {
+    const y = new Date().getFullYear(), lim = isoDate(new Date(Date.now() + 30 * 864e5)), out = [];
+    PLANES.filter(p => +p.anio === y).forEach(p => (p.filas || []).forEach(f => {
+      if (vacia(f)) return;
+      const e = estado(f); if (e.k === 'ok') return;
+      const v = vence(f); if (e.k !== 'bad' && !(v && v <= lim)) return;
+      out.push({plan:p.id, id:f.id, t:(f.medida || f.riesgo || '').trim(), riesgo:(f.riesgo || '').trim(), ctr:p.contrato || null, k:e.k === 'bad' ? 'bad' : 'warn', v});
+    }));
+    return out;
+  },
+  async editarFila(planId, filaId) {
+    if (PL && PL.id !== planId) await guardarYa();
+    showTab('plan');
+    if (!PL || PL.id !== planId) abrir(planId);
+    if (PL && PL.filas.some(f => f.id === filaId)) { FILA = filaId; renderFila(); }
+    else if (!PL) { renderLista(); vista('#pl-lista'); }
+  },
   async importar(arr) {
     const act = new Map(PLANES.map(x => [x.id, x])); let n = 0;
     for (const x of arr) { if (x && x.id && Array.isArray(x.filas) && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await pdb.put(x); n++; } }

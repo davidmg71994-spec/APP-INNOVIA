@@ -1,8 +1,8 @@
 /* Registros Visitas Técnicos PRL · service worker: keeps the app working without connection. */
-const VERSION = 'registro-rp-v28';
+const VERSION = 'registro-rp-v29';
 const SENAL = 'registro-rp-senal';
 const FONTS = 'registro-rp-fonts';
-const FILES = ['./', './index.html', './pdf-lib.min.js', './manifest.webmanifest',
+const FILES = ['./', './index.html', './pdf-lib.min.js', './pdfjs/pdf.min.js', './pdfjs/pdf.worker.min.js', './pdfjs/wasm/openjpeg.wasm', './pdfjs/wasm/jbig2.wasm', './pdfjs/wasm/qcms_bg.wasm', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png', './icons/favicon-64.png',
   './icons/logo-innovia.png', './icons/logo-innovia-dark.png'];
 

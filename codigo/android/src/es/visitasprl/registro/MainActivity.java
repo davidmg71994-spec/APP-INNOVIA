@@ -108,6 +108,9 @@ public class MainActivity extends Activity {
     static {
         TIPOS.put("html", "text/html");
         TIPOS.put("js", "application/javascript");
+        TIPOS.put("mjs", "application/javascript");
+        TIPOS.put("wasm", "application/wasm");
+        TIPOS.put("pdf", "application/pdf");
         TIPOS.put("css", "text/css");
         TIPOS.put("json", "application/json");
         TIPOS.put("webmanifest", "application/manifest+json");
@@ -150,6 +153,11 @@ public class MainActivity extends Activity {
 
         String[] acc = p.getAcceptTypes();
         boolean imagen = acc != null && acc.length > 0 && acc[0] != null && acc[0].startsWith("image");
+        boolean soloPdf = acc != null && acc.length > 0;
+        if (acc != null) for (String t : acc) {
+            String x = t == null ? "" : t.trim().toLowerCase();
+            if (!x.equals("application/pdf") && !x.equals(".pdf")) soloPdf = false;
+        }
         Intent intent;
         if (p.isCaptureEnabled() && imagen) {
             File dir = new File(getCacheDir(), "fotos");
@@ -163,7 +171,7 @@ public class MainActivity extends Activity {
         } else {
             intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType(imagen ? "image/*" : "*/*");
+            intent.setType(imagen ? "image/*" : soloPdf ? "application/pdf" : "*/*");
             if (p.getMode() == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE) {
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             }
