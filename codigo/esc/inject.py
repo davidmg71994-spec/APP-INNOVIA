@@ -42,5 +42,16 @@ if "{v:'1.19.1'" not in h:
   ]},
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.19.1 · 09/11/2026", h, count=1)
+if "{v:'1.20.0'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.20.0';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.20.0', fecha:'09/11/2026', items:[
+    '<b>Buscador de toda la app</b> en el ordenador: pulsa <b>Ctrl + K</b> (o «Buscar» en la barra de la izquierda) y escribe: visitas, preguntas, normativa, láminas de señalización, revisiones y apartados del PSS/DGP.',
+    '<b>Responder con el teclado</b>: <b>S</b> Sí, <b>N</b> No, <b>A</b> N.A.; las flechas ↑ ↓ cambian de pregunta, <b>Intro</b> pasa a la siguiente y ← → cambian de paso. Con «No» se abre la observación para escribir la deficiencia.',
+    '<b>Arrastrar y soltar</b>: una foto encima de la pregunta, un PDF a la carpeta PSS/DGP (o al certificado de la revisión abierta) y una copia de seguridad para importarla.',
+    'En el ordenador, las pestañas de arriba y los pasos de la visita llevan su nombre completo.'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.20.0 · 09/11/2026", h, count=1)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ok', len(h))
