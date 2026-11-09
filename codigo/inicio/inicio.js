@@ -195,7 +195,7 @@ function pssPerfil(c) {
 /* cuadrícula de apartados */
 function modulo(o) {
   return `<button type="button" class="ini-m" data-ini="${o.act}" aria-label="${esc(o.t)}${o.s ? ': ' + esc(o.s) : ''}">
-    ${o.n ? `<span class="ini-bd">${o.n > 99 ? '99+' : o.n}</span>` : ''}<span class="ini-mi m-${o.c}">${o.ic}</span><b>${esc(o.t)}</b></button>`;
+    ${o.n ? `<span class="ini-bd">${o.n > 99 ? '99+' : o.n}</span>` : ''}<span class="ini-mi m-${o.c}">${o.ic}</span><b>${esc(o.t.replace(/ \(.*$/, ''))}${/ \(/.test(o.t) ? `<small>${esc(o.t.replace(/^.*? \(/, '('))}</small>` : ''}</b></button>`;
 }
 function renderHome() {
   const box = $('#ini-home'); if (!box) return;
@@ -232,14 +232,14 @@ function renderHome() {
     </div>
     <h2 class="ini-sec">Apartados</h2>
     <div class="ini-mods">
-      ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Historial', s:plural(regs.length, 'visita', 'visitas')})}
+      ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
       ${modulo({act:'cal', c:'cal', ic:IC.cal, t:'Calendario', s:calSub(), n:rc && rc.venc})}
-      ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe', s:'Cuatrimestral · ' + plural(ins.length, 'informe', 'informes')})}
-      ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación', s:planSub(), n:rp && rp.bad})}
-      ${modulo({act:'evrl', c:'evrl', ic:IC.evrl, t:'EVRL', s:evrlSub()})}
-      ${modulo({act:'rev', c:'rev', ic:IC.rev, t:'Revisiones', s:revSub(), n:rr && rr.bad})}
-      ${modulo({act:'sen', c:'sen', ic:IC.sen, t:'Señalización', s:'Láminas de la Norma 8.3-IC'})}
-      ${modulo({act:'norma', c:'norma', ic:IC.norma, t:'Normativa', s:'Fichas y enlace al BOE'})}
+      ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe cuatrimestral', s:plural(ins.length, 'informe', 'informes')})}
+      ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación preventiva', s:planSub(), n:rp && rp.bad})}
+      ${modulo({act:'evrl', c:'evrl', ic:IC.evrl, t:'Evaluación de riesgos laborales', s:evrlSub()})}
+      ${modulo({act:'rev', c:'rev', ic:IC.rev, t:'Revisiones de instalaciones', s:revSub(), n:rr && rr.bad})}
+      ${modulo({act:'sen', c:'sen', ic:IC.sen, t:'Señalización (manual de obras fijas)', s:'Láminas de la Norma 8.3-IC'})}
+      ${modulo({act:'norma', c:'norma', ic:IC.norma, t:'Normativa legal', s:'Fichas y enlace al BOE'})}
       ${modulo({act:'pss', c:'pf', ic:IC.pss, t:'PSS/DGP', s:pssSub(c)})}
     </div>
   </div>`;

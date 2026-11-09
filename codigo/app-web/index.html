@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-XGDwdY2LM3xM1iV4qFcQIshgQlqQJZtDhxoU+EJ2b5w='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-KV+QbCRNzCNJ4ZAQ27ONRCGOKA6dZxfqS4rm/+3EhLs='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
@@ -675,7 +675,9 @@ body.on-ini.ini-pf-on::before{background:var(--bg)}
 .ini-m{position:relative;appearance:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 6px 12px;display:grid;justify-items:center;gap:7px;text-align:center;color:var(--ink);cursor:pointer;min-width:0;font-family:var(--f-body);box-shadow:0 1px 2px rgba(14,58,99,.05),0 4px 14px rgba(14,58,99,.05)}
 .ini-m .ini-mi{width:44px;height:44px;border-radius:13px}
 .ini-m .ini-mi svg{width:23px;height:23px}
-.ini-m b{font:700 13px/1.2 var(--f-display);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ini-m{align-content:start}
+.ini-m b{font:700 13px/1.2 var(--f-display);max-width:100%;overflow-wrap:break-word;hyphens:manual}
+.ini-m b small{display:block;margin-top:2px;font:500 11.5px/1.25 var(--f-body);color:var(--muted)}
 .ini-bd{position:absolute;top:7px;right:7px;background:var(--bad);color:var(--on-bad);font:700 11.5px/1 var(--f-display);border-radius:99px;min-width:21px;height:21px;display:grid;place-items:center;padding:0 6px}
 .ini-m:active,.ini-it:active{transform:scale(.985)}
 .m-vis{background:#E56F0B}.m-cal{background:#7A3FA0}.m-doc{background:#1F5FA8}.m-evrl{background:#365F92}.m-rev{background:#2C7A3F}.m-plan{background:#1F5FA8}
@@ -1737,7 +1739,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.19.0 · 09/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.19.1 · 09/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -4063,8 +4065,11 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.19.0';
+const APP_VER = '1.19.1';
 const NOVEDADES = [
+  {v:'1.19.1', fecha:'09/11/2026', items:[
+    '<b>Apartados con su nombre completo</b> en Inicio: Visitas a obra, Informe cuatrimestral, Planificación preventiva, Evaluación de riesgos laborales, Revisiones de instalaciones, Señalización (manual de obras fijas) y Normativa legal.'
+  ]},
   {v:'1.19.0', fecha:'09/11/2026', items:[
     '<b>En el ordenador, a lo ancho</b>: el menú pasa a una barra a la izquierda y la app aprovecha toda la pantalla. Inicio y Perfil se ven en dos columnas.',
     '<b>Visita con su resumen al lado</b>: mientras rellenas, a la derecha ves los pasos, las respuestas, las incidencias y los botones de guardar y PDF.',
@@ -4311,6 +4316,7 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
 
 
 
@@ -5164,7 +5170,7 @@ function pssPerfil(c) {
 /* cuadrícula de apartados */
 function modulo(o) {
   return `<button type="button" class="ini-m" data-ini="${o.act}" aria-label="${esc(o.t)}${o.s ? ': ' + esc(o.s) : ''}">
-    ${o.n ? `<span class="ini-bd">${o.n > 99 ? '99+' : o.n}</span>` : ''}<span class="ini-mi m-${o.c}">${o.ic}</span><b>${esc(o.t)}</b></button>`;
+    ${o.n ? `<span class="ini-bd">${o.n > 99 ? '99+' : o.n}</span>` : ''}<span class="ini-mi m-${o.c}">${o.ic}</span><b>${esc(o.t.replace(/ \(.*$/, ''))}${/ \(/.test(o.t) ? `<small>${esc(o.t.replace(/^.*? \(/, '('))}</small>` : ''}</b></button>`;
 }
 function renderHome() {
   const box = $('#ini-home'); if (!box) return;
@@ -5201,14 +5207,14 @@ function renderHome() {
     </div>
     <h2 class="ini-sec">Apartados</h2>
     <div class="ini-mods">
-      ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Historial', s:plural(regs.length, 'visita', 'visitas')})}
+      ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
       ${modulo({act:'cal', c:'cal', ic:IC.cal, t:'Calendario', s:calSub(), n:rc && rc.venc})}
-      ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe', s:'Cuatrimestral · ' + plural(ins.length, 'informe', 'informes')})}
-      ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación', s:planSub(), n:rp && rp.bad})}
-      ${modulo({act:'evrl', c:'evrl', ic:IC.evrl, t:'EVRL', s:evrlSub()})}
-      ${modulo({act:'rev', c:'rev', ic:IC.rev, t:'Revisiones', s:revSub(), n:rr && rr.bad})}
-      ${modulo({act:'sen', c:'sen', ic:IC.sen, t:'Señalización', s:'Láminas de la Norma 8.3-IC'})}
-      ${modulo({act:'norma', c:'norma', ic:IC.norma, t:'Normativa', s:'Fichas y enlace al BOE'})}
+      ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe cuatrimestral', s:plural(ins.length, 'informe', 'informes')})}
+      ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación preventiva', s:planSub(), n:rp && rp.bad})}
+      ${modulo({act:'evrl', c:'evrl', ic:IC.evrl, t:'Evaluación de riesgos laborales', s:evrlSub()})}
+      ${modulo({act:'rev', c:'rev', ic:IC.rev, t:'Revisiones de instalaciones', s:revSub(), n:rr && rr.bad})}
+      ${modulo({act:'sen', c:'sen', ic:IC.sen, t:'Señalización (manual de obras fijas)', s:'Láminas de la Norma 8.3-IC'})}
+      ${modulo({act:'norma', c:'norma', ic:IC.norma, t:'Normativa legal', s:'Fichas y enlace al BOE'})}
       ${modulo({act:'pss', c:'pf', ic:IC.pss, t:'PSS/DGP', s:pssSub(c)})}
     </div>
   </div>`;

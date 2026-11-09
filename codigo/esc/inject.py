@@ -34,5 +34,13 @@ if "{v:'1.19.0'" not in h:
   ]},
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.19.0 · 09/11/2026", h, count=1)
+if "{v:'1.19.1'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.19.1';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.19.1', fecha:'09/11/2026', items:[
+    '<b>Apartados con su nombre completo</b> en Inicio: Visitas a obra, Informe cuatrimestral, Planificación preventiva, Evaluación de riesgos laborales, Revisiones de instalaciones, Señalización (manual de obras fijas) y Normativa legal.'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.19.1 · 09/11/2026", h, count=1)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ok', len(h))
