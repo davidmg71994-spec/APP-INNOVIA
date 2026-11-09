@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.DocumentsContract;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.WindowManager;
@@ -360,6 +361,7 @@ public class MainActivity extends Activity {
             i.addCategory(Intent.CATEGORY_OPENABLE);
             i.setType("application/json");
             i.putExtra(Intent.EXTRA_TITLE, limpio(nombre));
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
             startActivityForResult(i, REQ_SYNC_PROPIO);
         } catch (ActivityNotFoundException e) {
             syncAviso("propio", false, "No hay selector de archivos");
@@ -372,6 +374,7 @@ public class MainActivity extends Activity {
             i.addCategory(Intent.CATEGORY_OPENABLE);
             i.setType("*/*");
             i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
             startActivityForResult(i, REQ_SYNC_OTROS);
         } catch (ActivityNotFoundException e) {
             syncAviso("otros", false, "No hay selector de archivos");
@@ -394,7 +397,12 @@ public class MainActivity extends Activity {
         if (req == REQ_SYNC_PROPIO) {
             soltarPermiso(p.getString("propio", null));
             Uri u = us.get(0);
-            try { cr.takePersistableUriPermission(u, fl); } catch (Exception x) { /* sin permiso permanente: valdrá mientras la app esté abierta */ }
+            /* permiso permanente de lectura y escritura (si el proveedor no da los dos, al menos lo que dé) */
+            try {
+                cr.takePersistableUriPermission(u, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            } catch (Exception x) {
+                try { cr.takePersistableUriPermission(u, fl); } catch (Exception y) { /* sin permiso permanente: valdrá mientras la app esté abierta */ }
+            }
             e.putString("propio", u.toString());
             e.putString("propioNombre", nombreDe(u));
             nombres.put(nombreDe(u));
@@ -458,6 +466,7 @@ public class MainActivity extends Activity {
             byte[] datos;
             try { datos = texto.getBytes("UTF-8"); } catch (Exception e) { return "Texto no válido"; }
             String ultimo = null;
+            boolean permiso = false;
             for (String modo : new String[]{"wt", "rwt", "w"}) {
                 OutputStream out = null;
                 try {
@@ -469,14 +478,36 @@ public class MainActivity extends Activity {
                     out = null;
                     return null;
                 } catch (SecurityException e) {
-                    return "Sin permiso para el archivo de OneDrive: vuelve a elegir dónde guardar";
+                    permiso = true;
+                    ultimo = e.getMessage();
                 } catch (Exception e) {
                     ultimo = e.getMessage();
                 } finally {
                     if (out != null) try { out.close(); } catch (IOException x) { /* nada */ }
                 }
             }
-            return "No se pudo escribir en OneDrive" + (ultimo != null ? " (" + ultimo + ")" : "");
+            /* último intento: descriptor de archivo, recortado a cero */
+            ParcelFileDescriptor pfd = null;
+            try {
+                pfd = getContentResolver().openFileDescriptor(u, "rw");
+                if (pfd != null) {
+                    FileOutputStream fo = new FileOutputStream(pfd.getFileDescriptor());
+                    fo.getChannel().truncate(0);
+                    fo.getChannel().position(0);
+                    fo.write(datos);
+                    fo.flush();
+                    fo.close();
+                    return null;
+                }
+            } catch (SecurityException e) {
+                permiso = true;
+            } catch (Exception e) {
+                if (ultimo == null) ultimo = e.getMessage();
+            } finally {
+                if (pfd != null) try { pfd.close(); } catch (IOException x) { /* nada */ }
+            }
+            if (permiso) return "Sin permiso para escribir el archivo de este móvil: pulsa «Desactivar», vuelve a activarlo y elige otra vez dónde guardar";
+            return "No se pudo escribir el archivo de este móvil" + (ultimo != null ? " (" + ultimo + ")" : "");
         }
     }
 
@@ -529,7 +560,14 @@ public class MainActivity extends Activity {
         try {
             SharedPreferences p = syncPrefs();
             JSONObject o = new JSONObject();
-            if (p.getString("propio", null) != null) o.put("propio", p.getString("propioNombre", ""));
+            String pu = p.getString("propio", null);
+            if (pu != null) {
+                o.put("propio", p.getString("propioNombre", ""));
+                boolean ok = false;
+                for (android.content.UriPermission up : getContentResolver().getPersistedUriPermissions())
+                    if (up.getUri().toString().equals(pu) && up.isWritePermission()) ok = true;
+                o.put("propioOk", ok);
+            }
             JSONArray l = new JSONArray(p.getString("otros", "[]")), n = new JSONArray();
             for (int i = 0; i < l.length(); i++) n.put(Uri.parse(l.getString(i)).getLastPathSegment());
             o.put("otros", n);

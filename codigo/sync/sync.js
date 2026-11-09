@@ -1,9 +1,10 @@
-/* ================= Sincronizar con OneDrive (1.21.0) =================
-   El móvil y el ordenador juntan sus datos a través de una carpeta de OneDrive, sin servidor:
+/* ================= Sincronizar móvil y ordenador (1.21.0; carpeta del móvil por Enlace Móvil en 1.21.1) =================
+   El móvil y el ordenador juntan sus datos a través de una carpeta compartida, sin servidor: una de OneDrive o
+   una carpeta del propio móvil que Windows muestra en el Explorador con Enlace Móvil (CrossDevice):
    - cada dispositivo escribe SU archivo («VisitasPRL-<ordenador|movil>-<id>.json», cifrado con la clave de las copias)
      y lee los de los demás;
    - en el ordenador (Edge o Chrome) la app usa la carpeta que elige el técnico (File System Access);
-   - en el móvil (app de Android) el técnico crea su archivo en OneDrive y elige el del ordenador (Storage Access Framework).
+   - en el móvil (app de Android) el técnico crea su archivo en la carpeta compartida y elige el del ordenador (Storage Access Framework).
    Se junta cada elemento por su fecha de guardado (gana el último) y los borrados viajan como «borrados»
    para que nada vuelva a aparecer. Lo que se sincroniza: visitas guardadas, informes, planificaciones,
    calendario, revisiones (con sus certificados), evaluaciones de riesgos y contratos del perfil.
@@ -106,7 +107,7 @@ async function aplicar(d, preguntar) {
   let borrar = true;
   if (aBorrar.length > 3) {
     if (!preguntar) { CFG.pendBorrar = aBorrar.length; borrar = false; }
-    else borrar = (await ask({title:'¿Borrar también aquí?', yes:'Borrar', no:'No borrar', danger:true, body:`<p>En el otro dispositivo se han borrado <b>${aBorrar.length} elementos</b> (${resumen(aBorrar.reduce((o, [m]) => { o[m] = (o[m] || 0) + 1; return o; }, {}))}).</p><p>Si no lo esperabas, pulsa «No borrar»: se quedan aquí y vuelven a subir a OneDrive.</p>`})) === true;
+    else borrar = (await ask({title:'¿Borrar también aquí?', yes:'Borrar', no:'No borrar', danger:true, body:`<p>En el otro dispositivo se han borrado <b>${aBorrar.length} elementos</b> (${resumen(aBorrar.reduce((o, [m]) => { o[m] = (o[m] || 0) + 1; return o; }, {}))}).</p><p>Si no lo esperabas, pulsa «No borrar»: se quedan aquí y vuelven al otro dispositivo.</p>`})) === true;
     if (preguntar && !borrar) { for (const [m, id] of aBorrar) { try { await revivir(m, id); } catch (e) {} } CFG.pendBorrar = 0; }
   }
   if (borrar) { for (const [m, id, ts] of aBorrar) { try { await borraLocal(m, id); b[m + ':' + id] = Math.max(b[m + ':' + id] || 0, ts); n.del++; } catch (e) {} } CFG.pendBorrar = 0; }
@@ -191,7 +192,7 @@ async function andLeer() {
 }
 async function andEscribir(t) {
   const p = espera('escrito', 120000); AndroidApp.syncEscribir(t);
-  const r = await p; if (!r.ok) throw new Error(r.info || 'No se pudo escribir en OneDrive');
+  const r = await p; if (!r.ok) throw new Error(r.info || 'No se pudo escribir el archivo de este móvil');
 }
 const estadoAnd = () => { try { return JSON.parse(AndroidApp.syncEstado() || '{}'); } catch (e) { return {}; } };
 
@@ -243,13 +244,13 @@ async function sincronizar(o = {}) {
       if (!env) throw new Error('Sin la contraseña de las copias no se puede sincronizar.');
       if (AND()) await andEscribir(env); else await webEscribir(env);
       CFG.firma = f; CFG.escrito = Date.now();
-      lsSet('seg-copia-fuera', String(CFG.escrito));   // el archivo de OneDrive ya es una copia fuera del dispositivo
+      lsSet('seg-copia-fuera', String(CFG.escrito));   // el archivo compartido ya es una copia fuera del dispositivo
     }
     anotarVisto();
     CFG.ultima = Date.now(); CFG.error = falta ? 'falta-clave' : ''; CFG.estado = 'ok';
     const r = resumen(total);
     if (r || total.del) {
-      toast('Sincronizado con OneDrive: ' + [r && r + ' del otro dispositivo', total.del && plural(total.del, 'borrado', 'borrados')].filter(Boolean).join(' · ') + '.');
+      toast('Sincronizado: ' + [r && r + ' del otro dispositivo', total.del && plural(total.del, 'borrado', 'borrados')].filter(Boolean).join(' · ') + '.');
       refrescarVista();
     }
     return total;
@@ -265,13 +266,13 @@ async function sincronizar(o = {}) {
 
 /* ---------- puesta en marcha ---------- */
 async function activar() {
-  if (!PUEDE()) { await ask({title:'Sincronizar con OneDrive', single:true, yes:'Entendido', body:'<p>Se puede usar en la app de Android y en el ordenador con <b>Edge</b> o <b>Chrome</b>.</p>'}); return; }
+  if (!PUEDE()) { await ask({title:'Sincronizar móvil y ordenador', single:true, yes:'Entendido', body:'<p>Se puede usar en la app de Android y en el ordenador con <b>Edge</b> o <b>Chrome</b>.</p>'}); return; }
   if (WEB()) {
-    const ok = await ask({title:'Sincronizar con OneDrive', yes:'Elegir carpeta', body:`<ol class="sy-pasos">
-      <li>En la ventana que se abre, entra en tu <b>OneDrive de Innovia</b>.</li>
-      <li>Crea una carpeta <b>«Visitas PRL»</b> (o elige la que ya tengas) y pulsa <b>«Seleccionar carpeta»</b>.</li>
-      <li>Permite que la app use la carpeta (<b>«Editar archivos»</b>; si te lo ofrece, <b>«Permitir en cada visita»</b>).</li></ol>
-      <p class="help">La app deja ahí su archivo cifrado y lee el del móvil. Después, en el móvil: Perfil › Sincronizar con OneDrive.</p>`});
+    const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir carpeta', body:`<p>En la ventana que se abre, elige la carpeta que compartirán los dos:</p>
+      <ul class="sy-pasos"><li><b>Con Enlace Móvil</b> (móvil personal): a la izquierda, tu móvil › <b>storage › Download › Visitas PRL</b>.</li>
+      <li><b>Con OneDrive</b> (si el móvil tiene la misma cuenta): tu OneDrive › <b>Visitas PRL</b>.</li></ul>
+      <p>Pulsa <b>«Seleccionar carpeta»</b> y permite que la app la use (<b>«Editar archivos»</b>; si te lo ofrece, <b>«Permitir en cada visita»</b>).</p>
+      <p class="help">La app deja ahí su archivo cifrado y lee el del móvil. Después, en el móvil: Perfil › Sincronizar móvil y ordenador.</p>`});
     if (ok !== true) return;
     let h; try { h = await window.showDirectoryPicker({id:'visitas-prl-sync', mode:'readwrite', startIn:'documents'}); } catch (e) { return; }
     DIR = h; try { await kv.set('dir', h); } catch (e) { /* se recuerda mientras la app esté abierta */ }
@@ -280,9 +281,11 @@ async function activar() {
     await sincronizar({preguntar:true, forzar:true});
     return;
   }
-  /* móvil: 1) tu archivo en OneDrive; 2) el del ordenador */
-  const ok = await ask({title:'Sincronizar con OneDrive', yes:'Elegir dónde guardar', body:`<p><b>Antes</b>, actívalo en el ordenador (Perfil › Sincronizar con OneDrive): así ya existe la carpeta «Visitas PRL» con su archivo.</p>
-    <ol class="sy-pasos"><li>Se abre el selector de archivos: toca <b>☰</b> y elige <b>OneDrive</b>.</li><li>Entra en la carpeta <b>«Visitas PRL»</b> y pulsa <b>«Guardar»</b>.</li></ol>`});
+  /* móvil: 1) su archivo en la carpeta compartida; 2) el del ordenador */
+  const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir dónde guardar', body:`<p><b>Antes</b>, actívalo en el ordenador: así ya existe la carpeta con su archivo.</p>
+    <p>Se abre el selector de archivos. Elige la misma carpeta que en el ordenador:</p>
+    <ul class="sy-pasos"><li><b>Con Enlace Móvil</b>: <b>Descargas › Visitas PRL</b> (en este móvil).</li><li><b>Con OneDrive</b>: toca <b>☰ › OneDrive › Visitas PRL</b>.</li></ul>
+    <p>Y pulsa <b>«Guardar»</b>.</p>`});
   if (ok !== true) return;
   CFG.id = CFG.id || idCorto();
   const p = espera('propio'); AndroidApp.syncElegirPropio(nombrePropio());
@@ -292,7 +295,7 @@ async function activar() {
   await elegirOtros(true);
 }
 async function elegirOtros(alta) {
-  const ok = await ask({title:alta ? 'Ahora, el archivo del ordenador' : 'Archivo del ordenador', yes:'Elegir archivo', no:alta ? 'Más tarde' : 'Cancelar', body:`<ol class="sy-pasos"><li>En <b>OneDrive › Visitas PRL</b>, toca el archivo <b>«VisitasPRL-ordenador-…json»</b>.</li><li>Si tienes más de un ordenador, mantén pulsado para elegir varios.</li></ol>`});
+  const ok = await ask({title:alta ? 'Ahora, el archivo del ordenador' : 'Archivo del ordenador', yes:'Elegir archivo', no:alta ? 'Más tarde' : 'Cancelar', body:`<ol class="sy-pasos"><li>En la misma carpeta (<b>Descargas › Visitas PRL</b>, u <b>OneDrive › Visitas PRL</b>), toca el archivo <b>«VisitasPRL-ordenador-…json»</b>.</li><li>Si tienes más de un ordenador, mantén pulsado para elegir varios.</li></ol>`});
   if (ok === true) {
     const p = espera('otros'); AndroidApp.syncElegirOtros();
     const r = await p; if (!r.ok) toast('No se ha elegido ningún archivo.');
@@ -300,7 +303,7 @@ async function elegirOtros(alta) {
   await sincronizar({preguntar:true, forzar:true});
 }
 async function desactivar() {
-  const ok = await ask({title:'¿Dejar de sincronizar?', yes:'Dejar de sincronizar', danger:true, body:'<p>Los datos de este dispositivo no se tocan. El archivo de OneDrive se queda donde está: puedes borrarlo tú si no lo vas a usar.</p>'});
+  const ok = await ask({title:'¿Dejar de sincronizar?', yes:'Dejar de sincronizar', danger:true, body:'<p>Los datos de este dispositivo no se tocan. El archivo compartido se queda donde está: puedes borrarlo tú si no lo vas a usar.</p>'});
   if (ok !== true) return;
   if (AND()) { try { AndroidApp.syncQuitar(); } catch (e) {} }
   else { DIR = null; try { await kv.del('dir'); } catch (e) {} }
@@ -316,10 +319,11 @@ function lineas() {
   const ot = Object.entries(CFG.otros || {});
   const enAnd = AND() ? (estadoAnd().otros || []) : [];
   if (AND() && !enAnd.length) L.push(['warn', 'Falta elegir el archivo del ordenador.']);
+  if (AND() && estadoAnd().propio != null && estadoAnd().propioOk === false) L.push(['warn', 'El móvil no tiene permiso permanente para escribir su archivo: pulsa «Desactivar» y vuelve a activarlo.']);
   ot.forEach(([n, x]) => L.push([x.error ? 'warn' : '', `Lee <b>${esc(n)}</b>${x.error ? ' · ' + esc(x.error) : x.escrito ? ` · copia del ${x.disp === 'movil' ? 'móvil' : x.disp === 'ordenador' ? 'ordenador' : 'otro dispositivo'} de ${hora(x.escrito)}` : ''}`]));
   if (!AND() && !ot.length && CFG.ultima) L.push(['', 'Aún no hay archivo del móvil en la carpeta: actívalo también en el móvil.']);
   if (CFG.estado === 'permiso') L.push(['warn', 'Hace falta volver a dar permiso a la carpeta: pulsa «Sincronizar ahora».']);
-  if (CFG.estado === 'carpeta') L.push(['warn', 'Este navegador ha olvidado la carpeta: pulsa «Cambiar carpeta» y elige otra vez la de OneDrive.']);
+  if (CFG.estado === 'carpeta') L.push(['warn', 'Este navegador ha olvidado la carpeta: pulsa «Cambiar carpeta» y elige otra vez la carpeta compartida.']);
   if (CFG.pendBorrar) L.push(['warn', `Hay ${CFG.pendBorrar} borrados del otro dispositivo sin confirmar: pulsa «Sincronizar ahora».`]);
   if (CFG.error === 'falta-clave') L.push(['warn', 'Falta la contraseña de las copias del otro dispositivo: pulsa «Sincronizar ahora».']);
   else if (CFG.error) L.push(['warn', 'Último error: ' + esc(CFG.error)]);
@@ -328,9 +332,9 @@ function lineas() {
 function perfilHtml() {
   const on = activa();
   return `<section class="block sy-card" id="sy-card">
-    <header class="bh"><h2>Sincronizar con OneDrive</h2><span class="pill ${on ? 'ok' : ''}">${on ? 'Activada' : 'Desactivada'}</span></header>
+    <header class="bh"><h2>Sincronizar móvil y ordenador</h2><span class="pill ${on ? 'ok' : ''}">${on ? 'Activada' : 'Desactivada'}</span></header>
     <div class="bb">
-      <p class="help">${on ? 'Lo que guardas aquí aparece en el otro dispositivo, y al revés: visitas guardadas, informes, planificaciones, calendario, revisiones, evaluaciones de riesgos y contratos. Va cifrado con la contraseña de las copias. El PDF del PSS/DGP no viaja.' : 'Junta lo del móvil y lo del ordenador a través de una carpeta de tu OneDrive de Innovia. Sin servidores: cada dispositivo deja ahí su archivo cifrado y lee el del otro.'}</p>
+      <p class="help">${on ? 'Lo que guardas aquí aparece en el otro dispositivo, y al revés: visitas guardadas, informes, planificaciones, calendario, revisiones, evaluaciones de riesgos y contratos. Va cifrado con la contraseña de las copias. El PDF del PSS/DGP no viaja.' : 'Junta lo del móvil y lo del ordenador a través de una carpeta compartida: la del propio móvil, que el ordenador ve con Enlace Móvil, o una de OneDrive. Sin servidores: cada dispositivo deja ahí su archivo cifrado y lee el del otro.'}</p>
       ${on ? `<ul class="sy-est">${lineas().map(([c, t]) => `<li class="${c}">${t}</li>`).join('')}</ul>` : ''}
       ${!PUEDE() ? '<p class="help">Disponible en la app de Android y en el ordenador con Edge o Chrome.</p>' : ''}
       <div class="sy-acc">${on ? `<button type="button" class="btn primary" data-sy="ya"${CFG.estado === 'sincronizando' ? ' disabled' : ''}>${CFG.estado === 'sincronizando' ? 'Sincronizando…' : 'Sincronizar ahora'}</button>${AND() ? '<button type="button" class="btn" data-sy="otros">Archivo del ordenador</button>' : '<button type="button" class="btn" data-sy="carpeta">Cambiar carpeta</button>'}<button type="button" class="btn sy-off" data-sy="off">Desactivar</button>` : PUEDE() ? '<button type="button" class="btn primary" data-sy="on">Activar</button>' : ''}</div>
@@ -347,7 +351,7 @@ function pinta() {
       if (!p) { nav.insertAdjacentHTML('beforeend', '<button type="button" class="sy-pie" id="sy-pie" data-sy="ya"></button>'); p = $('#sy-pie'); }
       const mal = CFG.estado === 'permiso' || CFG.estado === 'carpeta' || CFG.estado === 'error' || CFG.error || CFG.pendBorrar;
       p.className = 'sy-pie' + (mal ? ' warn' : '') + (CFG.estado === 'sincronizando' ? ' on' : '');
-      p.innerHTML = `<i aria-hidden="true"></i><span>${CFG.estado === 'sincronizando' ? 'Sincronizando…' : CFG.estado === 'permiso' ? 'OneDrive: pulsa para seguir' : mal ? 'OneDrive: revisar' : CFG.ultima ? 'OneDrive · ' + hora(CFG.ultima).replace('hoy a las ', '') : 'OneDrive'}</span>`;
+      p.innerHTML = `<i aria-hidden="true"></i><span>${CFG.estado === 'sincronizando' ? 'Sincronizando…' : CFG.estado === 'permiso' ? 'Sincronizar: pulsa para seguir' : mal ? 'Sincronizar: revisar' : CFG.ultima ? 'Sincronizado · ' + hora(CFG.ultima).replace('hoy a las ', '') : 'Sincronizar'}</span>`;
       p.title = 'Sincronizar ahora';
     } else if (p) p.remove();
   }
@@ -356,7 +360,7 @@ function pinta() {
   const hace = activa() && (CFG.estado === 'permiso' || CFG.pendBorrar || CFG.error === 'falta-clave');
   if (hace) {
     if (!a) { document.body.insertAdjacentHTML('beforeend', '<button type="button" class="sy-aviso" id="sy-aviso" data-sy="ya"></button>'); a = $('#sy-aviso'); }
-    a.innerHTML = `<b>OneDrive</b><span>${CFG.estado === 'permiso' ? 'Toca para seguir sincronizando' : CFG.pendBorrar ? 'Hay borrados por confirmar' : 'Falta la contraseña del otro dispositivo'}</span>`;
+    a.innerHTML = `<b>Sincronizar</b><span>${CFG.estado === 'permiso' ? 'Toca para seguir sincronizando' : CFG.pendBorrar ? 'Hay borrados por confirmar' : 'Falta la contraseña del otro dispositivo'}</span>`;
   } else if (a) a.remove();
 }
 document.addEventListener('click', async e => {

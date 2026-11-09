@@ -2,7 +2,7 @@
 
 App para los técnicos de PRL de Innovia: registro de comprobación del recurso preventivo en obra, informe de seguimiento cuatrimestral, planificación preventiva y evaluación de riesgos, con salida en PDF, Word y Excel, y el PSS/DGP de cada obra a mano.
 
-**Versión 1.21.0 · 09/11/2026**
+**Versión 1.21.1 · 09/11/2026**
 
 ## Cómo usarla
 

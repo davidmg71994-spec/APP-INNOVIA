@@ -28,5 +28,14 @@ if "{v:'1.21.0'" not in h:
   ]},
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.21.0 · 09/11/2026", h, count=1)
+if "{v:'1.21.1'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.21.1';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.21.1', fecha:'09/11/2026', items:[
+    '<b>Sincronizar sin OneDrive</b>: si el ordenador ve tu móvil con <b>Enlace Móvil</b>, la carpeta compartida puede ser <b>Descargas › Visitas PRL</b> del propio móvil. Sirve con el móvil personal.',
+    'En el móvil, el archivo de sincronización se guarda con permiso permanente y, si Android lo pierde, la app lo avisa en Perfil.'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.21.1 · 09/11/2026", h, count=1)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ok', len(h))
