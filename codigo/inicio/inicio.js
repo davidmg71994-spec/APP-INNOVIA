@@ -214,18 +214,22 @@ function renderHome() {
     </div>
   </section>
   <div class="ini-in ini-body">
+    <div class="ini-col ini-ca">
     ${falta ? `<div class="ini-setup"><b>Configura tu perfil</b><span>${!nom ? 'Pon tu nombre y da' : 'Da'} de alta los contratos que llevas. Cada visita e informe quedará ligado a su contrato.</span><button type="button" class="btn primary" data-ini="onb">Configurar mi perfil</button></div>` : ''}
     <button type="button" class="btn primary ini-new" data-ini="nueva">${IC.mas}Nueva visita</button>
     ${enCurso ? `<button type="button" class="ini-cont" data-ini="seguir"><span><small>Registro sin guardar</small><b>${esc((S.rp.ubicacion || '').trim() || 'Registro empezado')}</b></span><i>Continuar</i></button>` : ''}
-    ${carpetaHtml(c)}
     <section class="ini-card" id="ini-hoy">
       <div class="ini-ch"><h2>Hoy y vencidas</h2>${pc.mas ? `<button type="button" class="ini-lk" data-ini="todo">${verTodo ? 'Ver menos' : `Ver todo (${pc.n})`}</button>` : pc.n ? `<span class="ini-cn${pc.b ? ' bad' : ''}">${pc.n}</span>` : ''}</div>
       ${pendHtml()}
     </section>
+    </div>
+    <div class="ini-col ini-cb">
+    ${carpetaHtml(c)}
     <section class="ini-card" id="ini-def">
       <div class="ini-ch"><h2>Deficiencias por mes</h2>${regs.length ? `<button type="button" class="ini-lk" data-ini="hist">Historial ${IC.sig}</button>` : ''}</div>
       ${defHtml(c)}
     </section>
+    </div>
     <h2 class="ini-sec">Apartados</h2>
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Historial', s:plural(regs.length, 'visita', 'visitas')})}

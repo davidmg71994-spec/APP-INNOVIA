@@ -173,3 +173,7 @@ body.sub-on .block{scroll-margin-top:184px}
 .onb-tips li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
 .onb-tips b{color:var(--corp-text)}
 body.onb-on{overflow:hidden}
+
+/* Inicio en dos columnas en el ordenador (escritorio.css); en el móvil las columnas no existen y se mantiene el orden */
+.ini-col{display:contents}
+.ini-setup{order:1}.ini-new{order:2}.ini-cont{order:3}.ini-pss{order:4}#ini-hoy{order:5}#ini-def{order:6}.ini-sec{order:7}.ini-mods{order:8}

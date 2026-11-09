@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-CgNFMyFZ3CKDCgUOIGpIwHs4KbpKyMuTtPC6U/YoN8A='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-XGDwdY2LM3xM1iV4qFcQIshgQlqQJZtDhxoU+EJ2b5w='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
@@ -753,6 +753,10 @@ body.sub-on .block{scroll-margin-top:184px}
 .onb-tips li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
 .onb-tips b{color:var(--corp-text)}
 body.onb-on{overflow:hidden}
+
+/* Inicio en dos columnas en el ordenador (escritorio.css); en el móvil las columnas no existen y se mantiene el orden */
+.ini-col{display:contents}
+.ini-setup{order:1}.ini-new{order:2}.ini-cont{order:3}.ini-pss{order:4}#ini-hoy{order:5}#ini-def{order:6}.ini-sec{order:7}.ini-mods{order:8}
 /*INI-CSS-END*/
 /*PLAN-CSS-START*/
 /* Planificación preventiva: cabecera azul corporativa, filas con la banda de color de su origen (leyenda del Excel) */
@@ -1400,6 +1404,122 @@ body.onb-on{overflow:hidden}
 .ps-hl2{overflow-y:auto;overscroll-behavior:contain;display:grid;gap:8px;align-content:start;padding-bottom:4px}
 body.ps-noscroll{overflow:hidden}
 /*PSS-CSS-END*/
+/*ESC-CSS-START*/
+/* ===== Ordenador: barra lateral y pantallas a dos columnas (1.19.0) =====
+   ≥1024 px: barra lateral, contenido ancho, Inicio y Perfil en dos columnas, listas en rejilla.
+   ≥1280 px: la visita con su resumen al lado y el Historial con el detalle del registro al lado. */
+.esc-logo,.esc-pie,.esc-panel{display:none}
+@media (min-width:1024px){
+  :root{--side:236px;--esc-w:1180px}
+  body{padding-left:var(--side)}
+  /* barra lateral: la barra de abajo pasa a la izquierda */
+  .bottomnav{top:0;bottom:0;right:auto;width:var(--side);display:flex!important;flex-direction:column;align-items:stretch;gap:4px;padding:20px 14px 16px;border-top:0;border-right:1px solid var(--line);overflow-y:auto}
+  .bottomnav .esc-logo{display:flex;align-items:center;gap:10px;padding:2px 10px 18px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+  .esc-logo img{height:26px;width:auto}
+  .esc-logo span{font:600 13px/1.2 var(--f-display);color:var(--muted);padding-left:10px;border-left:1px solid var(--line)}
+  .bottomnav .esc-logo{order:-1}.bottomnav .tab{order:0}.bottomnav .esc-pie{order:99}
+  .bottomnav .tab,.bottomnav.n5 .tab{flex-direction:row;justify-content:flex-start;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;line-height:1.2;letter-spacing:0}
+  .bottomnav.n5 .tab span{overflow:visible}
+  .bottomnav .tab svg{width:21px;height:21px}
+  .bottomnav .tab:hover{background:var(--surface-2);color:var(--ink)}
+  .bottomnav .tab[aria-selected="true"]{background:var(--brand-soft);color:var(--brand-text)}
+  .bottomnav .tab[aria-selected="true"]::before{top:9px;bottom:9px;left:0;right:auto;width:3px;height:auto;border-radius:0 3px 3px 0}
+  .bottomnav .esc-pie{display:block;margin-top:auto;padding:14px 10px 0;border-top:1px solid var(--line);font-size:13px;line-height:1.35;color:var(--muted)}
+  .esc-pie b{display:block;font:600 14px/1.3 var(--f-display);color:var(--ink)}
+  /* contenido más ancho */
+  main,.top-in,.wiz-in,.ini-in{max-width:var(--esc-w)}
+  main{padding-bottom:48px}
+  .top .bar1{display:none}
+  .top{transform:none!important}
+  .top-in{padding-top:12px}
+  #view-form,#view-inf{padding-bottom:110px}
+  #view-ini{padding-bottom:40px}
+  .wiz,.ibar{left:var(--side);bottom:0}
+  .toast{left:calc(50% + var(--side) / 2);bottom:28px}
+  #view-form .toast,.wiz~.toast{bottom:96px}
+  .upd{left:calc(var(--side) + 24px);bottom:28px}
+  /* Inicio: saludo a la izquierda y anillos a la derecha; debajo, dos columnas */
+  .ini-hero{border-radius:0 0 24px 24px}
+  .ini-hero .ini-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:40px;align-items:center}
+  .ini-hero .ini-top{grid-column:1/-1}
+  .ini-hero .ini-sp,.ini-hero .ini-hi,.ini-hero .ini-ctr{grid-column:1}
+  .ini-hero .ini-rings{grid-column:2;grid-row:2 / span 3;align-self:center}
+  .ini-body{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:20px;align-items:start}
+  .ini-col{display:grid;gap:12px;align-content:start}
+  .ini-sec,.ini-mods{grid-column:1/-1}
+  .ini-mods{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+  /* Perfil: datos y privacidad a la izquierda, contratos a la derecha */
+  .ini-pf{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:20px;row-gap:14px;align-items:start}
+  .ini-pf>.ihead,.ini-pf>.ini-pfh{grid-column:1/-1}
+  .ini-pf>section:nth-of-type(1){grid-column:1;grid-row:3}
+  .ini-pf>section:nth-of-type(2){grid-column:2;grid-row:3 / span 2}
+  .ini-pf>section:nth-of-type(3){grid-column:1;grid-row:4}
+  /* listas de tarjetas en rejilla */
+  #h-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;align-items:start}
+  #h-list>.empty{grid-column:1/-1}
+  .pl-list,.rv-list{grid-template-columns:repeat(auto-fill,minmax(360px,1fr));align-items:start}
+  .nm-list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px;align-items:start}
+  .nm-list>:not(.nm-item){grid-column:1/-1}
+  .sen-items{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sen-items .sen-it:nth-child(even){border-left:1px solid var(--line)}
+  .sen-items .sen-it:last-child{border-radius:0}
+  /* Privacidad y seguridad: secciones en dos columnas */
+  #view-seg{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:20px;align-items:start}
+  #view-seg>.ihead,#view-seg>.sg-hero,#view-seg>.sg-tec{grid-column:1/-1}
+}
+/* ≥1280 px: panel al lado (la visita con su resumen, el Historial con el detalle) */
+@media (min-width:1280px){
+  .esc-panel{display:block;position:fixed;z-index:15;top:var(--esc-top,96px);left:var(--esc-left,auto);width:var(--esc-pw,360px);max-height:calc(100vh - var(--esc-top,96px) - var(--esc-bot,24px));overflow-y:auto;overscroll-behavior:contain;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+  .esc-panel[hidden]{display:none}
+  #view-form.esc-con{padding-right:calc(var(--esc-pw,360px) + 44px)}
+  #view-hist.esc-con{padding-right:calc(var(--esc-pw,460px) + 44px)}
+  #view-hist.esc-con #h-list{grid-template-columns:minmax(0,1fr)}
+  .hcard{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+  .hcard.esc-sel{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-soft)}
+  .esc-ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 12px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:1}
+  .esc-ph h2{margin:0;font:700 16px/1.25 var(--f-display);color:var(--ink)}
+  .esc-pb{padding:14px 18px 18px;display:grid;gap:14px}
+  .esc-obra b{display:block;font:600 16px/1.3 var(--f-display);color:var(--ink)}
+  .esc-obra span{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+  .esc-pasos{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+  .esc-pasos button{width:100%;display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:10px;padding:5px 8px;border:0;border-radius:8px;background:none;color:var(--ink);font:500 14.5px/1.2 var(--f-body);text-align:left;cursor:pointer}
+  .esc-pasos button:hover{background:var(--surface-2)}
+  .esc-pasos button[aria-current="true"]{background:var(--brand-soft);color:var(--brand-text);font-weight:600}
+  .esc-pasos .n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:600 12px/1 var(--f-mono);background:var(--surface-2);color:var(--muted)}
+  .esc-pasos .done .n{background:var(--ok-soft);color:var(--ok)}
+  .esc-pasos .warn .n{background:var(--bad-soft);color:var(--bad)}
+  .esc-pasos .c{font:500 12.5px/1 var(--f-mono);color:var(--muted)}
+  .esc-panel .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .esc-panel .stat{flex-direction:column;align-items:flex-start;gap:4px;padding:8px 8px 7px}
+  .esc-panel .stat b{font-size:21px;min-width:0}
+  .esc-panel .stat span{font-size:10px;letter-spacing:.04em}
+  .esc-panel .inc h3{font-size:14px}
+  .esc-panel .inc ul{max-height:none}
+  .esc-est{font-size:13.5px;color:var(--muted)}
+  .esc-est.ok{color:var(--ok)}
+  .esc-est.warn{color:var(--sg-warn-ink,#8A4A0B)}
+  .esc-pf{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:10px 18px 14px;display:grid;gap:8px}
+  .esc-pf .esc-est{margin:0}
+  .esc-acc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .esc-acc .btn{width:100%}
+  .esc-sub{font:600 12px/1.2 var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+  /* detalle de un registro */
+  .esc-det .hmeta{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--muted)}
+  .esc-det h3{margin:2px 0 0;font:700 19px/1.25 var(--f-display);color:var(--ink)}
+  .esc-fotos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .esc-fotos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:var(--surface-2)}
+  .esc-lst{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .esc-lst li{font-size:14.5px;line-height:1.35;padding:8px 10px;border-radius:8px;background:var(--surface-2)}
+  .esc-lst li small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+  .esc-lst li.bad{background:var(--bad-soft)}
+  .esc-firmas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .esc-firmas figure{margin:0;border:1px solid var(--line);border-radius:8px;padding:6px;background:#fff;text-align:center}
+  .esc-firmas img{max-width:100%;height:56px;object-fit:contain}
+  .esc-firmas figcaption{font-size:12.5px;color:#55534F;margin-top:2px}
+  .esc-vacio{padding:40px 18px;text-align:center;color:var(--muted);font-size:15px}
+}
+@media print{.esc-panel{display:none!important}}
+/*ESC-CSS-END*/
 /*SEG-CSS-START*/
 /* Privacidad y seguridad (1.18.0) */
 #view-seg{gap:12px}
@@ -1617,7 +1737,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.18.1 · 09/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.19.0 · 09/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -3612,6 +3732,7 @@ function showTab(t) {
   if (window.NORMA_API) NORMA_API.onTab(t);
   if (window.EVRL_API) EVRL_API.onTab(t);
   if (window.PSS_API) PSS_API.onTab(t);
+  if (window.ESC_API) ESC_API.onTab(t);
   if (window.SEG_API) SEG_API.onTab(t);
   $('#steps').hidden = t !== 'form'; $('#prog').hidden = t !== 'form';
   $('#wiz').hidden = t !== 'form'; document.body.classList.toggle('wiz-on', t === 'form');
@@ -3942,8 +4063,14 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.18.1';
+const APP_VER = '1.19.0';
 const NOVEDADES = [
+  {v:'1.19.0', fecha:'09/11/2026', items:[
+    '<b>En el ordenador, a lo ancho</b>: el menú pasa a una barra a la izquierda y la app aprovecha toda la pantalla. Inicio y Perfil se ven en dos columnas.',
+    '<b>Visita con su resumen al lado</b>: mientras rellenas, a la derecha ves los pasos, las respuestas, las incidencias y los botones de guardar y PDF.',
+    '<b>Historial con el detalle al lado</b>: al pulsar un registro ves sus incidencias, fotos, trabajadores y firmas sin abrirlo.',
+    'En el móvil todo sigue igual.'
+  ]},
   {v:'1.18.1', fecha:'09/11/2026', items:[
     '<b>Copia fuera del móvil</b>: Inicio te recuerda cada 7 días (lo cambias en Privacidad y seguridad) guardar una copia en OneDrive, SharePoint o el correo de la empresa. Al exportar, «Compartir» y eliges OneDrive; en el ordenador, «Guardar en…» y tu carpeta de OneDrive.',
     '<b>Contraseña de las copias desde el principio</b>: en el móvil la app la pide al abrirse si aún no la tienes, para que ninguna copia quede sin cifrar.',
@@ -5056,18 +5183,22 @@ function renderHome() {
     </div>
   </section>
   <div class="ini-in ini-body">
+    <div class="ini-col ini-ca">
     ${falta ? `<div class="ini-setup"><b>Configura tu perfil</b><span>${!nom ? 'Pon tu nombre y da' : 'Da'} de alta los contratos que llevas. Cada visita e informe quedará ligado a su contrato.</span><button type="button" class="btn primary" data-ini="onb">Configurar mi perfil</button></div>` : ''}
     <button type="button" class="btn primary ini-new" data-ini="nueva">${IC.mas}Nueva visita</button>
     ${enCurso ? `<button type="button" class="ini-cont" data-ini="seguir"><span><small>Registro sin guardar</small><b>${esc((S.rp.ubicacion || '').trim() || 'Registro empezado')}</b></span><i>Continuar</i></button>` : ''}
-    ${carpetaHtml(c)}
     <section class="ini-card" id="ini-hoy">
       <div class="ini-ch"><h2>Hoy y vencidas</h2>${pc.mas ? `<button type="button" class="ini-lk" data-ini="todo">${verTodo ? 'Ver menos' : `Ver todo (${pc.n})`}</button>` : pc.n ? `<span class="ini-cn${pc.b ? ' bad' : ''}">${pc.n}</span>` : ''}</div>
       ${pendHtml()}
     </section>
+    </div>
+    <div class="ini-col ini-cb">
+    ${carpetaHtml(c)}
     <section class="ini-card" id="ini-def">
       <div class="ini-ch"><h2>Deficiencias por mes</h2>${regs.length ? `<button type="button" class="ini-lk" data-ini="hist">Historial ${IC.sig}</button>` : ''}</div>
       ${defHtml(c)}
     </section>
+    </div>
     <h2 class="ini-sec">Apartados</h2>
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Historial', s:plural(regs.length, 'visita', 'visitas')})}
@@ -8699,6 +8830,172 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 /*PSS-JS-END*/
+/*ESC-JS-START*/
+/* ================= Ordenador: pantalla a dos columnas (1.19.0) =================
+   La barra de abajo pasa a ser una barra lateral (esc.css). En pantallas de 1280 px o más:
+   - la visita lleva al lado un resumen fijo: pasos, respuestas, incidencias y botones de guardar y PDF;
+   - el Historial muestra al lado el detalle del registro elegido (fotos, incidencias, firmas, código). */
+(() => {
+const G1 = matchMedia('(min-width:1024px)'), G2 = matchMedia('(min-width:1280px)');
+const vis = el => !!el && !el.hidden;
+
+/* ---------- barra lateral ---------- */
+function lateral() {
+  const nav = document.querySelector('.bottomnav'); if (!nav) return;
+  if (!nav.querySelector('.esc-logo')) {
+    nav.insertAdjacentHTML('afterbegin', '<div class="esc-logo" aria-hidden="true"><img class="logo-l" src="icons/logo-innovia.png" alt="" width="402" height="105"><img class="logo-d" src="icons/logo-innovia-dark.png" alt="" width="402" height="105"><span>Visitas PRL</span></div>');
+    nav.insertAdjacentHTML('beforeend', '<div class="esc-pie" id="esc-pie"></div>');
+  }
+  const n = (lsGet('rp-nombre') || '').trim(), p = perfilGet ? perfilGet() : null;
+  $('#esc-pie').innerHTML = `${n ? `<b>${esc(n)}</b>` : ''}${esc((p && p.cargo) || 'Técnico de PRL')}<br>Versión ${esc(APP_VER)}`;
+}
+
+/* ---------- posición de los paneles fijos ---------- */
+function coloca() {
+  const top = document.querySelector('.top'), r = top ? top.getBoundingClientRect() : {bottom:0};
+  document.documentElement.style.setProperty('--esc-top', Math.max(16, Math.round(r.bottom) + 16) + 'px');
+  [['#view-form', '#esc-res', 360], ['#view-hist', '#esc-det', 460]].forEach(([v, pn, w]) => {
+    const m = $(v), pa = $(pn); if (!m || !pa || m.hidden) return;
+    const b = m.getBoundingClientRect();
+    pa.style.setProperty('--esc-pw', w + 'px'); m.style.setProperty('--esc-pw', w + 'px');
+    pa.style.left = Math.round(b.right - 16 - w) + 'px';
+  });
+  const wiz = $('.wiz');
+  document.documentElement.style.setProperty('--esc-bot', (vis($('#view-form')) && wiz && wiz.offsetHeight ? wiz.offsetHeight + 16 : 24) + 'px');
+}
+let rq = 0;
+const pide = () => { if (rq) return; rq = requestAnimationFrame(() => { rq = 0; coloca(); }); };
+addEventListener('scroll', pide, {passive:true});
+addEventListener('resize', pide);
+
+/* ---------- resumen de la visita ---------- */
+function panelRes() {
+  let pa = $('#esc-res');
+  if (!pa) {
+    const m = $('#view-form'); if (!m) return null;
+    pa = document.createElement('aside'); pa.id = 'esc-res'; pa.className = 'esc-panel'; pa.setAttribute('aria-label', 'Resumen de la visita');
+    m.appendChild(pa); m.classList.add('esc-con');
+    pa.addEventListener('click', e => {
+      const b = e.target.closest('[data-esc]'); if (!b) return;
+      const a = b.dataset.esc;
+      if (a === 'paso') { const c = document.getElementById('st-' + b.dataset.id); if (c) c.click(); }
+      else if (a === 'save') { const x = $('#btn-save'); if (x) x.click(); }
+      else if (a === 'pdf') { const x = $('#btn-pdf'); if (x) x.click(); }
+    });
+  }
+  return pa;
+}
+function pintaRes() {
+  if (!G2.matches) return;
+  const pa = panelRes(); if (!pa) return;
+  const pasos = STEPS.map((st, i) => {
+    const c = document.getElementById('st-' + st.id), cls = c ? c.className : '';
+    const est = /\bwarn\b/.test(cls) ? 'warn' : /\bdone\b/.test(cls) ? 'done' : '';
+    const cur = !!c && c.getAttribute('aria-current') === 'step';
+    const cnt = c ? ($('.c', c) || {}).textContent || '' : '';
+    return `<li class="${est}"><button type="button" data-esc="paso" data-id="${st.id}" aria-current="${cur}"><span class="n">${est === 'done' ? '✓' : est === 'warn' ? '!' : i + 1}</span><span>${esc(st.l)}</span><span class="c">${esc(cnt)}</span></button></li>`;
+  }).join('');
+  const ss = $('#savestate'), sp = ss ? ($('span', ss) || ss).textContent : '';
+  const ctr = S.contrato && S.contrato.id ? nombreContrato(S.contrato) : '';
+  pa.innerHTML = `<div class="esc-ph"><h2>Resumen de la visita</h2></div>
+    <div class="esc-pb">
+      <div class="esc-obra"><b>${esc((S.rp.ubicacion || '').trim() || 'Obra sin indicar')}</b><span>${esc([S.rp.fecha ? fmtDate(S.rp.fecha) : '', S.rp.hora || '', ctr].filter(Boolean).join(' · ') || 'Fecha y contrato en «Datos»')}</span></div>
+      <ol class="esc-pasos">${pasos}</ol>
+      <div class="stats">${($('#stats') || {}).innerHTML || ''}</div>
+      ${($('#incid') || {}).innerHTML || ''}
+    </div>
+    <div class="esc-pf">
+      <p class="esc-est ${ss ? (/\bok\b/.test(ss.className) ? 'ok' : /\bwarn\b/.test(ss.className) ? 'warn' : '') : ''}">${esc(sp)}</p>
+      <div class="esc-acc"><button type="button" class="btn primary" data-esc="save"${$('#btn-save') && $('#btn-save').hidden ? ' hidden' : ''}>${esc(($('#btn-save') || {}).textContent || 'Guardar')}</button><button type="button" class="btn" data-esc="pdf">PDF</button></div>
+    </div>`;
+  pide();
+}
+
+/* ---------- detalle del registro en el Historial ---------- */
+let selId = null;
+function panelDet() {
+  let pa = $('#esc-det');
+  if (!pa) {
+    const m = $('#view-hist'); if (!m) return null;
+    pa = document.createElement('aside'); pa.id = 'esc-det'; pa.className = 'esc-panel esc-det'; pa.setAttribute('aria-label', 'Detalle del registro');
+    m.appendChild(pa); m.classList.add('esc-con');
+    $('#h-list').addEventListener('click', e => {
+      if (!G2.matches || e.target.closest('button, a, input')) return;
+      const card = e.target.closest('.hcard'); if (!card) return;
+      const b = card.querySelector('[data-hact="open"]'); if (!b) return;
+      selId = b.dataset.id; marca(); pintaDet();
+    });
+  }
+  return pa;
+}
+function marca() {
+  $$('#h-list .hcard').forEach(c => { const b = c.querySelector('[data-hact="open"]'); c.classList.toggle('esc-sel', !!b && b.dataset.id === selId); });
+}
+function fotosDe(r) {
+  const out = [];
+  Object.values(r.resp || {}).forEach(a => (a.fotos || []).forEach(f => { if (f && f.data) out.push(f.data); }));
+  Object.values(r.maqFotos || {}).forEach(l => (Array.isArray(l) ? l : [l]).forEach(f => { const d = f && (f.data || f); if (typeof d === 'string' && d.startsWith('data:image')) out.push(d); }));
+  return out;
+}
+function pintaDet() {
+  if (!G2.matches) return;
+  const pa = panelDet(); if (!pa) return;
+  const ids = $$('#h-list [data-hact="open"]').map(b => b.dataset.id);
+  if (!selId || !ids.includes(selId)) selId = ids[0] || null;
+  marca();
+  const rec = selId && HIST.find(x => x.id === selId);
+  if (!rec) { pa.innerHTML = '<div class="esc-vacio">Elige un registro de la lista para ver su detalle.</div>'; pide(); return; }
+  let A = null; try { A = analyze(normalize(clone(rec))); } catch (e) { A = null; }
+  const s = rec.resumen || {}, inc = A ? A.all : [];
+  const fotos = fotosDe(rec), ws = (rec.trabajadores || []);
+  const firmas = [rec.firma ? {img:rec.firma, n:(rec.rp && rec.rp.nombre) || 'Técnico'} : null, ...ws.filter(w => w.firma).map(w => ({img:w.firma, n:w.nombre || 'Trabajador'}))].filter(Boolean);
+  pa.innerHTML = `<div class="esc-ph"><h2>Detalle del registro</h2><span class="pill ${inc.length ? 'bad' : 'ok'}">${inc.length ? plural(inc.length, 'incidencia', 'incidencias') : 'Sin incidencias'}</span></div>
+    <div class="esc-pb">
+      <div><div class="hmeta"><span>${rec.codigo ? '<b class="hcode">' + esc(rec.codigo) + '</b> · ' : ''}${esc(fmtDate(rec.rp && rec.rp.fecha))} · ${esc((rec.rp && rec.rp.hora) || '')}</span></div>
+        <h3>${esc((rec.rp && rec.rp.ubicacion) || 'Sin ubicación')}</h3>
+        <p class="hsub">${esc([rec.contrato && rec.contrato.id ? nombreContrato(rec.contrato) : '', rec.rp && rec.rp.nombre].filter(Boolean).join(' · '))}</p>
+        ${window.SEG_API ? SEG_API.histLinea(rec) : ''}</div>
+      <div class="stats">
+        <div class="stat ok"><b>${A ? A.ok : s.ok || 0}</b><span>Conformes</span></div>
+        <div class="stat ${(A ? A.bad : s.bad) ? 'bad' : ''}"><b>${A ? A.bad : s.bad || 0}</b><span>No conformes</span></div>
+        <div class="stat"><b>${A ? A.na : s.na || 0}</b><span>N.A.</span></div>
+        <div class="stat"><b>${A ? A.pend : s.pend || 0}</b><span>Sin responder</span></div>
+      </div>
+      ${inc.length ? `<div><p class="esc-sub">Incidencias</p><ul class="esc-lst">${inc.map(x => `<li class="bad">${esc(x.t)}<small>${esc(x.sec)}${x.mejora ? ' · oportunidad de mejora' : ''}${x.obs ? ' · ' + esc(x.obs) : ''}</small></li>`).join('')}</ul></div>` : ''}
+      ${fotos.length ? `<div><p class="esc-sub">Fotos · ${fotos.length}</p><div class="esc-fotos">${fotos.slice(0, 12).map(f => `<img src="${esc(f)}" alt="Foto del registro" loading="lazy">`).join('')}</div></div>` : ''}
+      <div><p class="esc-sub">Trabajadores · ${ws.length}</p>${ws.length ? `<ul class="esc-lst">${ws.map(w => `<li>${esc(w.nombre || 'Sin nombre')}<small>${esc([(w.empresa || '').trim() || 'Personal propio', w.firma ? 'Firmado' : 'Sin firma'].join(' · '))}</small></li>`).join('')}</ul>` : '<p class="help">Sin trabajadores en este registro.</p>'}</div>
+      ${firmas.length ? `<div><p class="esc-sub">Firmas</p><div class="esc-firmas">${firmas.map(f => `<figure><img src="${esc(f.img)}" alt="Firma de ${esc(f.n)}"><figcaption>${esc(f.n)}</figcaption></figure>`).join('')}</div></div>` : ''}
+      <div class="hbtns">
+        <button type="button" class="mini" data-hact="open" data-id="${esc(rec.id)}">Abrir</button>
+        <button type="button" class="mini" data-hact="pdf" data-id="${esc(rec.id)}">PDF</button>
+        <button type="button" class="mini" data-hact="dup" data-id="${esc(rec.id)}">Duplicar</button>
+        <button type="button" class="mini del" data-hact="del" data-id="${esc(rec.id)}">Eliminar</button>
+      </div>
+    </div>`;
+  pide();
+}
+
+/* ---------- enganches: se repinta cuando la app actualiza la visita o el Historial ---------- */
+const _ud = updateDerived;
+updateDerived = function () { _ud.apply(this, arguments); try { pintaRes(); } catch (e) {} };
+/* el paso en curso se marca también en el resumen, sin repintarlo entero */
+const marcaPaso = () => $$('#esc-res .esc-pasos [data-id]').forEach(b => { const c = document.getElementById('st-' + b.dataset.id); b.setAttribute('aria-current', String(!!c && c.getAttribute('aria-current') === 'step')); });
+if ($('#steps') && window.MutationObserver) new MutationObserver(marcaPaso).observe($('#steps'), {subtree:true, attributes:true, attributeFilter:['aria-current']});
+const _rh = renderHist;
+renderHist = function () { _rh.apply(this, arguments); try { pintaDet(); } catch (e) {} };
+
+window.ESC_API = {
+  onTab(t) { lateral(); if (t === 'form') pintaRes(); if (t === 'hist') pintaDet(); pide(); },
+  refrescar() { lateral(); pintaRes(); pintaDet(); }
+};
+const cambia = () => { if (G2.matches) { pintaRes(); pintaDet(); } pide(); };
+(G2.addEventListener ? G2.addEventListener('change', cambia) : G2.addListener(cambia));
+(G1.addEventListener ? G1.addEventListener('change', cambia) : G1.addListener(cambia));
+lateral();
+setTimeout(() => { pintaRes(); pintaDet(); coloca(); }, 0);
+})();
+
+/*ESC-JS-END*/
 /*SEG-JS-START*/
 /* ================= Privacidad y seguridad (1.18.0) =================
    - Bloqueo de la app: en Android con el bloqueo del propio móvil (huella, cara, PIN o patrón);
