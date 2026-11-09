@@ -50,6 +50,8 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,6 +79,7 @@ public class MainActivity extends Activity {
     static final int REQ_DESBLOQUEO = 2;
     static final int REQ_SYNC_PROPIO = 3;
     static final int REQ_SYNC_OTROS = 4;
+    static final int REQ_SYNC_CARPETA = 5;
     static final String SYNC = "sincro";
 
     private WebView web;
@@ -84,6 +87,7 @@ public class MainActivity extends Activity {
     private Uri fotoUri;
     private long paradaMs = 0;
     private volatile String[] syncTextos;
+    private String syncNombrePendiente;
     private final Object syncLock = new Object();
 
     @Override
@@ -317,6 +321,10 @@ public class MainActivity extends Activity {
             syncResultado(req, res, data);
             return;
         }
+        if (req == REQ_SYNC_CARPETA) {
+            syncCarpetaResultado(res, data);
+            return;
+        }
         if (req != REQ_ARCHIVO || archivoCallback == null) return;
         Uri[] r = null;
         if (res == RESULT_OK) {
@@ -337,7 +345,7 @@ public class MainActivity extends Activity {
         fotoUri = null;
     }
 
-    /* ---------- sincronizar con OneDrive (Storage Access Framework) ---------- */
+    /* ---------- sincronizar móvil y ordenador (Storage Access Framework) ---------- */
 
     private SharedPreferences syncPrefs() {
         return getSharedPreferences(SYNC, MODE_PRIVATE);
@@ -378,6 +386,115 @@ public class MainActivity extends Activity {
             startActivityForResult(i, REQ_SYNC_OTROS);
         } catch (ActivityNotFoundException e) {
             syncAviso("otros", false, "No hay selector de archivos");
+        }
+    }
+
+    /* 1.21.2: la carpeta compartida entera (Descargas › Visitas PRL). Así el móvil encuentra siempre el archivo
+       más reciente del ordenador, aunque cambie de nombre: con Enlace Móvil, el ordenador no puede sobrescribir
+       lo que ya está en el móvil y deja cada vez un archivo nuevo; el móvil se queda con el último y quita los viejos. */
+    void syncElegirCarpeta(String nombre) {
+        syncNombrePendiente = limpio(nombre);
+        try {
+            Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
+            if (Build.VERSION.SDK_INT >= 26) {
+                try {
+                    i.putExtra(DocumentsContract.EXTRA_INITIAL_URI,
+                            DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Download/Visitas PRL"));
+                } catch (Exception x) { /* el selector empieza donde quiera */ }
+            }
+            startActivityForResult(i, REQ_SYNC_CARPETA);
+        } catch (ActivityNotFoundException e) {
+            syncAviso("carpeta", false, "No hay selector de carpetas");
+        }
+    }
+
+    private void syncCarpetaResultado(int res, Intent data) {
+        if (res != RESULT_OK || data == null || data.getData() == null) { syncAviso("carpeta", false, ""); return; }
+        Uri t = data.getData();
+        ContentResolver cr = getContentResolver();
+        SharedPreferences p = syncPrefs();
+        String viejo = p.getString("arbol", null);
+        try {
+            cr.takePersistableUriPermission(t, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } catch (Exception x) {
+            syncAviso("carpeta", false, "Esa carpeta no deja guardar archivos: elige Descargas › Visitas PRL");
+            return;
+        }
+        /* lo de antes (archivos sueltos o la carpeta anterior) ya no hace falta */
+        soltarPermiso(p.getString("propio", null));
+        try {
+            JSONArray l = new JSONArray(p.getString("otros", "[]"));
+            for (int i = 0; i < l.length(); i++) soltarPermiso(l.optString(i));
+        } catch (Exception x) { /* nada */ }
+        if (viejo != null && !viejo.equals(t.toString())) soltarPermiso(viejo);
+        String nombre = null;
+        try { nombre = meta(DocumentsContract.buildDocumentUriUsingTree(t, DocumentsContract.getTreeDocumentId(t)))[0]; } catch (Exception x) { /* sin nombre */ }
+        if (nombre == null) nombre = "Visitas PRL";
+        p.edit().clear()
+                .putString("arbol", t.toString())
+                .putString("arbolNombre", nombre)
+                .putString("propioNombre", syncNombrePendiente != null ? syncNombrePendiente : "VisitasPRL-movil.json")
+                .apply();
+        syncAviso("carpeta", true, nombre);
+    }
+
+    private static final Pattern SYNC_RX = Pattern.compile("^VisitasPRL-(movil|ordenador)-([A-Z0-9]+)(?=[-. (]|$)");
+
+    /** «VisitasPRL-movil-H9LL (1).json» → «movil-H9LL»; null si no es un archivo de sincronización. */
+    static String syncClave(String n) {
+        if (n == null || !n.toLowerCase().endsWith(".json")) return null;
+        Matcher m = SYNC_RX.matcher(n);
+        return m.find() ? m.group(1) + "-" + m.group(2) : null;
+    }
+
+    private static class Doc {
+        String id, nombre;
+        long mod, tam;
+    }
+
+    private List<Doc> hijos(Uri arbol) throws IOException {
+        List<Doc> l = new ArrayList<Doc>();
+        Uri u = DocumentsContract.buildChildDocumentsUriUsingTree(arbol, DocumentsContract.getTreeDocumentId(arbol));
+        Cursor c = null;
+        try {
+            c = getContentResolver().query(u, new String[]{DocumentsContract.Document.COLUMN_DOCUMENT_ID, DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+                    DocumentsContract.Document.COLUMN_LAST_MODIFIED, DocumentsContract.Document.COLUMN_SIZE, DocumentsContract.Document.COLUMN_MIME_TYPE}, null, null, null);
+            if (c == null) throw new IOException("no se puede ver la carpeta");
+            while (c.moveToNext()) {
+                if (!c.isNull(4) && DocumentsContract.Document.MIME_TYPE_DIR.equals(c.getString(4))) continue;
+                Doc d = new Doc();
+                d.id = c.getString(0);
+                d.nombre = c.isNull(1) ? "" : c.getString(1);
+                d.mod = c.isNull(2) ? 0 : c.getLong(2);
+                d.tam = c.isNull(3) ? 0 : c.getLong(3);
+                l.add(d);
+            }
+        } finally {
+            if (c != null) c.close();
+        }
+        return l;
+    }
+
+    private void borrar(Uri arbol, Doc d) {
+        try {
+            DocumentsContract.deleteDocument(getContentResolver(), DocumentsContract.buildDocumentUriUsingTree(arbol, d.id));
+        } catch (Exception e) { /* se queda: no molesta, se lee el más reciente */ }
+    }
+
+    private String leerTexto(Uri u) throws IOException {
+        InputStream in = null;
+        try {
+            in = getContentResolver().openInputStream(u);
+            if (in == null) throw new IOException("sin datos");
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            byte[] buf = new byte[65536];
+            int n;
+            while ((n = in.read(buf)) > 0) b.write(buf, 0, n);
+            return b.toString("UTF-8");
+        } finally {
+            if (in != null) try { in.close(); } catch (IOException x) { /* nada */ }
         }
     }
 
@@ -457,14 +574,58 @@ public class MainActivity extends Activity {
         return r;
     }
 
-    /** Escribe el archivo de este móvil en OneDrive. Devuelve null si ha ido bien, o el error. */
+    /** Escribe el archivo de este móvil (en la carpeta compartida o en el archivo elegido). Devuelve null si ha ido bien, o el error. */
     String syncEscribir(String texto) {
         synchronized (syncLock) {
-            String s = syncPrefs().getString("propio", null);
-            if (s == null) return "Falta elegir dónde guardar el archivo de este móvil";
-            Uri u = Uri.parse(s);
             byte[] datos;
             try { datos = texto.getBytes("UTF-8"); } catch (Exception e) { return "Texto no válido"; }
+            String a = syncPrefs().getString("arbol", null);
+            if (a != null) return escribirEnCarpeta(Uri.parse(a), datos);
+            String s = syncPrefs().getString("propio", null);
+            if (s == null) return "Falta elegir dónde guardar el archivo de este móvil";
+            String err = escribirDoc(Uri.parse(s), datos);
+            if (ERR_PERMISO.equals(err)) return "Sin permiso para escribir el archivo de este móvil: pulsa «Elegir carpeta» (o «Desactivar» y vuelve a activarlo)";
+            return err;
+        }
+    }
+
+    private static final String ERR_PERMISO = "permiso";
+
+    private String escribirEnCarpeta(Uri arbol, byte[] datos) {
+        String nombre = syncPrefs().getString("propioNombre", "VisitasPRL-movil.json");
+        String mia = syncClave(nombre);
+        List<Doc> l;
+        try { l = hijos(arbol); } catch (Exception e) { return "No se puede abrir la carpeta compartida: pulsa «Cambiar carpeta» y elígela otra vez"; }
+        Doc mio = null;
+        for (Doc d : l) if (nombre.equals(d.nombre)) mio = d;
+        String err = null, escrito = null;
+        if (mio != null) {
+            err = escribirDoc(DocumentsContract.buildDocumentUriUsingTree(arbol, mio.id), datos);
+            if (err == null) escrito = mio.nombre;
+            else borrar(arbol, mio);   // no se deja sobrescribir: se hace de nuevo
+        }
+        if (escrito == null) {
+            try {
+                Uri padre = DocumentsContract.buildDocumentUriUsingTree(arbol, DocumentsContract.getTreeDocumentId(arbol));
+                Uri nu = DocumentsContract.createDocument(getContentResolver(), padre, "application/json", nombre);
+                if (nu == null) return "No se pudo crear el archivo de este móvil en la carpeta";
+                err = escribirDoc(nu, datos);
+                if (err == null) { String n = meta(nu)[0]; escrito = n != null ? n : nombre; }
+            } catch (SecurityException e) {
+                return "Sin permiso para la carpeta compartida: pulsa «Cambiar carpeta» y elígela otra vez";
+            } catch (Exception e) {
+                return "No se pudo crear el archivo de este móvil (" + e.getMessage() + ")";
+            }
+        }
+        if (escrito == null) return ERR_PERMISO.equals(err) ? "Sin permiso para la carpeta compartida: pulsa «Cambiar carpeta» y elígela otra vez" : err;
+        /* copias viejas de este móvil («… (1).json»): fuera */
+        if (mia != null) for (Doc d : l) if (mia.equals(syncClave(d.nombre)) && !d.nombre.equals(escrito)) borrar(arbol, d);
+        return null;
+    }
+
+    /** Escribe en un documento ya existente; null si ha ido bien, ERR_PERMISO o el error. */
+    private String escribirDoc(Uri u, byte[] datos) {
+        {
             String ultimo = null;
             boolean permiso = false;
             for (String modo : new String[]{"wt", "rwt", "w"}) {
@@ -506,7 +667,7 @@ public class MainActivity extends Activity {
             } finally {
                 if (pfd != null) try { pfd.close(); } catch (IOException x) { /* nada */ }
             }
-            if (permiso) return "Sin permiso para escribir el archivo de este móvil: pulsa «Desactivar», vuelve a activarlo y elige otra vez dónde guardar";
+            if (permiso) return ERR_PERMISO;
             return "No se pudo escribir el archivo de este móvil" + (ultimo != null ? " (" + ultimo + ")" : "");
         }
     }
@@ -516,6 +677,12 @@ public class MainActivity extends Activity {
         synchronized (syncLock) {
             JSONArray meta = new JSONArray();
             List<String> textos = new ArrayList<String>();
+            String a = syncPrefs().getString("arbol", null);
+            if (a != null) {
+                leerCarpeta(Uri.parse(a), meta, textos);
+                syncTextos = textos.toArray(new String[0]);
+                return meta.toString();
+            }
             try {
                 JSONArray l = new JSONArray(syncPrefs().getString("otros", "[]"));
                 for (int i = 0; i < l.length(); i++) {
@@ -556,10 +723,72 @@ public class MainActivity extends Activity {
         }
     }
 
+    /** De cada uno de los otros dispositivos, su archivo más reciente; los anteriores se quitan. */
+    private void leerCarpeta(Uri arbol, JSONArray meta, List<String> textos) {
+        String mia = syncClave(syncPrefs().getString("propioNombre", ""));
+        Map<String, List<Doc>> grupos = new HashMap<String, List<Doc>>();
+        try {
+            for (Doc d : hijos(arbol)) {
+                String k = syncClave(d.nombre);
+                if (k == null || k.equals(mia)) continue;
+                List<Doc> g = grupos.get(k);
+                if (g == null) grupos.put(k, g = new ArrayList<Doc>());
+                g.add(d);
+            }
+        } catch (Exception e) {
+            try {
+                JSONObject o = new JSONObject();
+                o.put("nombre", syncPrefs().getString("arbolNombre", "carpeta"));
+                o.put("ok", false);
+                o.put("error", e instanceof SecurityException ? "sin permiso para la carpeta: pulsa «Cambiar carpeta»" : "no se puede abrir la carpeta");
+                meta.put(o);
+                textos.add(null);
+            } catch (Exception x) { /* nada */ }
+            return;
+        }
+        long ahora = System.currentTimeMillis();
+        for (List<Doc> g : grupos.values()) {
+            Doc n = null;
+            for (Doc d : g) if (n == null || d.mod > n.mod || (d.mod == n.mod && d.nombre.compareTo(n.nombre) > 0)) n = d;
+            try {
+                JSONObject o = new JSONObject();
+                o.put("nombre", n.nombre);
+                if (n.mod > 0) o.put("mod", n.mod);
+                o.put("tam", n.tam);
+                try {
+                    textos.add(leerTexto(DocumentsContract.buildDocumentUriUsingTree(arbol, n.id)));
+                    o.put("ok", true);
+                    /* los anteriores de ese dispositivo sobran (si el último ya está asentado) */
+                    if (n.mod > 0 && ahora - n.mod > 60000) for (Doc d : g) if (d != n) borrar(arbol, d);
+                } catch (SecurityException e) {
+                    textos.add(null);
+                    o.put("ok", false);
+                    o.put("error", "sin permiso: pulsa «Cambiar carpeta»");
+                } catch (Exception e) {
+                    textos.add(null);
+                    o.put("ok", false);
+                    o.put("error", "no se pudo leer (¿todavía llegando?)");
+                }
+                meta.put(o);
+            } catch (Exception e) { /* nada */ }
+        }
+    }
+
     String syncEstado() {
         try {
             SharedPreferences p = syncPrefs();
             JSONObject o = new JSONObject();
+            String a = p.getString("arbol", null);
+            if (a != null) {
+                o.put("modo", "carpeta");
+                o.put("carpeta", p.getString("arbolNombre", ""));
+                o.put("propio", p.getString("propioNombre", ""));
+                boolean ok = false;
+                for (android.content.UriPermission up : getContentResolver().getPersistedUriPermissions())
+                    if (up.getUri().toString().equals(a) && up.isWritePermission()) ok = true;
+                o.put("propioOk", ok);
+                return o.toString();
+            }
             String pu = p.getString("propio", null);
             if (pu != null) {
                 o.put("propio", p.getString("propioNombre", ""));
@@ -580,6 +809,7 @@ public class MainActivity extends Activity {
     void syncQuitar() {
         SharedPreferences p = syncPrefs();
         soltarPermiso(p.getString("propio", null));
+        soltarPermiso(p.getString("arbol", null));
         try {
             JSONArray l = new JSONArray(p.getString("otros", "[]"));
             for (int i = 0; i < l.length(); i++) soltarPermiso(l.optString(i));
@@ -839,6 +1069,15 @@ public class MainActivity extends Activity {
             a.runOnUiThread(new Runnable() {
                 public void run() {
                     a.syncElegirPropio(nombre);
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void syncElegirCarpeta(final String nombre) {
+            a.runOnUiThread(new Runnable() {
+                public void run() {
+                    a.syncElegirCarpeta(nombre);
                 }
             });
         }

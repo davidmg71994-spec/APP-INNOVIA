@@ -37,5 +37,14 @@ if "{v:'1.21.1'" not in h:
   ]},
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.21.1 · 09/11/2026", h, count=1)
+if "{v:'1.21.2'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.21.2';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.21.2', fecha:'09/11/2026', items:[
+    '<b>Sincronizar con Enlace Móvil, arreglado</b>: el ordenador ya no da error al escribir en la carpeta del móvil («archivo de solo lectura»). Deja un archivo nuevo cada vez y el móvil se queda con el más reciente.',
+    'En el móvil se elige <b>la carpeta</b> (Descargas › Visitas PRL), no el archivo: Perfil › Sincronizar › <b>Elegir carpeta</b>. El móvil quita solo los archivos viejos.'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.21.2 · 09/11/2026", h, count=1)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ok', len(h))
