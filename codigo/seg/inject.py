@@ -98,6 +98,9 @@ once("SEG_API.notaCopias(el)",
 once("SEG_API.prepararCopia(data)",
      "  await entregar(new Blob([data], {type:'application/json'}), `RegistroRP_copia_${isoDate(new Date())}.json`, 'Copia de seguridad', msg);",
      "  const salida = window.SEG_API ? await SEG_API.prepararCopia(data) : data;\n  if (salida == null) return;\n  await entregar(new Blob([salida], {type:'application/json'}), `RegistroRP_copia_${isoDate(new Date())}.json`, 'Copia de seguridad', salida === data ? msg : msg.replace('Para recuperarla:', 'Va cifrada: hace falta la contraseña de las copias. Para recuperarla:'));")
+once("SEG_API.entregarCopia",
+     "  await entregar(new Blob([salida], {type:'application/json'}), `RegistroRP_copia_${isoDate(new Date())}.json`, 'Copia de seguridad', salida === data ? msg : msg.replace('Para recuperarla:', 'Va cifrada: hace falta la contraseña de las copias. Para recuperarla:'));",
+     "  const copiaBlob = new Blob([salida], {type:'application/json'}), copiaNom = `RegistroRP_copia_${isoDate(new Date())}.json`, copiaMsg = salida === data ? msg : msg.replace('Para recuperarla:', 'Va cifrada: hace falta la contraseña de las copias. Para recuperarla:');\n  if (window.SEG_API && SEG_API.entregarCopia) await SEG_API.entregarCopia(copiaBlob, copiaNom, copiaMsg);\n  else await entregar(copiaBlob, copiaNom, 'Copia de seguridad', copiaMsg);")
 once("SEG_API.descifrarCopia(j",
      "      const j = JSON.parse(await f.text());\n",
      "      let j = JSON.parse(await f.text());\n      if (j && !Array.isArray(j) && j.cifrado && window.SEG_API) j = await SEG_API.descifrarCopia(j, f.name);\n")
@@ -129,6 +132,16 @@ if "{v:'1.18.0'" not in h:
   ]},
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.18.0 · 08/11/2026", h, count=1)
+if "{v:'1.18.1'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.18.1';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.18.1', fecha:'09/11/2026', items:[
+    '<b>Copia fuera del móvil</b>: Inicio te recuerda cada 7 días (lo cambias en Privacidad y seguridad) guardar una copia en OneDrive, SharePoint o el correo de la empresa. Al exportar, «Compartir» y eliges OneDrive; en el ordenador, «Guardar en…» y tu carpeta de OneDrive.',
+    '<b>Contraseña de las copias desde el principio</b>: en el móvil la app la pide al abrirse si aún no la tienes, para que ninguna copia quede sin cifrar.',
+    '<b>Misma contraseña en el ordenador</b>: al importar una copia cifrada en un dispositivo sin contraseña, se queda la de esa copia.'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.18.1 · 09/11/2026", h, count=1)
 
 # --- 8. política de seguridad del contenido ---
 h = csp.aplicar(h)

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-mr7xEx6cMT7+lo2yjdACM2Cczua4aRiRrnMkkb4iVJU='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-CgNFMyFZ3CKDCgUOIGpIwHs4KbpKyMuTtPC6U/YoN8A='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
@@ -1459,6 +1459,15 @@ html.seg-lk body{overflow:hidden}
 :root{--sg-warn:#B45309;--sg-warn-soft:#FDF0DC;--sg-warn-ink:#8A4A0B}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sg-warn:#F0A64B;--sg-warn-soft:#3A2A14;--sg-warn-ink:#F3B66A}}
 :root[data-theme="dark"]{--sg-warn:#F0A64B;--sg-warn-soft:#3A2A14;--sg-warn-ink:#F3B66A}
+/* 1.18.1: copia fuera del dispositivo y contraseña obligatoria */
+.ini-mi.m-seg{background:#0B4F8C}
+.sl-clave{gap:10px}
+.sl-clave>p{font-size:15px}
+.sl-campos{width:100%;display:grid;gap:6px;text-align:left;margin-top:4px}
+.sl-campos label{font:600 14px/1.3 var(--f-display);color:var(--ink)}
+.sl-campos input{width:100%;font-size:17px;padding:12px 14px;margin-bottom:6px}
+.sl-nota{font-size:14px!important;text-align:left}
+.sl-clave .btn{width:100%}
 /*SEG-CSS-END*/
 </style>
 </head>
@@ -1608,7 +1617,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.18.0 · 08/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.18.1 · 09/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -2608,7 +2617,9 @@ async function exportBackup() {
   const msg = `Copia de seguridad de Visitas PRL con ${plural(HIST.length, 'registro', 'registros')}${infs.length ? ' y ' + plural(infs.length, 'informe', 'informes') : ''}, del ${fmtDate(isoDate(new Date()))}.\nPara recuperarla: Historial › Importar copia.`;
   const salida = window.SEG_API ? await SEG_API.prepararCopia(data) : data;
   if (salida == null) return;
-  await entregar(new Blob([salida], {type:'application/json'}), `RegistroRP_copia_${isoDate(new Date())}.json`, 'Copia de seguridad', salida === data ? msg : msg.replace('Para recuperarla:', 'Va cifrada: hace falta la contraseña de las copias. Para recuperarla:'));
+  const copiaBlob = new Blob([salida], {type:'application/json'}), copiaNom = `RegistroRP_copia_${isoDate(new Date())}.json`, copiaMsg = salida === data ? msg : msg.replace('Para recuperarla:', 'Va cifrada: hace falta la contraseña de las copias. Para recuperarla:');
+  if (window.SEG_API && SEG_API.entregarCopia) await SEG_API.entregarCopia(copiaBlob, copiaNom, copiaMsg);
+  else await entregar(copiaBlob, copiaNom, 'Copia de seguridad', copiaMsg);
 }
 /* importar una o varias copias (la copia exportada o los archivos de Descargas › Visitas PRL › Copias) */
 async function importBackup(e) {
@@ -3931,8 +3942,13 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.18.0';
+const APP_VER = '1.18.1';
 const NOVEDADES = [
+  {v:'1.18.1', fecha:'09/11/2026', items:[
+    '<b>Copia fuera del móvil</b>: Inicio te recuerda cada 7 días (lo cambias en Privacidad y seguridad) guardar una copia en OneDrive, SharePoint o el correo de la empresa. Al exportar, «Compartir» y eliges OneDrive; en el ordenador, «Guardar en…» y tu carpeta de OneDrive.',
+    '<b>Contraseña de las copias desde el principio</b>: en el móvil la app la pide al abrirse si aún no la tienes, para que ninguna copia quede sin cifrar.',
+    '<b>Misma contraseña en el ordenador</b>: al importar una copia cifrada en un dispositivo sin contraseña, se queda la de esa copia.'
+  ]},
   {v:'1.18.0', fecha:'08/11/2026', items:[
     '<b>Bloqueo de la app</b>: se abre con la huella, la cara o el PIN del móvil, y se vuelve a bloquear tras unos minutos fuera. En el ordenador, con un PIN de la app.',
     '<b>Copias cifradas</b>: «Exportar copia» y las copias automáticas de Descargas van cifradas con tu contraseña (AES-256). Sin ella nadie puede abrirlas.',
@@ -4847,6 +4863,7 @@ const IC = {
   con: SVG('<path d="M4 5.5c2.7-1 5.3-1 8 .7 2.7-1.7 5.3-1.7 8-.7v13c-2.7-1-5.3-1-8 .7-2.7-1.7-5.3-1.7-8-.7z"/><path d="M12 6.2v13.2"/>'),
   ctr: SVG('<path d="M4 7.5h16v12H4z"/><path d="M9 7.5V5h6v2.5"/><path d="M4 12.5h16"/>'),
   ok: SVG('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+  copia: SVG('<path d="M7 18.5h-.5a4 4 0 0 1-.6-8 5.5 5.5 0 0 1 10.6-1.3A4.3 4.3 0 0 1 17.5 18.5H17"/><path d="M12 12.5v7M9.2 15.2 12 12.4l2.8 2.8"/>'),
   pss: SVG('<path d="M3.5 7.5V18a1.5 1.5 0 0 0 1.5 1.5h14a1.5 1.5 0 0 0 1.5-1.5V9.5A1.5 1.5 0 0 0 19 8h-7l-2-2.5H5A1.5 1.5 0 0 0 3.5 7z"/><path d="M3.5 11h17"/>'),
   lupa: SVG('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/>')
 };
@@ -4927,13 +4944,14 @@ function anillos(c, mes) {
 /* «Hoy y vencidas»: calendario, revisiones y planificación */
 let verTodo = false;
 const MOD = {
-  cal:{t:'Calendario', ic:IC.cal}, rev:{t:'Revisiones', ic:IC.rev}, plan:{t:'Planificación', ic:IC.plan}
+  cal:{t:'Calendario', ic:IC.cal}, rev:{t:'Revisiones', ic:IC.rev}, plan:{t:'Planificación', ic:IC.plan}, seg:{t:'Copia de seguridad', ic:IC.copia}
 };
 function pendientes() {
   const h = isoDate(new Date()), out = [];
   if (window.CAL_API && CAL_API.pendientes) CAL_API.pendientes().forEach(x => out.push({m:'cal', id:x.id, d:x.d, t:x.t, k:x.d < h ? 'bad' : 'hoy', ctr:x.ctr, extra:x.n > 1 ? `${x.n} sin marcar` : ''}));
   if (window.REV_API && REV_API.pendientes) REV_API.pendientes().forEach(x => out.push({m:'rev', id:x.id, d:x.v, t:x.t, k:x.k === 'bad' ? 'bad' : x.v === h ? 'hoy' : 'warn', ctr:x.ctr, extra:x.ident}));
   if (window.PLAN_API && PLAN_API.pendientes) PLAN_API.pendientes().forEach(x => out.push({m:'plan', id:x.id, plan:x.plan, d:x.v || h, t:x.t || 'Medida sin texto', k:x.k === 'bad' ? 'bad' : x.v === h ? 'hoy' : 'warn', ctr:x.ctr, extra:x.riesgo && x.riesgo !== x.t ? x.riesgo : ''}));
+  if (window.SEG_API && SEG_API.pendiente) { const x = SEG_API.pendiente(); if (x) out.push({m:'seg', id:'copia', d:x.d, t:x.t, k:x.k, extra:x.extra}); }
   const peso = {bad:0, hoy:1, warn:2};
   return out.sort((a, b) => (peso[a.k] - peso[b.k]) || (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
 }
@@ -5270,6 +5288,7 @@ async function onClick(e) {
     if (m === 'cal' && window.CAL_API) CAL_API.editar(id, b.dataset.d);
     else if (m === 'rev' && window.REV_API) REV_API.editar(id);
     else if (m === 'plan' && window.PLAN_API) PLAN_API.editarFila(b.dataset.plan, id);
+    else if (m === 'seg' && window.SEG_API) SEG_API.hacerCopia();
     return;
   }
   if (a === 'seguir') { showTab('form'); return; }
@@ -8716,7 +8735,7 @@ const CFG = 'seg-cfg';
 function cfg() {
   let c = null; try { c = JSON.parse(lsGet(CFG) || 'null'); } catch (e) {}
   c = c && typeof c === 'object' ? c : {};
-  return {lock:c.lock !== false, min:[1, 5, 15, 30].includes(c.min) ? c.min : 5, captura:!!c.captura};
+  return {lock:c.lock !== false, min:[1, 5, 15, 30].includes(c.min) ? c.min : 5, captura:!!c.captura, aviso:[3, 7, 15, 30].includes(c.aviso) ? c.aviso : 7};
 }
 const setCfg = o => lsSet(CFG, JSON.stringify({...cfg(), ...o}));
 
@@ -8770,16 +8789,19 @@ async function crearClave() {
   if (c1 !== c2) { toast('Las dos contraseñas no coinciden.'); return crearClave(); }
   if (FUERZA(c1) < 2) { toast('Es una contraseña muy fácil: alárgala o mezcla letras, números y símbolos.'); return crearClave(); }
   toast('Preparando el cifrado…');
-  const sal = b64(crypto.getRandomValues(new Uint8Array(16)));
-  const key = await claveDe(c1, unb64(sal), ITER);
-  const nueva = {id:'copias', key, sal, it:ITER, creado:Date.now()};
-  nueva.chk = await cifrarCon(nueva, 'ok');
-  await sdb.put(nueva); CLAVE = nueva;
-  const n = await recopiar();
+  const n = await nuevaClave(c1);
   toast(cambio ? 'Contraseña cambiada.' + (n ? ` ${plural(n, 'copia automática cifrada', 'copias automáticas cifradas')} de nuevo.` : '')
     : 'Listo: las copias van cifradas.' + (n ? ` ${plural(n, 'copia automática cifrada', 'copias automáticas cifradas')}.` : ''));
   pinta();
   return true;
+}
+/* guarda la clave sacada de la contraseña y vuelve a escribir cifradas las copias automáticas */
+async function nuevaClave(pass, sal = b64(crypto.getRandomValues(new Uint8Array(16))), key = null, it = ITER) {
+  key = key || await claveDe(pass, unb64(sal), it);
+  const nueva = {id:'copias', key, sal, it, creado:Date.now()};
+  nueva.chk = await cifrarCon(nueva, 'ok');
+  await sdb.put(nueva); CLAVE = nueva;
+  return recopiar();
 }
 /* vuelve a escribir las copias automáticas (cifradas) y borra las que ya no tienen registro */
 async function recopiar() {
@@ -8806,7 +8828,11 @@ async function descifrarCopia(j, nombre) {
     const pass = $('#sg-cp').value; if (!pass) continue;
     const key = await claveDe(pass, unb64(c.sal), c.it || ITER);
     const t = await abrirCon(key, j);
-    if (t != null) { CACHE.set(c.sal, key); return parse(t); }
+    if (t != null) {
+      CACHE.set(c.sal, key);
+      if (!CLAVE) { try { await nuevaClave(null, c.sal, key, c.it || ITER); toast('Las copias de este dispositivo usarán la misma contraseña.'); } catch (x) {} }
+      return parse(t);
+    }
   }
   const e = new Error('contraseña'); e.seg = true; throw e;
 }
@@ -8933,6 +8959,7 @@ function pintaLock() {
   </div>`;
 }
 function bloquear() {
+  if (exige) return;
   if (!activo()) { document.documentElement.classList.remove('seg-lk'); return; }
   bloq = true; pidiendo = false;
   document.documentElement.classList.add('seg-lk');
@@ -8946,6 +8973,7 @@ function abrir() {
   lsSet('seg-int', JSON.stringify({n:0, hasta:0}));
   document.documentElement.classList.remove('seg-lk');
   const el = document.getElementById('seg-lock'); if (el) el.remove();
+  listo.then(exigirClave);
 }
 function pedirMovil() {
   if (!bloq || pidiendo) return;
@@ -9063,6 +9091,96 @@ async function borrarAntiguos() {
   toast(`Borrados ${plural(l.length, 'registro', 'registros')}.`); pinta();
 }
 
+/* ---------- copia fuera del dispositivo (OneDrive, SharePoint, correo de la empresa) ---------- */
+const FUERA = 'seg-copia-fuera';
+const ultimaFuera = () => +(lsGet(FUERA) || 0);
+const hayDatos = () => !!(HIST.length || (window.INF_API && INF_API.lista().length) || (window.PLAN_API && PLAN_API.lista().length) || (window.CAL_API && CAL_API.lista().length) || (window.REV_API && REV_API.lista().length) || (window.EVRL_API && EVRL_API.lista().length) || (window.PSS_API && PSS_API.lista().length));
+const diasDesde = t => Math.floor((Date.now() - t) / 864e5);
+function marcarFuera() { lsSet(FUERA, String(Date.now())); refrescaPerfil(); const v = $('#view-seg'); if (v && !v.hidden) pinta(); }
+/* tarea para «Hoy y vencidas» de Inicio cuando toca hacer copia */
+function pendiente() {
+  if (!hayDatos()) return null;
+  const u = ultimaFuera(), dias = cfg().aviso;
+  if (u && diasDesde(u) < dias) return null;
+  const desde = u || Math.min(...HIST.map(r => r.creado || r.guardado || Date.now()), Date.now());
+  if (!u && diasDesde(desde) < 1) return null;
+  return {t:'Guardar una copia fuera del ' + (AND() ? 'móvil' : 'ordenador'), d:isoDate(new Date(desde)), k:'bad',
+    extra:u ? `La última, hace ${plural(diasDesde(u), 'día', 'días')}` : 'Aún no has guardado ninguna'};
+}
+async function entregarCopia(blob, nombre, msg) {
+  const A = AND();
+  if (A) {
+    const r = await ask({title:'Copia de seguridad', yes:'Compartir', no:'Guardar en el móvil', body:`<p class="m-file">${esc(nombre)}</p>
+      <p>Va cifrada con tu contraseña. Para no perderla si pierdes el móvil, pulsa <b>Compartir</b> y elige <b>OneDrive</b> (o Teams o SharePoint) y una carpeta de la empresa, por ejemplo «Visitas PRL». También puedes enviártela al correo de la empresa.</p>
+      <p class="help">«Guardar en el móvil» la deja en Descargas › Visitas PRL, que no te salva si pierdes el móvil.</p>`});
+    if (r === null) return;
+    try {
+      const b = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1] || ''); fr.onerror = () => rej(fr.error); fr.readAsDataURL(blob); });
+      if (r === true) {
+        if (msg && typeof A.compartirTexto === 'function') A.compartirTexto(b, nombre, 'application/json', msg); else A.compartir(b, nombre, 'application/json');
+        marcarFuera();
+      } else if (A.guardar(b, nombre, 'application/json')) toast('Guardada en Descargas › Visitas PRL. Para tenerla fuera del móvil, compártela a OneDrive.');
+      else { toast('Este móvil no deja guardar directamente: elige dónde guardarla.'); A.compartir(b, nombre, 'application/json'); marcarFuera(); }
+    } catch (e) { toast('No se pudo preparar la copia.'); }
+    return;
+  }
+  const picker = typeof window.showSaveFilePicker === 'function';
+  const r = await ask({title:'Copia de seguridad', yes:picker ? 'Guardar en…' : 'Descargar', no:'Cerrar', body:`<p class="m-file">${esc(nombre)}</p>
+    <p>Va cifrada con tu contraseña. ${picker ? 'Elige tu carpeta de <b>OneDrive</b> o de <b>SharePoint</b> de la empresa; la próxima vez se abrirá directamente ahí.' : 'Después, muévela a tu carpeta de <b>OneDrive</b> o de <b>SharePoint</b> de la empresa.'}</p>`});
+  if (r !== true) return;
+  if (picker) {
+    try {
+      const h = await window.showSaveFilePicker({id:'copias-visitas-prl', suggestedName:nombre, types:[{description:'Copia de Visitas PRL', accept:{'application/json':['.json']}}]});
+      const w = await h.createWritable(); await w.write(blob); await w.close();
+      marcarFuera(); toast('Copia guardada en ' + (h.name || 'la carpeta elegida') + '.');
+    } catch (e) { if (e && e.name !== 'AbortError') { descargar(blob, nombre); marcarFuera(); } }
+    return;
+  }
+  descargar(blob, nombre); marcarFuera();
+  toast('Descargada. Muévela a tu carpeta de OneDrive o SharePoint.');
+}
+
+/* ---------- contraseña de las copias obligatoria en el móvil ---------- */
+const PRUEBA = /[?&]test\b/.test(location.search) && !/[?&]segclave\b/.test(location.search);
+let exige = false;
+function exigirClave() {
+  if (CLAVE || !AND() || PRUEBA || bloq || !SUB()) return;
+  exige = true;
+  document.documentElement.classList.add('seg-lk');
+  let el = document.getElementById('seg-lock');
+  if (!el) { el = document.createElement('div'); el.id = 'seg-lock'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-labelledby', 'sl-t'); document.body.appendChild(el); }
+  el.innerHTML = `<div class="sl-in sl-clave">
+    <span class="sl-ic">${IC.llave}</span>
+    <h2 id="sl-t">Protege tus copias</h2>
+    <p>La app guarda copias de tus registros en Descargas y te deja exportarlas. Van cifradas con una contraseña que eliges ahora: sin ella nadie puede abrirlas.</p>
+    <div class="sl-campos">
+      <label for="sl-c1">Contraseña</label><input id="sl-c1" type="password" autocomplete="new-password">
+      <label for="sl-c2">Repítela</label><input id="sl-c2" type="password" autocomplete="new-password">
+    </div>
+    <p class="sl-nota">Mínimo 8 caracteres, mejor con letras, números y algún símbolo. <b>Apúntala en un sitio seguro: no se puede recuperar.</b></p>
+    <p class="sl-err" id="sl-err" role="alert"></p>
+    <button type="button" class="btn primary" data-sl="clave">Guardar la contraseña</button>
+  </div>`;
+  el.onclick = e => { if (e.target.closest('[data-sl="clave"]')) guardarObligatoria(); };
+  el.onkeydown = e => { if (e.key === 'Enter' && /^sl-c[12]$/.test(e.target.id)) { e.preventDefault(); if (e.target.id === 'sl-c1') $('#sl-c2').focus(); else guardarObligatoria(); } };
+  setTimeout(() => { const i = $('#sl-c1'); if (i) i.focus(); }, 60);
+}
+async function guardarObligatoria() {
+  const a = $('#sl-c1').value, b = $('#sl-c2').value, e = $('#sl-err'), btn = document.querySelector('[data-sl="clave"]');
+  const err = t => { e.textContent = t; };
+  if (a.length < 8) return err('La contraseña tiene que tener al menos 8 caracteres.');
+  if (a !== b) return err('Las dos contraseñas no coinciden.');
+  if (FUERZA(a) < 2) return err('Es muy fácil: alárgala o mezcla letras, números y símbolos.');
+  err(''); btn.disabled = true; btn.textContent = 'Preparando el cifrado…';
+  try { await nuevaClave(a); }
+  catch (x) { btn.disabled = false; btn.textContent = 'Guardar la contraseña'; return err('No se pudo guardar. Inténtalo otra vez.'); }
+  exige = false;
+  document.documentElement.classList.remove('seg-lk');
+  const el = document.getElementById('seg-lock'); if (el) el.remove();
+  toast('Contraseña guardada: tus copias van cifradas.');
+  renderCopiaEstado(); refrescaPerfil();
+}
+
 /* ---------- texto de protección de datos para los PDF ---------- */
 const clausula = () => (lsGet('seg-clausula') || '').trim().slice(0, 1500);
 
@@ -9079,6 +9197,10 @@ function estado() {
     : ['warn', IC.candado, 'Bloqueo de la app', 'Sin PIN. Crea uno abajo para que nadie más pueda abrirla en este ordenador.']);
   L.push(CLAVE ? ['ok', IC.llave, 'Copias de seguridad', `Cifradas con AES-256 y tu contraseña${auto ? ', también las automáticas' : ''}.`]
     : ['warn', IC.llave, 'Copias de seguridad', `Sin contraseña: ${auto ? 'las copias automáticas de Descargas no van cifradas' : 'la primera vez que exportes te pedirá una'}.`]);
+  { const u = ultimaFuera(), d = cfg().aviso;
+    L.push(!hayDatos() && !u ? ['info', IC.doc, 'Copia fuera del ' + (AND() ? 'móvil' : 'ordenador'), 'Cuando tengas registros, te recordará guardar una copia en OneDrive o SharePoint.']
+      : u && diasDesde(u) < d ? ['ok', IC.doc, 'Copia fuera del ' + (AND() ? 'móvil' : 'ordenador'), `La última, ${diasDesde(u) ? 'hace ' + plural(diasDesde(u), 'día', 'días') : 'hoy'}. Te avisa cada ${d} días.`]
+      : ['warn', IC.doc, 'Copia fuera del ' + (AND() ? 'móvil' : 'ordenador'), u ? `La última fue hace ${plural(diasDesde(u), 'día', 'días')}. Haz una ahora y guárdala en OneDrive o SharePoint.` : 'Aún no has guardado ninguna. Haz una y guárdala en OneDrive o SharePoint.']); }
   L.push(['ok', IC.escudo, 'Registros', HIST.length ? `${sellados} de ${HIST.length} con código de verificación. Cada cambio queda como una versión nueva.` : 'Cada registro que guardes llevará su código de verificación.']);
   L.push(['ok', IC.red, 'Conexiones', 'Ninguna. La app no tiene servidor, no carga nada de internet y no puede enviar datos a ningún sitio.']);
   if (AND()) L.push(c.captura ? ['ok', IC.ojo, 'Capturas de pantalla', 'Bloqueadas, y la app no se ve en las apps recientes.'] : ['info', IC.ojo, 'Capturas de pantalla', 'Permitidas.']);
@@ -9132,6 +9254,13 @@ function pinta() {
     <p class="help">«Exportar copia»${auto ? ' y las copias automáticas de Descargas › Visitas PRL › Copias' : ''} se cifran con AES-256 y tu contraseña. Aunque alguien consiga el archivo (por WhatsApp, un pendrive o el móvil perdido), sin la contraseña no puede leerlo. Al importar te la pide.</p>
     ${CLAVE ? `<p class="help">Contraseña creada el ${fFecha(CLAVE.creado)}.</p>` : ''}
     <div class="hbtns"><button type="button" class="mini" data-seg="clave">${CLAVE ? 'Cambiar la contraseña' : 'Crear la contraseña'}</button>${CLAVE && auto ? '<button type="button" class="mini" data-seg="recopiar">Volver a cifrar las copias de Descargas</button>' : ''}</div>
+  </div></section>
+
+  <section class="block"><header class="bh"><h2>Copia fuera del ${AND() ? 'móvil' : 'ordenador'}</h2></header><div class="bb">
+    <p class="help">Si pierdes ${AND() ? 'el móvil' : 'el ordenador'}, solo conservas lo que hayas guardado fuera. Haz una copia de vez en cuando y guárdala en <b>OneDrive</b> o <b>SharePoint</b> de la empresa (o mándatela al correo de la empresa). La app te lo recuerda en Inicio.</p>
+    <p class="help">${ultimaFuera() ? `Última copia fuera: ${fFecha(ultimaFuera())}.` : 'Aún no has guardado ninguna copia fuera.'}</p>
+    <div class="ajustes"><label class="ajuste sg-sel"><span><b>Recordármelo</b><small>Si no he guardado una copia fuera en:</small></span><select id="sg-aviso">${[3, 7, 15, 30].map(x => `<option value="${x}" ${x === c.aviso ? 'selected' : ''}>${x} días</option>`).join('')}</select></label></div>
+    <div class="hbtns"><button type="button" class="mini" data-seg="copia">Hacer una copia ahora</button></div>
   </div></section>
 
   <section class="block"><header class="bh"><h2>Comprobar un registro</h2></header><div class="bb">
@@ -9202,6 +9331,7 @@ async function onClick(e) {
       : !n ? 'Aún no hay registros guardados.' : `<b>Todo correcto.</b> ${n === 1 ? 'El registro coincide' : `Los ${n} registros coinciden`} con su código de verificación.`;
     return;
   }
+  if (a === 'copia') return exportBackup();
   if (a === 'cl') { lsSet('seg-clausula', ($('#sg-cl').value || '').trim().slice(0, 1500)); toast(clausula() ? 'Guardado: saldrá al final del PDF de cada registro.' : 'Texto quitado de los PDF.'); return; }
   if (a === 'antiguos') return borrarAntiguos();
   if (a === 'todo') return borrarTodo();
@@ -9210,6 +9340,7 @@ function onChange(e) {
   const t = e.target;
   if (t.id === 'sg-lock') { setCfg({lock:t.checked}); toast(t.checked ? 'Bloqueo activado.' : 'Bloqueo desactivado.'); pinta(); }
   else if (t.id === 'sg-min') { setCfg({min:+t.value}); pinta(); }
+  else if (t.id === 'sg-aviso') { setCfg({aviso:+t.value}); pinta(); }
   else if (t.id === 'sg-cap') { setCfg({captura:t.checked}); try { AND().pantallaSegura(t.checked); } catch (x) {} pinta(); }
   else if (t.id === 'sg-anos') { const n = $('#sg-antn'); if (n) n.textContent = antiguos(+t.value).length; }
 }
@@ -9240,7 +9371,9 @@ window.SEG_API = {
   sellar, sellarImport, histLinea, codigoPdf, codigo, clausula,
   /* bloqueo (lo llama la app de Android) */
   resultado, vuelve,
-  bloqueada:() => bloq,
+  bloqueada:() => bloq || exige,
+  pendiente, entregarCopia,
+  hacerCopia:() => exportBackup(),
   bloquear,
   /* pantalla */
   ver, perfilHtml,
@@ -9252,6 +9385,7 @@ window.SEG_API = {
 vista();
 if (AND() && fn('pantallaSegura') && cfg().captura) { try { AND().pantallaSegura(true); } catch (e) {} }
 if (activo()) bloquear(); else document.documentElement.classList.remove('seg-lk');
+listo.then(exigirClave);
 listo.then(async () => {
   if (typeof initHist === 'function' && histState === 'wait') { try { await initHist(); } catch (e) {} }
   const n = await sellarPendientes();

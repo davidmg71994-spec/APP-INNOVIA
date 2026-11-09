@@ -2,7 +2,7 @@
 
 App para los técnicos de PRL de Innovia: registro de comprobación del recurso preventivo en obra, informe de seguimiento cuatrimestral, planificación preventiva y evaluación de riesgos, con salida en PDF, Word y Excel, y el PSS/DGP de cada obra a mano.
 
-**Versión 1.18.0 · 08/11/2026**
+**Versión 1.18.1 · 09/11/2026**
 
 ## Cómo usarla
 
@@ -26,7 +26,7 @@ Los datos (visitas, informes, planificaciones, evaluaciones de riesgos, calendar
 - **Revisiones**: instalaciones y equipos (camión pluma, extintores, aire acondicionado, puesta a tierra, legionela…) con su última revisión, periodicidad, vencimiento y aviso; certificado de mantenimiento en PDF o foto; las fechas pasan al apartado 9 del informe cuatrimestral.
 - **Consulta**: láminas de señalización de obras fijas (Norma 8.3-IC) y **Normativa PRL**: 33 fichas (qué regula, para qué sirve en obra y lo más importante) que se consultan sin cobertura, con enlace al texto consolidado del BOE, buscador y favoritas.
 - **PSS/DGP**: una carpeta por obra con el PDF del plan de seguridad (o la DGP). La app saca el índice, busca por apartado o por palabras en todas las obras, abre la página exacta con el texto resaltado y, en la visita, el campo del apartado del PSS tiene un desplegable con ese índice.
-- **Privacidad y seguridad** (Perfil): bloqueo de la app con la huella o el PIN del móvil, copias de seguridad cifradas (AES-256), código de verificación SHA-256 en cada registro (Historial y pie del PDF) con sus versiones, texto de protección de datos para los PDF y borrado de datos. La app no se conecta a nada de fuera y solo ejecuta su propio código (política de seguridad del contenido con la huella de cada script).
+- **Privacidad y seguridad** (Perfil): bloqueo de la app con la huella o el PIN del móvil, copias de seguridad cifradas (AES-256), código de verificación SHA-256 en cada registro (Historial y pie del PDF) con sus versiones, texto de protección de datos para los PDF y borrado de datos. La contraseña de las copias se pide al abrir la app en el móvil, e Inicio recuerda guardar una copia fuera del móvil (OneDrive, SharePoint o correo de la empresa). La app no se conecta a nada de fuera y solo ejecuta su propio código (política de seguridad del contenido con la huella de cada script).
 - **Primera vez**: configuración en 3 pasos (perfil, contrato y primera visita).
 
 ## Contenido del repositorio

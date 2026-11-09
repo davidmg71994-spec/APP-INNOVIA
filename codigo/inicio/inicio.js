@@ -21,6 +21,7 @@ const IC = {
   con: SVG('<path d="M4 5.5c2.7-1 5.3-1 8 .7 2.7-1.7 5.3-1.7 8-.7v13c-2.7-1-5.3-1-8 .7-2.7-1.7-5.3-1.7-8-.7z"/><path d="M12 6.2v13.2"/>'),
   ctr: SVG('<path d="M4 7.5h16v12H4z"/><path d="M9 7.5V5h6v2.5"/><path d="M4 12.5h16"/>'),
   ok: SVG('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+  copia: SVG('<path d="M7 18.5h-.5a4 4 0 0 1-.6-8 5.5 5.5 0 0 1 10.6-1.3A4.3 4.3 0 0 1 17.5 18.5H17"/><path d="M12 12.5v7M9.2 15.2 12 12.4l2.8 2.8"/>'),
   pss: SVG('<path d="M3.5 7.5V18a1.5 1.5 0 0 0 1.5 1.5h14a1.5 1.5 0 0 0 1.5-1.5V9.5A1.5 1.5 0 0 0 19 8h-7l-2-2.5H5A1.5 1.5 0 0 0 3.5 7z"/><path d="M3.5 11h17"/>'),
   lupa: SVG('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/>')
 };
@@ -101,13 +102,14 @@ function anillos(c, mes) {
 /* «Hoy y vencidas»: calendario, revisiones y planificación */
 let verTodo = false;
 const MOD = {
-  cal:{t:'Calendario', ic:IC.cal}, rev:{t:'Revisiones', ic:IC.rev}, plan:{t:'Planificación', ic:IC.plan}
+  cal:{t:'Calendario', ic:IC.cal}, rev:{t:'Revisiones', ic:IC.rev}, plan:{t:'Planificación', ic:IC.plan}, seg:{t:'Copia de seguridad', ic:IC.copia}
 };
 function pendientes() {
   const h = isoDate(new Date()), out = [];
   if (window.CAL_API && CAL_API.pendientes) CAL_API.pendientes().forEach(x => out.push({m:'cal', id:x.id, d:x.d, t:x.t, k:x.d < h ? 'bad' : 'hoy', ctr:x.ctr, extra:x.n > 1 ? `${x.n} sin marcar` : ''}));
   if (window.REV_API && REV_API.pendientes) REV_API.pendientes().forEach(x => out.push({m:'rev', id:x.id, d:x.v, t:x.t, k:x.k === 'bad' ? 'bad' : x.v === h ? 'hoy' : 'warn', ctr:x.ctr, extra:x.ident}));
   if (window.PLAN_API && PLAN_API.pendientes) PLAN_API.pendientes().forEach(x => out.push({m:'plan', id:x.id, plan:x.plan, d:x.v || h, t:x.t || 'Medida sin texto', k:x.k === 'bad' ? 'bad' : x.v === h ? 'hoy' : 'warn', ctr:x.ctr, extra:x.riesgo && x.riesgo !== x.t ? x.riesgo : ''}));
+  if (window.SEG_API && SEG_API.pendiente) { const x = SEG_API.pendiente(); if (x) out.push({m:'seg', id:'copia', d:x.d, t:x.t, k:x.k, extra:x.extra}); }
   const peso = {bad:0, hoy:1, warn:2};
   return out.sort((a, b) => (peso[a.k] - peso[b.k]) || (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
 }
@@ -444,6 +446,7 @@ async function onClick(e) {
     if (m === 'cal' && window.CAL_API) CAL_API.editar(id, b.dataset.d);
     else if (m === 'rev' && window.REV_API) REV_API.editar(id);
     else if (m === 'plan' && window.PLAN_API) PLAN_API.editarFila(b.dataset.plan, id);
+    else if (m === 'seg' && window.SEG_API) SEG_API.hacerCopia();
     return;
   }
   if (a === 'seguir') { showTab('form'); return; }
