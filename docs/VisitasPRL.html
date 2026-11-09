@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-rNKN+zzrP5+lHvEvHAGkL6+DbCDn0Z1BvtjWFPJArYE='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-aklarzdVbnSuVixmqiWb9lyL9o5HGy7ssh+etaNosbY='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
@@ -1814,7 +1814,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.21.1 · 09/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.21.2 · 09/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -4157,8 +4157,12 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.21.1';
+const APP_VER = '1.21.2';
 const NOVEDADES = [
+  {v:'1.21.2', fecha:'09/11/2026', items:[
+    '<b>Sincronizar con Enlace Móvil, arreglado</b>: el ordenador ya no da error al escribir en la carpeta del móvil («archivo de solo lectura»). Deja un archivo nuevo cada vez y el móvil se queda con el más reciente.',
+    'En el móvil se elige <b>la carpeta</b> (Descargas › Visitas PRL), no el archivo: Perfil › Sincronizar › <b>Elegir carpeta</b>. El móvil quita solo los archivos viejos.'
+  ]},
   {v:'1.21.1', fecha:'09/11/2026', items:[
     '<b>Sincronizar sin OneDrive</b>: si el ordenador ve tu móvil con <b>Enlace Móvil</b>, la carpeta compartida puede ser <b>Descargas › Visitas PRL</b> del propio móvil. Sirve con el móvil personal.',
     'En el móvil, el archivo de sincronización se guarda con permiso permanente y, si Android lo pierde, la app lo avisa en Perfil.'
@@ -4423,6 +4427,7 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
 
 
 
@@ -9392,7 +9397,7 @@ setTimeout(() => { pintaRes(); pintaDet(); coloca(); }, 0);
 
 /*ESC-JS-END*/
 /*SYNC-JS-START*/
-/* ================= Sincronizar móvil y ordenador (1.21.0; carpeta del móvil por Enlace Móvil en 1.21.1) =================
+/* ================= Sincronizar móvil y ordenador (1.21.0; carpeta del móvil por Enlace Móvil en 1.21.1 y 1.21.2) =================
    El móvil y el ordenador juntan sus datos a través de una carpeta compartida, sin servidor: una de OneDrive o
    una carpeta del propio móvil que Windows muestra en el Explorador con Enlace Móvil (CrossDevice):
    - cada dispositivo escribe SU archivo («VisitasPRL-<ordenador|movil>-<id>.json», cifrado con la clave de las copias)
@@ -9402,9 +9407,14 @@ setTimeout(() => { pintaRes(); pintaDet(); coloca(); }, 0);
    Se junta cada elemento por su fecha de guardado (gana el último) y los borrados viajan como «borrados»
    para que nada vuelva a aparecer. Lo que se sincroniza: visitas guardadas, informes, planificaciones,
    calendario, revisiones (con sus certificados), evaluaciones de riesgos y contratos del perfil.
-   El PDF del PSS/DGP no (pesa demasiado): cada dispositivo tiene su carpeta. */
+   El PDF del PSS/DGP no (pesa demasiado): cada dispositivo tiene su carpeta.
+   1.21.2: con Enlace Móvil, lo que ya está en el móvil se ve de solo lectura desde el ordenador. Si no se puede
+   sobrescribir, el ordenador deja un archivo nuevo cada vez («VisitasPRL-ordenador-<id>-<fecha>.json») y quita los
+   suyos anteriores si le dejan; el móvil usa la carpeta entera, lee de cada dispositivo el archivo más reciente
+   y quita los viejos. */
 (() => {
 const AND = () => !!(window.AndroidApp && typeof AndroidApp.syncLeer === 'function');
+const AND_CARPETA = () => AND() && typeof AndroidApp.syncElegirCarpeta === 'function';
 const WEB = () => !AND() && typeof window.showDirectoryPicker === 'function';
 const PUEDE = () => AND() || WEB();
 const PREFIJO = 'VisitasPRL-';
@@ -9423,6 +9433,18 @@ const guardaBorrados = b => {
 const hora = t => { if (!t) return ''; const d = new Date(t), h = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); return isoDate(d) === isoDate(new Date()) ? 'hoy a las ' + h : fmtDate(isoDate(d)) + ' a las ' + h; };
 const idCorto = () => { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = ''; const r = crypto.getRandomValues(new Uint8Array(4)); r.forEach(x => { s += a[x % a.length]; }); return s; };
 const nombrePropio = () => `${PREFIJO}${AND() ? 'movil' : 'ordenador'}-${CFG.id || (CFG.id = idCorto())}.json`;
+/* de qué dispositivo es un archivo: «VisitasPRL-movil-H9LL (1).json» y «VisitasPRL-ordenador-RVDW-20261109-153000.json» → «movil-H9LL», «ordenador-RVDW» */
+const claveDe = n => { const m = /^VisitasPRL-(movil|ordenador)-([A-Z0-9]+)(?=[-. (]|$)/.exec(n || ''); return m ? m[1] + '-' + m[2] : n; };
+const miClave = () => (AND() ? 'movil' : 'ordenador') + '-' + CFG.id;
+const esSync = n => !!n && n.startsWith(PREFIJO) && /\.json$/i.test(n);
+/* de cada dispositivo, solo su archivo más reciente */
+function masNuevos(l) {
+  const g = {};
+  l.forEach(x => { const k = claveDe(x.nombre); if (k === miClave()) return; const a = g[k];
+    if (!a || (x.mod || 0) > (a.mod || 0) || ((x.mod || 0) === (a.mod || 0) && x.nombre > a.nombre)) g[k] = x; });
+  return Object.values(g);
+}
+const sello = () => { const d = new Date(), p = n => String(n).padStart(2, '0'); return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`; };
 
 /* ---------- lo que se sincroniza ---------- */
 const MOD = {
@@ -9552,18 +9574,39 @@ async function permiso(pedir) {
   try { if ((await h.queryPermission(o)) === 'granted') return true; if (!pedir) return false; return (await h.requestPermission(o)) === 'granted'; } catch (e) { return false; }
 }
 async function webLeer() {
-  const h = await carpeta(), out = [];
+  const h = await carpeta(), l = [], out = [];
   for await (const [nombre, e] of h.entries()) {
-    if (e.kind !== 'file' || nombre === CFG.nombre || !nombre.startsWith(PREFIJO) || !/\.json$/i.test(nombre)) continue;
-    const f = await e.getFile(), ant = (CFG.otros || {})[nombre];
-    out.push({nombre, mod:f.lastModified, texto:ant && ant.h && ant.mod === f.lastModified && ant.tam === f.size ? null : await f.text(), tam:f.size});
+    if (e.kind !== 'file' || !esSync(nombre) || claveDe(nombre) === miClave()) continue;
+    const f = await e.getFile(); l.push({nombre, f, mod:f.lastModified, tam:f.size});
+  }
+  for (const x of masNuevos(l)) {
+    const ant = (CFG.otros || {})[claveDe(x.nombre)];
+    out.push({nombre:x.nombre, mod:x.mod, tam:x.tam, texto:ant && ant.h && ant.nombre === x.nombre && ant.mod === x.mod && ant.tam === x.tam ? null : await x.f.text()});
   }
   return out;
 }
+async function escribeEn(h, nombre, t) {
+  const fh = await h.getFileHandle(nombre, {create:true});
+  const w = await fh.createWritable();
+  try { await w.write(t); await w.close(); } catch (e) { try { await w.abort(); } catch (x) {} throw e; }
+}
+const soloLectura = e => !!e && (/^(NoModificationAllowedError|InvalidModificationError|InvalidStateError)$/.test(e.name || '') || /read-only|solo lectura|sólo lectura/i.test(e.message || ''));
 async function webEscribir(t) {
   const h = await carpeta();
-  const fh = await h.getFileHandle(CFG.nombre, {create:true});
-  const w = await fh.createWritable(); await w.write(t); await w.close();
+  if (!CFG.nuevos) {
+    try { await escribeEn(h, CFG.nombre, t); return; }
+    catch (e) { if (!soloLectura(e)) throw e; }
+  }
+  /* la carpeta no deja sobrescribir (la del móvil por Enlace Móvil): un archivo nuevo cada vez */
+  const base = `${PREFIJO}ordenador-${CFG.id}`;
+  let nom = `${base}-${sello()}.json`;
+  if (nom === CFG.nombre) nom = `${base}-${sello()}-${Date.now() % 1000}.json`;
+  await escribeEn(h, nom, t);
+  CFG.nombre = nom; CFG.nuevos = true;
+  /* los míos anteriores sobran: se quitan si la carpeta deja (si no, los quita el móvil) */
+  const viejos = [];
+  for await (const [n, e] of h.entries()) if (e.kind === 'file' && n !== nom && esSync(n) && claveDe(n) === miClave()) viejos.push(n);
+  for (const n of viejos) { try { await h.removeEntry(n); } catch (e) { /* de solo lectura: se queda */ } }
 }
 
 /* ---------- archivos del móvil (app de Android) ---------- */
@@ -9578,8 +9621,8 @@ async function andLeer() {
   let meta = []; try { meta = JSON.parse(r.info || '[]'); } catch (e) {}
   const out = meta.map((m, i) => {
     if (!m.ok) return {nombre:m.nombre, mod:m.mod, error:m.error || 'sin acceso', texto:null};
-    const ant = (CFG.otros || {})[m.nombre];
-    return {nombre:m.nombre, mod:m.mod, tam:m.tam, texto:ant && ant.h && m.mod && ant.mod === m.mod && ant.tam === m.tam ? null : AndroidApp.syncTexto(i)};
+    const ant = (CFG.otros || {})[claveDe(m.nombre)];
+    return {nombre:m.nombre, mod:m.mod, tam:m.tam, texto:ant && ant.h && ant.nombre === m.nombre && m.mod && ant.mod === m.mod && ant.tam === m.tam ? null : AndroidApp.syncTexto(i)};
   });
   try { AndroidApp.syncSoltar(); } catch (e) {}
   return out;
@@ -9616,20 +9659,22 @@ async function sincronizar(o = {}) {
     detectarBorrados();
     /* 1. leer los de los demás */
     const otros = AND() ? await andLeer() : await webLeer();
-    CFG.otros = CFG.otros || {};
+    /* uno por dispositivo (el nombre del archivo puede cambiar); lo que ya no está, se olvida */
+    const antes = CFG.otros || {}; CFG.otros = {};
     for (const x of otros) {
-      if (x.error) { CFG.otros[x.nombre] = {...(CFG.otros[x.nombre] || {}), h:'', error:x.error}; continue; }
-      if (x.texto == null) continue;
-      const h = await huella(x.texto), ant = CFG.otros[x.nombre] || {};
-      if (ant.h === h && !o.forzar) { CFG.otros[x.nombre] = {...ant, mod:x.mod, tam:x.tam}; continue; }
-      let j; try { j = parseSobre(x.texto); } catch (e) { CFG.otros[x.nombre] = {...ant, h:'', error:'el archivo no se puede leer'}; continue; }
+      const k = claveDe(x.nombre), ant = antes[k] || {};
+      if (x.error) { CFG.otros[k] = {...ant, nombre:x.nombre, h:'', error:x.error}; continue; }
+      if (x.texto == null) { CFG.otros[k] = ant; continue; }
+      const h = await huella(x.texto);
+      if (ant.h === h && !o.forzar) { CFG.otros[k] = {...ant, nombre:x.nombre, mod:x.mod, tam:x.tam}; continue; }
+      let j; try { j = parseSobre(x.texto); } catch (e) { CFG.otros[k] = {...ant, nombre:x.nombre, h:'', error:'el archivo no se puede leer'}; continue; }
       const d = j && j.cifrado ? await SEG_API.abrirSync(j, x.nombre, !!o.preguntar) : j;
-      if (!d) { falta = x.nombre; CFG.otros[x.nombre] = {...ant, h:'', error:'falta la contraseña'}; continue; }
-      if (!d.registros && d.tipo !== 'sincro') continue;
+      if (!d) { falta = x.nombre; CFG.otros[k] = {...ant, nombre:x.nombre, h:'', error:'falta la contraseña'}; continue; }
+      if (!d.registros && d.tipo !== 'sincro') continue;   // no es de la app
       const n = await aplicar(d, !!o.preguntar);
-      Object.keys(total).forEach(k => { total[k] += n[k] || 0; });
-      CFG.otros[x.nombre] = {h, mod:x.mod, tam:x.tam, leido:Date.now(), disp:d.disp || '', escrito:d.escrito || 0, pendiente:!!CFG.pendBorrar};
-      if (CFG.pendBorrar) CFG.otros[x.nombre].h = '';   // se vuelve a mirar en la próxima vuelta
+      Object.keys(total).forEach(kk => { total[kk] += n[kk] || 0; });
+      CFG.otros[k] = {nombre:x.nombre, h, mod:x.mod, tam:x.tam, leido:Date.now(), disp:d.disp || '', escrito:d.escrito || 0, pendiente:!!CFG.pendBorrar};
+      if (CFG.pendBorrar) CFG.otros[k].h = '';   // se vuelve a mirar en la próxima vuelta
     }
     /* 2. escribir el mío si ha cambiado algo */
     const f = firmaLocal();
@@ -9671,11 +9716,12 @@ async function activar() {
     let h; try { h = await window.showDirectoryPicker({id:'visitas-prl-sync', mode:'readwrite', startIn:'documents'}); } catch (e) { return; }
     DIR = h; try { await kv.set('dir', h); } catch (e) { /* se recuerda mientras la app esté abierta */ }
     if (!(await permiso(true))) { toast('Sin permiso para la carpeta no se puede sincronizar.'); return; }
-    CFG = {on:true, id:CFG.id || idCorto(), carpeta:h.name, otros:{}}; CFG.nombre = nombrePropio(); guarda();
+    CFG = {on:true, id:CFG.id || idCorto(), carpeta:h.name, otros:{}, visto:CFG.visto}; CFG.nombre = nombrePropio(); guarda();
     await sincronizar({preguntar:true, forzar:true});
     return;
   }
-  /* móvil: 1) su archivo en la carpeta compartida; 2) el del ordenador */
+  if (AND_CARPETA()) return elegirCarpetaAnd();
+  /* móvil (app anterior a 1.21.2): 1) su archivo en la carpeta compartida; 2) el del ordenador */
   const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir dónde guardar', body:`<p><b>Antes</b>, actívalo en el ordenador: así ya existe la carpeta con su archivo.</p>
     <p>Se abre el selector de archivos. Elige la misma carpeta que en el ordenador:</p>
     <ul class="sy-pasos"><li><b>Con Enlace Móvil</b>: <b>Descargas › Visitas PRL</b> (en este móvil).</li><li><b>Con OneDrive</b>: toca <b>☰ › OneDrive › Visitas PRL</b>.</li></ul>
@@ -9687,6 +9733,19 @@ async function activar() {
   let nom = nombrePropio(); try { nom = JSON.parse(r.info || '[]')[0] || nom; } catch (e) {}
   CFG = {...CFG, on:true, nombre:nom, otros:{}}; delete CFG.firma; delete CFG.escrito; guarda();
   await elegirOtros(true);
+}
+/* móvil (1.21.2): la carpeta compartida entera */
+async function elegirCarpetaAnd() {
+  const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir carpeta', body:`<p><b>Antes</b>, actívalo en el ordenador: así ya existe la carpeta con su archivo.</p>
+    <p>Se abre el selector de carpetas:</p>
+    <ol class="sy-pasos"><li>Ve a <b>Descargas › Visitas PRL</b> (la carpeta que eligió el ordenador).</li><li>Pulsa <b>«Usar esta carpeta»</b> y después <b>«Permitir»</b>.</li></ol>
+    <p class="help">El móvil deja ahí su archivo cifrado y lee siempre el más reciente del ordenador.</p>`});
+  if (ok !== true) return;
+  CFG.id = CFG.id || idCorto();
+  const p = espera('carpeta'); AndroidApp.syncElegirCarpeta(nombrePropio());
+  const r = await p; if (!r.ok) { toast(r.info || 'No se ha elegido ninguna carpeta.'); return; }
+  CFG = {...CFG, on:true, modo:'carpeta', nombre:nombrePropio(), carpeta:r.info || '', otros:{}, estado:'', error:''}; delete CFG.firma; delete CFG.escrito; guarda();
+  await sincronizar({preguntar:true, forzar:true});
 }
 async function elegirOtros(alta) {
   const ok = await ask({title:alta ? 'Ahora, el archivo del ordenador' : 'Archivo del ordenador', yes:'Elegir archivo', no:alta ? 'Más tarde' : 'Cancelar', body:`<ol class="sy-pasos"><li>En la misma carpeta (<b>Descargas › Visitas PRL</b>, u <b>OneDrive › Visitas PRL</b>), toca el archivo <b>«VisitasPRL-ordenador-…json»</b>.</li><li>Si tienes más de un ordenador, mantén pulsado para elegir varios.</li></ol>`});
@@ -9709,19 +9768,26 @@ function lineas() {
   const L = [];
   if (!activa()) return L;
   L.push(['', CFG.ultima ? 'Última sincronización: ' + hora(CFG.ultima) : 'Todavía sin sincronizar']);
-  L.push(['', `Este ${AND() ? 'móvil' : 'ordenador'} escribe <b>${esc(CFG.nombre || '')}</b>${!AND() && CFG.carpeta ? ' en la carpeta «' + esc(CFG.carpeta) + '»' : ''}`]);
+  const ea = AND() ? estadoAnd() : {}, enCarpeta = !AND() || ea.modo === 'carpeta';
+  const dondeAnd = ea.carpeta || CFG.carpeta;
+  L.push(['', `Este ${AND() ? 'móvil' : 'ordenador'} escribe <b>${esc(CFG.nombre || '')}</b>${!AND() && CFG.carpeta ? ' en la carpeta «' + esc(CFG.carpeta) + '»' : AND() && enCarpeta && dondeAnd ? ' en la carpeta «' + esc(dondeAnd) + '»' : ''}`]);
   const ot = Object.entries(CFG.otros || {});
-  const enAnd = AND() ? (estadoAnd().otros || []) : [];
-  if (AND() && !enAnd.length) L.push(['warn', 'Falta elegir el archivo del ordenador.']);
-  if (AND() && estadoAnd().propio != null && estadoAnd().propioOk === false) L.push(['warn', 'El móvil no tiene permiso permanente para escribir su archivo: pulsa «Desactivar» y vuelve a activarlo.']);
-  ot.forEach(([n, x]) => L.push([x.error ? 'warn' : '', `Lee <b>${esc(n)}</b>${x.error ? ' · ' + esc(x.error) : x.escrito ? ` · copia del ${x.disp === 'movil' ? 'móvil' : x.disp === 'ordenador' ? 'ordenador' : 'otro dispositivo'} de ${hora(x.escrito)}` : ''}`]));
-  if (!AND() && !ot.length && CFG.ultima) L.push(['', 'Aún no hay archivo del móvil en la carpeta: actívalo también en el móvil.']);
+  if (AND() && !enCarpeta && AND_CARPETA()) L.push(['warn', 'Nuevo: pulsa «Elegir carpeta» y elige <b>Descargas › Visitas PRL</b>. Así el móvil encuentra siempre el archivo más reciente del ordenador.']);
+  else if (AND() && !enCarpeta && !(ea.otros || []).length) L.push(['warn', 'Falta elegir el archivo del ordenador.']);
+  if (AND() && ea.propio != null && ea.propioOk === false) L.push(['warn', enCarpeta ? 'El móvil no tiene permiso permanente para la carpeta: pulsa «Cambiar carpeta» y elígela otra vez.' : 'El móvil no tiene permiso permanente para escribir su archivo: pulsa «Desactivar» y vuelve a activarlo.']);
+  ot.forEach(([k, x]) => L.push([x.error ? 'warn' : '', `Lee <b>${esc(x.nombre || k)}</b>${x.error ? ' · ' + esc(x.error) : x.escrito ? ` · copia del ${x.disp === 'movil' ? 'móvil' : x.disp === 'ordenador' ? 'ordenador' : 'otro dispositivo'} de ${hora(x.escrito)}` : ''}`]));
+  if (enCarpeta && !ot.length && CFG.ultima) L.push(['', AND() ? 'Aún no hay archivo del ordenador en la carpeta: actívalo también en el ordenador y elige la misma carpeta.' : 'Aún no hay archivo del móvil en la carpeta: actívalo también en el móvil.']);
   if (CFG.estado === 'permiso') L.push(['warn', 'Hace falta volver a dar permiso a la carpeta: pulsa «Sincronizar ahora».']);
   if (CFG.estado === 'carpeta') L.push(['warn', 'Este navegador ha olvidado la carpeta: pulsa «Cambiar carpeta» y elige otra vez la carpeta compartida.']);
   if (CFG.pendBorrar) L.push(['warn', `Hay ${CFG.pendBorrar} borrados del otro dispositivo sin confirmar: pulsa «Sincronizar ahora».`]);
   if (CFG.error === 'falta-clave') L.push(['warn', 'Falta la contraseña de las copias del otro dispositivo: pulsa «Sincronizar ahora».']);
   else if (CFG.error) L.push(['warn', 'Último error: ' + esc(CFG.error)]);
   return L;
+}
+function botonAnd() {
+  if (!AND()) return '<button type="button" class="btn" data-sy="carpeta">Cambiar carpeta</button>';
+  if (!AND_CARPETA()) return '<button type="button" class="btn" data-sy="otros">Archivo del ordenador</button>';
+  return estadoAnd().modo === 'carpeta' ? '<button type="button" class="btn" data-sy="carpeta">Cambiar carpeta</button>' : '<button type="button" class="btn" data-sy="carpeta">Elegir carpeta</button>';
 }
 function perfilHtml() {
   const on = activa();
@@ -9731,7 +9797,7 @@ function perfilHtml() {
       <p class="help">${on ? 'Lo que guardas aquí aparece en el otro dispositivo, y al revés: visitas guardadas, informes, planificaciones, calendario, revisiones, evaluaciones de riesgos y contratos. Va cifrado con la contraseña de las copias. El PDF del PSS/DGP no viaja.' : 'Junta lo del móvil y lo del ordenador a través de una carpeta compartida: la del propio móvil, que el ordenador ve con Enlace Móvil, o una de OneDrive. Sin servidores: cada dispositivo deja ahí su archivo cifrado y lee el del otro.'}</p>
       ${on ? `<ul class="sy-est">${lineas().map(([c, t]) => `<li class="${c}">${t}</li>`).join('')}</ul>` : ''}
       ${!PUEDE() ? '<p class="help">Disponible en la app de Android y en el ordenador con Edge o Chrome.</p>' : ''}
-      <div class="sy-acc">${on ? `<button type="button" class="btn primary" data-sy="ya"${CFG.estado === 'sincronizando' ? ' disabled' : ''}>${CFG.estado === 'sincronizando' ? 'Sincronizando…' : 'Sincronizar ahora'}</button>${AND() ? '<button type="button" class="btn" data-sy="otros">Archivo del ordenador</button>' : '<button type="button" class="btn" data-sy="carpeta">Cambiar carpeta</button>'}<button type="button" class="btn sy-off" data-sy="off">Desactivar</button>` : PUEDE() ? '<button type="button" class="btn primary" data-sy="on">Activar</button>' : ''}</div>
+      <div class="sy-acc">${on ? `<button type="button" class="btn primary" data-sy="ya"${CFG.estado === 'sincronizando' ? ' disabled' : ''}>${CFG.estado === 'sincronizando' ? 'Sincronizando…' : 'Sincronizar ahora'}</button>${botonAnd()}<button type="button" class="btn sy-off" data-sy="off">Desactivar</button>` : PUEDE() ? '<button type="button" class="btn primary" data-sy="on">Activar</button>' : ''}</div>
     </div>
   </section>`;
 }
@@ -9764,7 +9830,10 @@ document.addEventListener('click', async e => {
   if (a === 'off') return desactivar();
   if (a === 'ya') return sincronizar({preguntar:true, forzar:!!b.closest('#sy-card')});
   if (a === 'otros') return elegirOtros(false);
-  if (a === 'carpeta') { const id = CFG.id; DIR = null; try { await kv.del('dir'); } catch (x) {} CFG = {id}; guarda(); return activar(); }
+  if (a === 'carpeta') {
+    if (AND()) return elegirCarpetaAnd();
+    const id = CFG.id, visto = CFG.visto; DIR = null; try { await kv.del('dir'); } catch (x) {} CFG = {id, visto}; guarda(); return activar();
+  }
 });
 
 /* ---------- cuándo se sincroniza ---------- */
