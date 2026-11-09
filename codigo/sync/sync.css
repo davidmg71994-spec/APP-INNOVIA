@@ -1,0 +1,27 @@
+/* ===== Sincronizar con OneDrive (1.21.0) ===== */
+.sy-card .bb{display:grid;gap:12px}
+.sy-card .help{margin:0}
+.sy-est{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.sy-est li{font-size:14.5px;line-height:1.4;padding:8px 10px;border-radius:8px;background:var(--surface-2);overflow-wrap:anywhere}
+.sy-est li.warn{background:var(--brand-soft);color:var(--ink)}
+.sy-acc{display:flex;flex-wrap:wrap;gap:8px}
+.sy-acc .btn{flex:1 1 auto}
+.sy-acc .sy-off{color:var(--bad);flex:0 0 auto}
+.sy-pasos{margin:0 0 10px;padding-left:20px;display:grid;gap:6px;font-size:15px;line-height:1.45}
+.sy-pie{display:none}
+.sy-aviso{position:fixed;z-index:30;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 14px;border:1px solid var(--brand);border-radius:12px;background:var(--surface);box-shadow:0 8px 24px rgba(0,0,0,.16);color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+.sy-aviso b{font:700 14px/1.2 var(--f-display);color:var(--brand-text)}
+.sy-aviso span{font-size:14px;line-height:1.3}
+body.sub-on.wiz-on .sy-aviso,#view-form:not([hidden])~.sy-aviso{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
+@media (min-width:1024px){
+  .bottomnav .sy-pie{order:100;display:flex;align-items:center;gap:8px;margin:8px 0 0;padding:8px 10px;border:0;border-radius:8px;background:none;color:var(--muted);font:500 13px/1.2 var(--f-body);text-align:left;cursor:pointer}
+  .sy-pie:hover{background:var(--surface-2);color:var(--ink)}
+  .sy-pie i{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+  .sy-pie.warn i{background:var(--brand)}
+  .sy-pie.on i{background:var(--muted);animation:syLatido 1s ease-in-out infinite}
+  .sy-aviso{left:calc(var(--side,236px) + 16px);right:auto;width:300px;bottom:24px}
+  .ini-pf>section:nth-of-type(2){grid-row:3}
+  .ini-pf>section:nth-of-type(4){grid-column:2;grid-row:4}
+}
+@keyframes syLatido{50%{opacity:.3}}
+@media print{.sy-aviso,.sy-pie{display:none!important}}

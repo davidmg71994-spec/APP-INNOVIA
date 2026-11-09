@@ -2,7 +2,7 @@
 
 App para los técnicos de PRL de Innovia: registro de comprobación del recurso preventivo en obra, informe de seguimiento cuatrimestral, planificación preventiva y evaluación de riesgos, con salida en PDF, Word y Excel, y el PSS/DGP de cada obra a mano.
 
-**Versión 1.20.0 · 09/11/2026**
+**Versión 1.21.0 · 09/11/2026**
 
 ## Cómo usarla
 
@@ -11,7 +11,7 @@ App para los técnicos de PRL de Innovia: registro de comprobación del recurso 
 | **Android** | Descarga [`VisitasPRL.apk`](VisitasPRL.apk) e instálala (si ya la tienes, se instala encima y no se pierde nada). |
 | **iPhone, tablet u ordenador** | Abre **https://davidmg71994-spec.github.io/APP-INNOVIA/** en el navegador (funciona también sin conexión una vez abierta). |
 
-Los datos (visitas, informes, planificaciones, evaluaciones de riesgos, calendario, revisiones con sus certificados, PSS/DGP y perfil) se guardan **solo en el móvil** de cada técnico. Para cambiar de móvil o pasar datos: *Visitas › Historial › Exportar copia* e *Importar copia* (la copia va cifrada con la contraseña de cada técnico).
+Los datos (visitas, informes, planificaciones, evaluaciones de riesgos, calendario, revisiones con sus certificados, PSS/DGP y perfil) se guardan **solo en el móvil** de cada técnico. Para cambiar de móvil o pasar datos: *Visitas › Historial › Exportar copia* e *Importar copia* (la copia va cifrada con la contraseña de cada técnico). Para tener **los mismos datos en el móvil y en el ordenador**: *Perfil › Sincronizar con OneDrive* (primero en el ordenador y luego en el móvil); cada dispositivo deja su archivo cifrado en una carpeta de OneDrive y lee el del otro, sin ningún servidor.
 
 ## Qué hace
 
@@ -37,7 +37,7 @@ Los datos (visitas, informes, planificaciones, evaluaciones de riesgos, calendar
 | `docs/` | La web que publica GitHub Pages: `VisitasPRL.html` (la app en un solo archivo), `index.html` (entrada) y `sw.js` (caché sin conexión). |
 | `VisitasPRL.apk` | La app de Android firmada. |
 | `codigo/app-web/` | Código fuente de la app web (`index.html` con todos los módulos ya integrados). |
-| `codigo/informe/`, `codigo/inicio/`, `codigo/plan/`, `codigo/cal/`, `codigo/rev/`, `codigo/norma/`, `codigo/evrl/`, `codigo/pss/`, `codigo/esc/`, `codigo/seg/` | Fuentes de cada módulo y sus scripts `inject.py` (se ejecutan en ese orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, seg). `seg/inject.py` va siempre el último: pone la política de seguridad del contenido con la huella de cada script. |
+| `codigo/informe/`, `codigo/inicio/`, `codigo/plan/`, `codigo/cal/`, `codigo/rev/`, `codigo/norma/`, `codigo/evrl/`, `codigo/pss/`, `codigo/esc/`, `codigo/sync/`, `codigo/seg/` | Fuentes de cada módulo y sus scripts `inject.py` (se ejecutan en ese orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, sync, seg). `seg/inject.py` va siempre el último: pone la política de seguridad del contenido con la huella de cada script. |
 | `codigo/app-web/pdfjs/` | pdf.js 6.2.108 de Mozilla (licencia Apache 2.0), para leer los PDF del PSS/DGP. |
 | `codigo/android/` | Proyecto Android (sin la clave de firma). |
 | `codigo/LEEME.md` | Notas técnicas de cada versión. |

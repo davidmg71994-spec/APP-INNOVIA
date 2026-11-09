@@ -672,6 +672,32 @@ window.SEG_API = {
   bloqueada:() => bloq || exige,
   pendiente, entregarCopia,
   hacerCopia:() => exportBackup(),
+  /* sincronización con OneDrive: se cifra con la clave de las copias; si el otro dispositivo usa otra,
+     se pide su contraseña una vez y este dispositivo se queda con ella (así los dos usan la misma) */
+  async cifrarSync(texto) { await listo; if (!SUB()) return null; if (!CLAVE && !(await crearClave())) return null; return cifrarCon(CLAVE, texto); },
+  async abrirSync(j, nombre, preguntar) {
+    const c = (j && j.cifrado) || {};
+    if (c.alg !== 'AES-256-GCM' || !j.datos || !SUB()) { const e = new Error('formato'); e.seg = true; throw e; }
+    await listo;
+    if (CLAVE && CLAVE.sal === c.sal) { const t = await abrirCon(CLAVE.key, j); if (t != null) return JSON.parse(t); }
+    if (!preguntar) return null;
+    for (let i = 0; i < 3; i++) {
+      const r = await ask({title:'Contraseña del otro dispositivo', yes:'Usar', no:'Ahora no', body:`<p class="m-file">${esc(nombre || 'Archivo de OneDrive')}</p>
+        <p>${i ? '<b>Contraseña incorrecta.</b> ' : ''}Este archivo está cifrado con la contraseña de las copias del otro dispositivo. Escríbela: desde ahora este dispositivo usará la misma.</p>
+        <div class="field"><label for="sg-sy">Contraseña de las copias</label><input id="sg-sy" type="password" autocomplete="current-password"></div>`});
+      if (r !== true) return null;
+      const pass = $('#sg-sy').value; if (!pass) continue;
+      const key = await claveDe(pass, unb64(c.sal), c.it || ITER);
+      const t = await abrirCon(key, j);
+      if (t != null) {
+        await nuevaClave(null, c.sal, key, c.it || ITER);
+        toast('Listo: los dos dispositivos usan la misma contraseña de copias.');
+        try { pinta(); } catch (e) {}
+        return JSON.parse(t);
+      }
+    }
+    return null;
+  },
   bloquear,
   /* pantalla */
   ver, perfilHtml,

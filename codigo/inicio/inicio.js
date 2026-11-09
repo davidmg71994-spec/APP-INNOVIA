@@ -281,6 +281,7 @@ function renderPerfil() {
       </div>
     </section>
     ${window.SEG_API ? SEG_API.perfilHtml() : ''}
+    ${window.SYNC_API ? SYNC_API.perfilHtml() : ''}
   </div>`;
 }
 function verPerfil(on) {

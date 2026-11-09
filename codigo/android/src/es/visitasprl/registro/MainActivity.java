@@ -10,6 +10,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.hardware.biometrics.BiometricManager;
 import android.hardware.biometrics.BiometricPrompt;
@@ -21,6 +22,7 @@ import android.os.SystemClock;
 import android.os.Environment;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.WindowManager;
@@ -35,12 +37,15 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +63,10 @@ import org.json.JSONObject;
  *    Los enlaces que pulsa el usuario (BOE, normativa) se abren en el navegador, fuera de la app.
  *  - Bloqueo de la app con el bloqueo del propio móvil (BiometricPrompt / KeyguardManager).
  *  - Opción de impedir capturas de pantalla (FLAG_SECURE).
+ *
+ * Sincronizar con OneDrive (1.21.0): sin red propia. El técnico crea su archivo en OneDrive y elige el del
+ * ordenador con el selector del sistema (Storage Access Framework); la app guarda el permiso permanente y
+ * escribe y lee esos archivos en segundo plano. La subida y la bajada las hace la app de OneDrive.
  */
 public class MainActivity extends Activity {
 
@@ -65,11 +74,16 @@ public class MainActivity extends Activity {
     static final String START = "https://" + HOST + "/index.html";
     static final int REQ_ARCHIVO = 1;
     static final int REQ_DESBLOQUEO = 2;
+    static final int REQ_SYNC_PROPIO = 3;
+    static final int REQ_SYNC_OTROS = 4;
+    static final String SYNC = "sincro";
 
     private WebView web;
     private ValueCallback<Uri[]> archivoCallback;
     private Uri fotoUri;
     private long paradaMs = 0;
+    private volatile String[] syncTextos;
+    private final Object syncLock = new Object();
 
     @Override
     protected void onCreate(Bundle saved) {
@@ -277,6 +291,7 @@ public class MainActivity extends Activity {
     protected void onStop() {
         super.onStop();
         paradaMs = SystemClock.elapsedRealtime();
+        if (web != null) web.evaluateJavascript("window.SYNC_API&&SYNC_API.alSalir()", null);
     }
 
     @Override
@@ -286,6 +301,7 @@ public class MainActivity extends Activity {
             long fuera = SystemClock.elapsedRealtime() - paradaMs;
             paradaMs = 0;
             web.evaluateJavascript("window.SEG_API&&SEG_API.vuelve(" + fuera + ")", null);
+            web.evaluateJavascript("window.SYNC_API&&SYNC_API.alVolver()", null);
         }
     }
 
@@ -294,6 +310,10 @@ public class MainActivity extends Activity {
         super.onActivityResult(req, res, data);
         if (req == REQ_DESBLOQUEO) {
             resultadoDesbloqueo(res == RESULT_OK, res == RESULT_OK ? "" : "No se ha desbloqueado");
+            return;
+        }
+        if (req == REQ_SYNC_PROPIO || req == REQ_SYNC_OTROS) {
+            syncResultado(req, res, data);
             return;
         }
         if (req != REQ_ARCHIVO || archivoCallback == null) return;
@@ -314,6 +334,220 @@ public class MainActivity extends Activity {
         archivoCallback.onReceiveValue(r);
         archivoCallback = null;
         fotoUri = null;
+    }
+
+    /* ---------- sincronizar con OneDrive (Storage Access Framework) ---------- */
+
+    private SharedPreferences syncPrefs() {
+        return getSharedPreferences(SYNC, MODE_PRIVATE);
+    }
+
+    private void js(final String codigo) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                if (web != null) web.evaluateJavascript(codigo, null);
+            }
+        });
+    }
+
+    private void syncAviso(String k, boolean ok, String info) {
+        js("window.SYNC_API&&SYNC_API.nativo(" + JSONObject.quote(k) + "," + ok + "," + JSONObject.quote(info == null ? "" : info) + ")");
+    }
+
+    void syncElegirPropio(String nombre) {
+        try {
+            Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);
+            i.setType("application/json");
+            i.putExtra(Intent.EXTRA_TITLE, limpio(nombre));
+            startActivityForResult(i, REQ_SYNC_PROPIO);
+        } catch (ActivityNotFoundException e) {
+            syncAviso("propio", false, "No hay selector de archivos");
+        }
+    }
+
+    void syncElegirOtros() {
+        try {
+            Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);
+            i.setType("*/*");
+            i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            startActivityForResult(i, REQ_SYNC_OTROS);
+        } catch (ActivityNotFoundException e) {
+            syncAviso("otros", false, "No hay selector de archivos");
+        }
+    }
+
+    private void syncResultado(int req, int res, Intent data) {
+        String k = req == REQ_SYNC_PROPIO ? "propio" : "otros";
+        if (res != RESULT_OK || data == null) { syncAviso(k, false, ""); return; }
+        List<Uri> us = new ArrayList<Uri>();
+        ClipData c = data.getClipData();
+        if (c != null) for (int i = 0; i < c.getItemCount(); i++) us.add(c.getItemAt(i).getUri());
+        else if (data.getData() != null) us.add(data.getData());
+        if (us.isEmpty()) { syncAviso(k, false, ""); return; }
+        int fl = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        ContentResolver cr = getContentResolver();
+        SharedPreferences p = syncPrefs();
+        SharedPreferences.Editor e = p.edit();
+        JSONArray nombres = new JSONArray();
+        if (req == REQ_SYNC_PROPIO) {
+            soltarPermiso(p.getString("propio", null));
+            Uri u = us.get(0);
+            try { cr.takePersistableUriPermission(u, fl); } catch (Exception x) { /* sin permiso permanente: valdrá mientras la app esté abierta */ }
+            e.putString("propio", u.toString());
+            e.putString("propioNombre", nombreDe(u));
+            nombres.put(nombreDe(u));
+        } else {
+            try {
+                JSONArray viejos = new JSONArray(p.getString("otros", "[]"));
+                for (int i = 0; i < viejos.length(); i++) soltarPermiso(viejos.optString(i));
+            } catch (Exception x) { /* nada */ }
+            JSONArray l = new JSONArray();
+            for (Uri u : us) {
+                try { cr.takePersistableUriPermission(u, fl & Intent.FLAG_GRANT_READ_URI_PERMISSION); } catch (Exception x) { /* sin permiso permanente */ }
+                l.put(u.toString());
+                nombres.put(nombreDe(u));
+            }
+            e.putString("otros", l.toString());
+        }
+        e.apply();
+        syncAviso(k, true, nombres.toString());
+    }
+
+    private void soltarPermiso(String uri) {
+        if (uri == null || uri.isEmpty()) return;
+        try {
+            getContentResolver().releasePersistableUriPermission(Uri.parse(uri), Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } catch (Exception e) { /* ya no estaba */ }
+        try {
+            getContentResolver().releasePersistableUriPermission(Uri.parse(uri), Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (Exception e) { /* ya no estaba */ }
+    }
+
+    /** Nombre, fecha de modificación y tamaño del documento (lo que diga el proveedor, p. ej. OneDrive). */
+    private String nombreDe(Uri u) {
+        String[] m = meta(u);
+        return m[0] != null ? m[0] : u.getLastPathSegment();
+    }
+
+    private String[] meta(Uri u) {
+        String[] r = new String[3];
+        Cursor c = null;
+        try {
+            c = getContentResolver().query(u, new String[]{DocumentsContract.Document.COLUMN_DISPLAY_NAME, DocumentsContract.Document.COLUMN_LAST_MODIFIED, DocumentsContract.Document.COLUMN_SIZE}, null, null, null);
+            if (c != null && c.moveToFirst()) {
+                if (!c.isNull(0)) r[0] = c.getString(0);
+                if (!c.isNull(1)) r[1] = String.valueOf(c.getLong(1));
+                if (!c.isNull(2)) r[2] = String.valueOf(c.getLong(2));
+            }
+        } catch (Exception e) {
+            // sin datos del proveedor
+        } finally {
+            if (c != null) c.close();
+        }
+        return r;
+    }
+
+    /** Escribe el archivo de este móvil en OneDrive. Devuelve null si ha ido bien, o el error. */
+    String syncEscribir(String texto) {
+        synchronized (syncLock) {
+            String s = syncPrefs().getString("propio", null);
+            if (s == null) return "Falta elegir dónde guardar el archivo de este móvil";
+            Uri u = Uri.parse(s);
+            byte[] datos;
+            try { datos = texto.getBytes("UTF-8"); } catch (Exception e) { return "Texto no válido"; }
+            String ultimo = null;
+            for (String modo : new String[]{"wt", "rwt", "w"}) {
+                OutputStream out = null;
+                try {
+                    out = getContentResolver().openOutputStream(u, modo);
+                    if (out == null) throw new IOException("sin salida");
+                    out.write(datos);
+                    out.flush();
+                    out.close();
+                    out = null;
+                    return null;
+                } catch (SecurityException e) {
+                    return "Sin permiso para el archivo de OneDrive: vuelve a elegir dónde guardar";
+                } catch (Exception e) {
+                    ultimo = e.getMessage();
+                } finally {
+                    if (out != null) try { out.close(); } catch (IOException x) { /* nada */ }
+                }
+            }
+            return "No se pudo escribir en OneDrive" + (ultimo != null ? " (" + ultimo + ")" : "");
+        }
+    }
+
+    /** Lee los archivos de los otros dispositivos; el texto se queda en memoria hasta que la página lo recoge. */
+    String syncLeer() {
+        synchronized (syncLock) {
+            JSONArray meta = new JSONArray();
+            List<String> textos = new ArrayList<String>();
+            try {
+                JSONArray l = new JSONArray(syncPrefs().getString("otros", "[]"));
+                for (int i = 0; i < l.length(); i++) {
+                    Uri u = Uri.parse(l.getString(i));
+                    JSONObject o = new JSONObject();
+                    String[] m = meta(u);
+                    o.put("nombre", m[0] != null ? m[0] : u.getLastPathSegment());
+                    if (m[1] != null) o.put("mod", Long.parseLong(m[1]));
+                    if (m[2] != null) o.put("tam", Long.parseLong(m[2]));
+                    InputStream in = null;
+                    try {
+                        in = getContentResolver().openInputStream(u);
+                        if (in == null) throw new IOException("sin datos");
+                        ByteArrayOutputStream b = new ByteArrayOutputStream();
+                        byte[] buf = new byte[65536];
+                        int n;
+                        while ((n = in.read(buf)) > 0) b.write(buf, 0, n);
+                        textos.add(b.toString("UTF-8"));
+                        o.put("ok", true);
+                    } catch (SecurityException e) {
+                        textos.add(null);
+                        o.put("ok", false);
+                        o.put("error", "sin permiso: vuelve a elegir el archivo del ordenador");
+                    } catch (Exception e) {
+                        textos.add(null);
+                        o.put("ok", false);
+                        o.put("error", "no se pudo leer (¿sin conexión?)");
+                    } finally {
+                        if (in != null) try { in.close(); } catch (IOException x) { /* nada */ }
+                    }
+                    meta.put(o);
+                }
+            } catch (Exception e) {
+                // lista vacía
+            }
+            syncTextos = textos.toArray(new String[0]);
+            return meta.toString();
+        }
+    }
+
+    String syncEstado() {
+        try {
+            SharedPreferences p = syncPrefs();
+            JSONObject o = new JSONObject();
+            if (p.getString("propio", null) != null) o.put("propio", p.getString("propioNombre", ""));
+            JSONArray l = new JSONArray(p.getString("otros", "[]")), n = new JSONArray();
+            for (int i = 0; i < l.length(); i++) n.put(Uri.parse(l.getString(i)).getLastPathSegment());
+            o.put("otros", n);
+            return o.toString();
+        } catch (Exception e) {
+            return "{}";
+        }
+    }
+
+    void syncQuitar() {
+        SharedPreferences p = syncPrefs();
+        soltarPermiso(p.getString("propio", null));
+        try {
+            JSONArray l = new JSONArray(p.getString("otros", "[]"));
+            for (int i = 0; i < l.length(); i++) soltarPermiso(l.optString(i));
+        } catch (Exception e) { /* nada */ }
+        p.edit().clear().apply();
+        syncTextos = null;
     }
 
     /* ---------- puente con la página: compartir, guardar, copiar ---------- */
@@ -559,6 +793,66 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public String version() {
             return BuildConfigInfo.VERSION;
+        }
+
+        /* --- sincronizar con OneDrive: las respuestas llegan a SYNC_API.nativo(tipo, ok, info) --- */
+        @JavascriptInterface
+        public void syncElegirPropio(final String nombre) {
+            a.runOnUiThread(new Runnable() {
+                public void run() {
+                    a.syncElegirPropio(nombre);
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void syncElegirOtros() {
+            a.runOnUiThread(new Runnable() {
+                public void run() {
+                    a.syncElegirOtros();
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void syncEscribir(final String texto) {
+            new Thread(new Runnable() {
+                public void run() {
+                    String err = a.syncEscribir(texto);
+                    a.syncAviso("escrito", err == null, err);
+                }
+            }).start();
+        }
+
+        @JavascriptInterface
+        public void syncLeer() {
+            new Thread(new Runnable() {
+                public void run() {
+                    String meta = a.syncLeer();
+                    a.syncAviso("leido", true, meta);
+                }
+            }).start();
+        }
+
+        @JavascriptInterface
+        public String syncTexto(int i) {
+            String[] t = a.syncTextos;
+            return t != null && i >= 0 && i < t.length ? t[i] : null;
+        }
+
+        @JavascriptInterface
+        public void syncSoltar() {
+            a.syncTextos = null;
+        }
+
+        @JavascriptInterface
+        public String syncEstado() {
+            return a.syncEstado();
+        }
+
+        @JavascriptInterface
+        public void syncQuitar() {
+            a.syncQuitar();
         }
     }
 
