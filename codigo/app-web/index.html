@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-GzankSO3lQgaySZqzIhTF3eeJMxqaVl4hVdhb5x00ic='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-weN2Me7jwmebC8GRt+sM9IzqHG9w3fUcu/BCahMy+eY='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -875,82 +875,6 @@ body.onb-on{overflow:hidden}
 .pl-mes.vacio .pl-mh{font-size:calc(14.5px*var(--fz,1));color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:8px}
 .pl-mes.hoy .pl-mh{color:var(--corp-text)}
 /*PLAN-CSS-END*/
-/*CAL-CSS-START*/
-/* Calendario PRL: cabecera azul como la planificación; cada tarea con la banda de color de su tipo (los del Calendario PRL) */
-:root{--k-vis:#1F5FA8;--k-inst:#B4530F;--k-veh:#8A6A00;--k-reg:#2C7A3F;--k-ma:#0E7490;--k-hito:#7A3FA0;--k-otr:#5B6470}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}}
-:root[data-theme="dark"]{--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}
-#view-cal{gap:12px}
-#view-cal>div{min-width:0}
-#cal-main:not([hidden]),#cal-form:not([hidden]){display:grid;gap:12px;min-width:0}
-#cal-main>*,#cal-form>*{min-width:0}
-.k-vis{--kc:var(--k-vis)}.k-inst{--kc:var(--k-inst)}.k-veh{--kc:var(--k-veh)}.k-reg{--kc:var(--k-reg)}.k-ma{--kc:var(--k-ma)}.k-hito{--kc:var(--k-hito)}.k-otr{--kc:var(--k-otr)}
-#view-cal .dot,.cal-ley .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--kc);flex:none}
-.cal-blank{gap:10px}
-.cal-blank .btn{justify-self:start;margin-top:4px}
-.cal-ctrs{gap:6px}
-.cal-ctrs .chip{padding:8px 12px;font-size:calc(14px*var(--fz,1))}
-/* filas */
-.cal-gh{display:flex;align-items:center;gap:8px;margin:8px 2px 0;font:600 calc(12.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.cal-gh i{font-style:normal;font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
-.cal-gh.g-bad{color:var(--bad)}
-.cal-gh.g-bad i{background:var(--bad-soft);color:var(--bad);border-color:transparent}
-.cal-gh.g-hoy{color:var(--corp-text)}
-.cal-list{display:grid;gap:8px}
-.cal-row{position:relative;display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px 10px 18px;overflow:hidden;min-width:0}
-.cal-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--kc)}
-.cal-row.st-bad{border-color:var(--bad-line)}
-.cal-ck{appearance:none;flex:none;width:32px;height:32px;border-radius:9px;border:2px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:transparent}
-.cal-ck svg{width:18px;height:18px}
-.cal-ck[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--on-ok)}
-.cal-ck:active{transform:scale(.94)}
-.cal-open{appearance:none;flex:1;min-width:0;background:none;border:0;padding:2px 0;margin:0;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;display:grid;gap:4px}
-.cal-open b{font:600 calc(15px*var(--fz,1))/1.3 var(--f-body);overflow-wrap:anywhere}
-.cal-row.st-ok .cal-open b{text-decoration:line-through;color:var(--muted)}
-.cal-meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:calc(12.5px*var(--fz,1));color:var(--muted)}
-.cal-tc{font-weight:600;color:var(--corp-text)}
-.cal-rp{display:inline-flex;align-items:center;gap:4px}
-.cal-rp svg{width:13px;height:13px}
-.cal-late{font:600 calc(11.5px*var(--fz,1))/1 var(--f-body);border-radius:99px;padding:4px 8px;background:var(--bad-soft);color:var(--bad)}
-/* mes */
-.cal-mbar{display:flex;align-items:center;gap:10px}
-.cal-mbar h3{flex:1;margin:0;text-align:center;font:700 calc(19px*var(--fz,1))/1.2 var(--f-display)}
-.nav-b{appearance:none;width:42px;height:40px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:600 calc(22px*var(--fz,1))/1 var(--f-display);cursor:pointer}
-.cal-msum{margin:-4px 0 0;text-align:center;font-size:calc(13.5px*var(--fz,1));color:var(--muted)}
-.cal-hoyb{padding:2px 4px;font-size:calc(13.5px*var(--fz,1));color:var(--corp-text);text-decoration:underline;text-underline-offset:3px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.cal-dow{font:600 calc(11px*var(--fz,1))/1 var(--f-mono);color:var(--muted);text-align:center;padding:4px 0 2px}
-.cal-d{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:9px;min-height:54px;padding:5px 3px 4px;display:grid;grid-template-rows:auto 1fr;justify-items:center;gap:3px;cursor:pointer;color:var(--ink);min-width:0}
-.cal-d.out{visibility:hidden}
-.cal-d.we{background:var(--surface-2)}
-.cal-d .n{font:600 calc(13px*var(--fz,1))/1 var(--f-mono)}
-.cal-d.hoy .n{background:var(--corp);color:var(--corp-ink);border-radius:99px;padding:3px 6px;margin-top:-2px}
-.cal-d.sel{border-color:var(--corp-text);box-shadow:inset 0 0 0 1.5px var(--corp-text)}
-.cal-d.late{border-color:var(--bad-line);background:var(--bad-soft)}
-.cal-d.todo .n{color:var(--ok)}
-.cal-d .dots{display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-start;gap:3px;max-width:100%}
-#view-cal .cal-d .dot{width:7px;height:7px}
-#view-cal .cal-d .dot.ok{opacity:.35}
-.cal-d .mas{font:700 calc(9px*var(--fz,1))/calc(7px*var(--fz,1)) var(--f-mono);font-style:normal;color:var(--muted)}
-.cal-vacio{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.cal-ley{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:calc(12.5px*var(--fz,1));color:var(--muted);padding:4px 2px 0}
-.cal-ley span{display:inline-flex;align-items:center;gap:6px}
-/* formulario */
-.cal-ff{display:grid;gap:16px}
-.cal-ff .opc{font-style:normal;font-weight:500;opacity:.8}
-.cal-ff textarea{resize:vertical}
-.cal-tipos,.cal-reps{gap:6px}
-.cal-tipos .chip,.cal-reps .chip{padding:9px 12px;font-size:calc(14px*var(--fz,1))}
-.cal-tipos .chip[aria-pressed="true"] .dot{box-shadow:0 0 0 2px var(--accent-ink)}
-.cal-sug{border:1px dashed var(--line-strong);border-radius:10px;padding:0 12px}
-.cal-sug summary{cursor:pointer;padding:11px 0;font:600 calc(14.5px*var(--fz,1))/1.2 var(--f-body);color:var(--corp-text)}
-.cal-sug summary small{font-weight:400;color:var(--muted);margin-left:4px}
-.cal-sug .chips{gap:6px;padding:0 0 12px}
-.cal-sug .chip{padding:8px 11px;font-size:calc(13.5px*var(--fz,1));text-align:left}
-.cal-fbtns{display:grid;gap:8px}
-@media (min-width:600px){.cal-d{min-height:66px}}
-.ini-t.bad .ini-n{background:var(--bad-soft);color:var(--bad)}
-/*CAL-CSS-END*/
 /*REV-CSS-START*/
 /* Revisiones: cabecera azul como planificación y calendario; tarjetas con el estado a la vista y tabla como la del Calendario PRL */
 #view-rev{gap:12px}
@@ -1648,6 +1572,120 @@ body.sub-on.wiz-on .sy-aviso,#view-form:not([hidden])~.sy-aviso{bottom:calc(140p
 @keyframes syLatido{50%{opacity:.3}}
 @media print{.sy-aviso,.sy-pie{display:none!important}}
 /*SYNC-CSS-END*/
+/*CAL-CSS-START*/
+/* Calendario PRL (1.26.0: más sencillo). Sin bandas de color ni leyenda: una lista limpia, tres pestañas y un número por día en el mes. */
+:root{--k-vis:#1F5FA8;--k-inst:#B4530F;--k-veh:#8A6A00;--k-reg:#2C7A3F;--k-ma:#0E7490;--k-hito:#7A3FA0;--k-otr:#5B6470}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}}
+:root[data-theme="dark"]{--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}
+#view-cal{gap:12px}
+#view-cal>div{min-width:0}
+#cal-main:not([hidden]),#cal-form:not([hidden]){display:grid;gap:12px;min-width:0}
+#cal-main>*,#cal-form>*{min-width:0}
+.k-vis{--kc:var(--k-vis)}.k-inst{--kc:var(--k-inst)}.k-veh{--kc:var(--k-veh)}.k-reg{--kc:var(--k-reg)}.k-ma{--kc:var(--k-ma)}.k-hito{--kc:var(--k-hito)}.k-otr{--kc:var(--k-otr)}
+#view-cal .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--kc);flex:none}
+/* cabecera corta: título y un resumen en pastillas */
+.cal-top{display:grid;gap:8px}
+.cal-top h2{margin:0;font:700 calc(26px*var(--fz,1))/1.15 var(--f-display);color:var(--ink)}
+.cal-res{margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.cal-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:99px;font:600 calc(14px*var(--fz,1))/1 var(--f-body);background:var(--surface-2);border:1px solid var(--line);color:var(--ink)}
+.cal-pill.bad{background:var(--bad-soft);border-color:transparent;color:var(--bad)}
+.cal-pill.hoy{background:var(--corp);border-color:transparent;color:var(--corp-ink)}
+.cal-pill.ok{color:var(--ok)}
+.cal-pill svg{width:15px;height:15px}
+.cal-blank{gap:10px}
+.cal-blank .btn{justify-self:start;margin-top:4px;display:inline-flex;align-items:center;gap:6px}
+.cal-blank .btn svg{width:18px;height:18px}
+/* pestañas */
+.cal-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-tabs button{appearance:none;border:0;background:none;border-radius:9px;min-height:44px;padding:6px 4px;font:600 calc(15px*var(--fz,1))/1.1 var(--f-body);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-width:0}
+.cal-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12),inset 0 0 0 1px var(--line-strong)}
+.cal-tabs button i{font:600 calc(12px*var(--fz,1))/1 var(--f-mono);font-style:normal;padding:3px 7px;border-radius:99px;background:var(--line);color:var(--ink)}
+.cal-tabs button[aria-selected="true"] i{background:var(--corp);color:var(--corp-ink)}
+.cal-tabs button:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.cal-fcw{display:flex;align-items:center;gap:8px;font-size:calc(14px*var(--fz,1));color:var(--muted)}
+.cal-fcw select{flex:1;min-width:0;min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 calc(15px*var(--fz,1)) var(--f-body)}
+.cal-body{display:grid;gap:10px;min-width:0}
+/* grupos y filas: una tarjeta con líneas finas entre tareas */
+.cal-gh{display:flex;align-items:center;gap:8px;margin:6px 2px 0;font:600 calc(12.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cal-gh i{font-style:normal;font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-gh.g-bad{color:var(--bad)}
+.cal-gh.g-bad i{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.cal-gh.g-hoy{color:var(--corp-text)}
+.cal-list{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cal-row{display:flex;align-items:center;gap:12px;padding:10px 12px;min-width:0;border-top:1px solid var(--line)}
+.cal-row:first-child{border-top:0}
+.cal-row.st-bad .cal-ck{border-color:var(--bad)}
+.cal-ck{appearance:none;flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:transparent}
+.cal-ck svg{width:17px;height:17px}
+.cal-ck[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--on-ok)}
+.cal-ck:active{transform:scale(.94)}
+.cal-ck:focus-visible,.cal-open:focus-visible,.cal-quitar:focus-visible,.cal-d:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.cal-open{appearance:none;flex:1;min-width:0;background:none;border:0;padding:2px 0;margin:0;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;display:grid;gap:3px}
+.cal-open b{font:600 calc(15px*var(--fz,1))/1.3 var(--f-body);overflow-wrap:anywhere}
+.cal-row.st-ok .cal-open b{text-decoration:line-through;color:var(--muted)}
+.cal-meta{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;font-size:calc(13px*var(--fz,1));color:var(--muted)}
+.cal-meta span{display:inline-flex;align-items:center;gap:4px}
+.cal-tc{font-weight:600;color:var(--corp-text)}
+.cal-meta svg{width:13px;height:13px}
+.cal-late{font-weight:600;color:var(--bad)}
+.cal-mas{display:grid;gap:8px}
+.cal-mas summary{cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 2px;font:600 calc(12.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);list-style:none}
+.cal-mas summary::-webkit-details-marker{display:none}
+.cal-mas summary::before{content:'›';font:700 calc(18px*var(--fz,1))/1 var(--f-display);letter-spacing:0;transition:transform .15s}
+.cal-mas[open] summary::before{transform:rotate(90deg)}
+.cal-mas summary small{font:400 calc(12px*var(--fz,1)) var(--f-body);letter-spacing:0;text-transform:none}
+.cal-mas summary i{font-style:normal;font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-ok{display:flex;align-items:center;gap:10px;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);color:var(--ok)}
+.cal-ok svg{width:26px;height:26px;flex:none}
+.cal-ok b{color:var(--ink);font:600 calc(16px*var(--fz,1)) var(--f-body)}
+.cal-vacio{margin:0}
+/* Mis tareas: añadir arriba, «Quitar» en cada una */
+.cal-add{display:flex;align-items:center;justify-content:center;gap:8px}
+.cal-add svg{width:20px;height:20px}
+.cal-lh{margin:0}
+.cal-quitar{appearance:none;flex:none;display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:6px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--bad);font:600 calc(14px*var(--fz,1)) var(--f-body);cursor:pointer}
+.cal-quitar svg{width:17px;height:17px}
+.cal-quitar:hover{border-color:var(--bad)}
+@media (max-width:360px){.cal-quitar span{display:none}}
+/* mes: un número por día con lo que queda */
+.cal-mbar{display:flex;align-items:center;gap:10px}
+.cal-mbar h3{flex:1;margin:0;text-align:center;font:700 calc(19px*var(--fz,1))/1.2 var(--f-display)}
+.nav-b{appearance:none;width:42px;height:40px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:600 calc(22px*var(--fz,1))/1 var(--f-display);cursor:pointer}
+.cal-msum{margin:-4px 0 0;text-align:center;font-size:calc(13.5px*var(--fz,1));color:var(--muted)}
+.cal-hoyb{padding:2px 4px;font-size:calc(13.5px*var(--fz,1));color:var(--corp-text);text-decoration:underline;text-underline-offset:3px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal-dow{font:600 calc(11px*var(--fz,1))/1 var(--f-mono);color:var(--muted);text-align:center;padding:4px 0 2px}
+.cal-d{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:9px;min-height:50px;padding:6px 2px 5px;display:grid;grid-template-rows:auto 1fr;justify-items:center;align-items:center;gap:2px;cursor:pointer;color:var(--ink);min-width:0}
+.cal-d.out{visibility:hidden}
+.cal-d.we{background:var(--surface-2)}
+.cal-d .n{font:600 calc(13px*var(--fz,1))/1 var(--f-mono)}
+.cal-d.hoy .n{background:var(--corp);color:var(--corp-ink);border-radius:99px;padding:3px 6px;margin-top:-2px}
+.cal-d.sel{border-color:var(--corp-text);box-shadow:inset 0 0 0 1.5px var(--corp-text)}
+.cal-c{font:700 calc(11.5px*var(--fz,1))/1 var(--f-mono);font-style:normal;min-width:18px;height:18px;padding:0 4px;border-radius:99px;display:grid;place-items:center;background:var(--corp-soft,var(--surface-2));color:var(--corp-text)}
+.cal-d.late .cal-c{background:var(--bad);color:#fff}
+.cal-c.ok{background:none;color:var(--ok);padding:0}
+.cal-c.ok svg{width:15px;height:15px}
+.cal-dhead{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.cal-dhead .cal-gh{margin:0}
+.cal-addd{appearance:none;display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:4px 10px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);color:var(--corp-text);font:600 calc(14px*var(--fz,1)) var(--f-body);cursor:pointer}
+.cal-addd svg{width:16px;height:16px}
+/* formulario */
+.cal-ff{display:grid;gap:16px}
+.cal-ff .opc{font-style:normal;font-weight:500;opacity:.8}
+.cal-ff textarea{resize:vertical}
+.cal-tipos,.cal-reps{gap:6px}
+.cal-tipos .chip,.cal-reps .chip{padding:9px 12px;font-size:calc(14px*var(--fz,1))}
+.cal-sug,.cal-masop{border:1px dashed var(--line-strong);border-radius:10px;padding:0 12px}
+.cal-sug summary,.cal-masop summary{cursor:pointer;padding:11px 0;font:600 calc(14.5px*var(--fz,1))/1.2 var(--f-body);color:var(--corp-text)}
+.cal-sug summary small,.cal-masop summary small{font-weight:400;color:var(--muted);margin-left:4px}
+.cal-sug .chips{gap:6px;padding:0 0 12px}
+.cal-sug .chip{padding:8px 11px;font-size:calc(13.5px*var(--fz,1));text-align:left}
+.cal-masop>.cal-ff{padding:2px 0 14px}
+.cal-fbtns{display:grid;gap:8px}
+.cal-fbtns .btn svg{width:18px;height:18px;vertical-align:-3px;margin-right:6px}
+@media (min-width:600px){.cal-d{min-height:62px}}
+.ini-t.bad .ini-n{background:var(--bad-soft);color:var(--bad)}
+/*CAL-CSS-END*/
 /*TAR-CSS-START*/
 /* Tareas del técnico de PRL (1.24.0) */
 .tar-res .bb{display:grid;gap:10px}
@@ -2001,7 +2039,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.25.0 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.26.0 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -4328,8 +4366,14 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.25.0';
+const APP_VER = '1.26.0';
 const NOVEDADES = [
+  {v:'1.26.0', fecha:'10/11/2026', items:[
+    '<b>Calendario más sencillo</b>: arriba un resumen corto (vencidas, hoy y esta semana) y tres pestañas: <b>Pendientes</b>, <b>Mes</b> y <b>Mis tareas</b>.',
+    '<b>Mis tareas</b>: todas tus tareas en una lista, con «Añadir tarea» arriba y «Quitar» en cada una.',
+    'Menos ruido: sin bandas de colores ni leyenda; en el mes, cada día dice cuántas tareas le quedan (en rojo si se pasó la fecha).',
+    'Añadir una tarea es más corto: qué, cuándo y si se repite. El tipo, «hasta» y las notas quedan en «Más opciones».'
+  ]},
   {v:'1.25.0', fecha:'10/11/2026', items:[
     '<b>Panel con gráficos en Inicio</b>: visitas de cada mes del año, en qué bloques aparecen las deficiencias, cómo va la planificación preventiva, las revisiones (al día, vencen pronto, vencidas) y las tareas del mes.',
     'Toca una barra para ver su número exacto, o abre «Ver los datos en tabla». Sigue al contrato activo.'
@@ -4619,6 +4663,8 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
+
 
 
 
@@ -6408,351 +6454,6 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 /*PLAN-JS-END*/
-/*CAL-JS-START*/
-/* ================= Calendario PRL del técnico: empieza en blanco, cada uno añade sus tareas ================= */
-(() => {
-const TIPOS = [
-  {k:'vis', t:'Visitas y planificación'},
-  {k:'inst', t:'Instalaciones'},
-  {k:'veh', t:'Vehículos y maquinaria'},
-  {k:'reg', t:'Índices y registros'},
-  {k:'ma', t:'Medio ambiente'},
-  {k:'hito', t:'Comités, informes y simulacros'},
-  {k:'otr', t:'Otros'}
-];
-const TIPO = Object.fromEntries(TIPOS.map(x => [x.k, x]));
-const REP = [['', 'No se repite'], ['sem', 'Cada semana'], ['mes', 'Cada mes'], ['tri', 'Cada 3 meses'], ['cua', 'Cada 4 meses'], ['semes', 'Cada 6 meses'], ['anu', 'Cada año']];
-const REPT = Object.fromEntries(REP);
-const REPM = {mes:1, tri:3, cua:4, semes:6, anu:12};
-/* ideas rápidas: solo rellenan el formulario, el técnico decide */
-const SUG = [
-  ['Visita a tajo de día', 'vis', 'mes'], ['Visita a tajo de noche', 'vis', 'mes'], ['Revisión de la planificación preventiva', 'vis', 'mes'],
-  ['Índices PRL del mes anterior', 'reg', 'mes'], ['Horas WINSIE', 'reg', 'mes'], ['Gastos PRL del mes', 'reg', 'mes'], ['Hoja trimestral de accidentes', 'reg', 'tri'],
-  ['Revisión de vehículos y maquinaria', 'veh', 'mes'], ['Revisión de pequeña maquinaria', 'veh', 'mes'],
-  ['Revisión trimestral de botiquín, extintores, anticaídas y escaleras', 'inst', 'tri'], ['Control de legionela', 'inst', 'tri'],
-  ['Registro de consumos y residuos', 'ma', 'mes'], ['Indicadores de seguridad vial', 'otr', 'mes'], ['Cartel de sensibilización y tablón', 'otr', 'mes'],
-  ['Comité de Seguridad y Salud', 'hito', 'tri'], ['Informe de seguimiento cuatrimestral', 'hito', 'cua'], ['Simulacro de emergencia', 'hito', 'anu']
-];
-const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
-const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-const REPIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 14-4.5M20 13a8 8 0 0 1-14 4.5"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>';
-
-/* ---------- almacén ---------- */
-const cdb = (() => {
-  let p;
-  const open = () => p || (p = new Promise((res, rej) => {
-    try { const r = indexedDB.open('registro-rp-cal', 1); r.onupgradeneeded = () => r.result.createObjectStore('tareas', {keyPath:'id'}); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }
-    catch (e) { rej(e); }
-  }));
-  const tx = (m, f) => open().then(d => new Promise((res, rej) => { const t = d.transaction('tareas', m); const out = f(t.objectStore('tareas')); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }));
-  return { all: () => tx('readonly', s => s.getAll()), put: x => tx('readwrite', s => s.put(x)), del: id => tx('readwrite', s => s.delete(id)) };
-})();
-let TAREAS = [], ED = null, modo = lsGet('cal-modo') === 'mes' ? 'mes' : 'agenda', fctr = '', mesV = null, diaSel = null;
-async function cargar() { try { TAREAS = await cdb.all() || []; } catch (e) { TAREAS = []; } if (!ED) renderMain(); refrescaIni(); }
-async function guardar(t) {
-  t.guardado = Date.now();
-  const i = TAREAS.findIndex(x => x.id === t.id); if (i >= 0) TAREAS[i] = t; else TAREAS.push(t);
-  try { await cdb.put(JSON.parse(JSON.stringify(t))); } catch (e) { toast('No se pudo guardar la tarea.'); }
-  refrescaIni();
-}
-const nid = () => 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
-const refrescaIni = () => { if (window.INI_API && INI_API.refrescar) INI_API.refrescar(); };
-
-/* ---------- fechas y repeticiones ---------- */
-const hoy = () => isoDate(new Date());
-const pISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
-const masDias = (s, n) => { const d = pISO(s); d.setDate(d.getDate() + n); return isoDate(d); };
-const dim = (y, m) => new Date(y, m + 1, 0).getDate();
-const corta = s => { const d = pISO(s); return `${d.getDate()} ${MESES[d.getMonth()].slice(0, 3)}`; };
-const larga = s => { const d = pISO(s); return `${DIAS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`; };
-const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-/* fechas en que toca la tarea entre a y b (ambas incluidas) */
-function fechas(t, a, b) {
-  if (!t.f) return [];
-  const fin = t.hasta && t.hasta < b ? t.hasta : b;
-  /* las repeticiones anteriores al día en que se creó la tarea no cuentan */
-  const ini = t.rep && t.desde && t.desde > a ? t.desde : a;
-  if (!t.rep) return t.f >= a && t.f <= b ? [t.f] : [];
-  const out = [];
-  if (t.rep === 'sem') {
-    let s = t.f;
-    if (s < ini) { const n = Math.ceil((pISO(ini) - pISO(s)) / 864e5 / 7); s = masDias(s, 7 * n); }
-    for (; s <= fin; s = masDias(s, 7)) out.push(s);
-    return out;
-  }
-  const paso = REPM[t.rep]; if (!paso) return [];
-  const f0 = pISO(t.f), d0 = f0.getDate();
-  const ia = pISO(ini);
-  let k = Math.max(0, Math.floor(((ia.getFullYear() - f0.getFullYear()) * 12 + ia.getMonth() - f0.getMonth()) / paso) - 1);
-  for (let guard = 0; guard < 400; guard++, k++) {
-    const y = f0.getFullYear(), m = f0.getMonth() + k * paso;
-    const d = new Date(y, m, 1); const s = isoDate(new Date(d.getFullYear(), d.getMonth(), Math.min(d0, dim(d.getFullYear(), d.getMonth()))));
-    if (s > fin) break;
-    if (s >= ini) out.push(s);
-  }
-  return out;
-}
-const hecha = (t, d) => !!(t.hechas && t.hechas[d]);
-const delFiltro = t => !fctr || (fctr === '-' ? !(t.ctr && t.ctr.id) : !!(t.ctr && t.ctr.id === fctr));
-/* todas las apariciones (tarea + fecha) en un rango */
-function ocurr(a, b, todas) {
-  const out = [];
-  TAREAS.filter(t => todas || delFiltro(t)).forEach(t => fechas(t, a, b).forEach(d => out.push({t, d, ok:hecha(t, d)})));
-  return out.sort((x, y) => x.d < y.d ? -1 : x.d > y.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
-}
-const vencidas = todas => ocurr(masDias(hoy(), -400), masDias(hoy(), -1), todas).filter(o => !o.ok);
-function resumen(todas) {
-  const h = hoy(), sem = ocurr(h, masDias(h, 7), todas), ym = h.slice(0, 7);
-  const mes = ocurr(ym + '-01', ym + '-31', todas);
-  return {n:TAREAS.length, hoy:sem.filter(o => o.d === h && !o.ok).length, semana:sem.filter(o => !o.ok).length, venc:vencidas(todas).length, hechasMes:mes.filter(o => o.ok).length, mes:mes.length};
-}
-
-/* ---------- pantalla principal ---------- */
-const ctrCorto = c => c ? (c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : '';
-function filaHtml(o, conFecha = true) {
-  const {t, d, ok} = o, late = !ok && d < hoy();
-  const meta = [conFecha ? `<span>${esc(corta(d))}</span>` : '', t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : '', t.rep ? `<span class="cal-rp">${REPIC}${esc(REPT[t.rep])}</span>` : '', late ? '<span class="cal-late">Vencida</span>' : ''].filter(Boolean).join('');
-  return `<div class="cal-row k-${t.k || 'otr'}${ok ? ' st-ok' : ''}${late ? ' st-bad' : ''}">
-    <button type="button" class="cal-ck" data-hecha="${esc(t.id)}" data-d="${d}" aria-pressed="${ok}" aria-label="${ok ? 'Desmarcar' : 'Marcar como hecha'}: ${esc(t.t)}">${CHECK}</button>
-    <button type="button" class="cal-open" data-edit="${esc(t.id)}" data-d="${d}"><b>${esc(t.t)}</b>${meta ? `<span class="cal-meta">${meta}</span>` : ''}</button>
-  </div>`;
-}
-function grupo(tit, list, cls = '', conFecha = true) {
-  if (!list.length) return '';
-  return `<h3 class="cal-gh ${cls}">${esc(tit)}<i>${list.length}</i></h3><div class="cal-list">${list.map(o => filaHtml(o, conFecha)).join('')}</div>`;
-}
-function agendaHtml() {
-  const h = hoy(), v = vencidas(), hoyL = ocurr(h, h), sem = ocurr(masDias(h, 1), masDias(h, 7));
-  /* más adelante: de las que se repiten, solo la siguiente vez */
-  const vistas = new Set([...hoyL, ...sem].map(o => o.t.id)), mas = ocurr(masDias(h, 8), masDias(h, 30)).filter(o => !vistas.has(o.t.id) && (vistas.add(o.t.id), true));
-  const nada = !v.length && !hoyL.length && !sem.length && !mas.length;
-  if (nada) return `<div class="empty"><b>Nada pendiente en los próximos 30 días</b><span>Pulsa «Mes» para ver el calendario entero o añade una tarea nueva.</span></div>`;
-  return grupo('Vencidas', v, 'g-bad') + grupo('Hoy', hoyL, 'g-hoy', false) + grupo('Próximos 7 días', sem) + grupo('Más adelante (hasta 30 días)', mas);
-}
-function mesHtml() {
-  const [y, m] = mesV, a = `${y}-${pad2(m + 1)}-01`, b = `${y}-${pad2(m + 1)}-${pad2(dim(y, m))}`, h = hoy();
-  const os = ocurr(a, b), by = {};
-  os.forEach(o => (by[o.d] = by[o.d] || []).push(o));
-  if (!diaSel || !diaSel.startsWith(a.slice(0, 7))) diaSel = h.startsWith(a.slice(0, 7)) ? h : (Object.keys(by).sort()[0] || a);
-  let g = ['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(x => `<span class="cal-dow">${x}</span>`).join('');
-  const lead = (new Date(y, m, 1).getDay() + 6) % 7;
-  for (let i = 0; i < lead; i++) g += '<span class="cal-d out" aria-hidden="true"></span>';
-  for (let d = 1; d <= dim(y, m); d++) {
-    const s = `${y}-${pad2(m + 1)}-${pad2(d)}`, l = by[s] || [], wd = new Date(y, m, d).getDay();
-    const late = l.some(o => !o.ok && s < h), todo = l.length && l.every(o => o.ok);
-    const dots = l.slice(0, 6).map(o => `<i class="dot k-${o.t.k || 'otr'}${o.ok ? ' ok' : ''}"></i>`).join('') + (l.length > 6 ? '<i class="mas">+</i>' : '');
-    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${plural(l.length, 'tarea', 'tareas')}"><span class="n">${d}</span><span class="dots">${dots}</span></button>`;
-  }
-  const lm = by[diaSel] || [];
-  const pend = os.filter(o => !o.ok).length;
-  return `<div class="cal-mbar"><button type="button" class="nav-b" data-mes="-1" aria-label="Mes anterior">‹</button><h3>${cap(MESES[m])} ${y}</h3><button type="button" class="nav-b" data-mes="1" aria-label="Mes siguiente">›</button></div>
-    <p class="cal-msum">${plural(os.length, 'tarea', 'tareas')} este mes · ${os.length - pend} ${os.length - pend === 1 ? 'hecha' : 'hechas'}${h.startsWith(a.slice(0, 7)) ? '' : ` · <button type="button" class="linkbtn cal-hoyb" data-mes="0">Volver a hoy</button>`}</p>
-    <div class="cal-grid" role="grid" aria-label="${cap(MESES[m])} ${y}">${g}</div>
-    <h3 class="cal-gh">${esc(cap(larga(diaSel)))}<i>${lm.length}</i></h3>
-    ${lm.length ? `<div class="cal-list">${lm.map(o => filaHtml(o, false)).join('')}</div>` : `<p class="help cal-vacio">Sin tareas este día. <button type="button" class="linkbtn" data-nueva="${diaSel}">Añadir una</button></p>`}`;
-}
-function ctrsHtml() {
-  const cs = perfilGet().contratos, sin = TAREAS.some(t => !(t.ctr && t.ctr.id));
-  if (!cs.length && !sin) return '';
-  if (cs.length < 2 && !sin) return '';
-  const b = (id, txt) => `<button type="button" class="chip" data-fc="${esc(id)}" aria-pressed="${fctr === id}">${esc(txt)}</button>`;
-  return `<div class="chips cal-ctrs" role="group" aria-label="Filtrar por contrato">${b('', 'Todos')}${cs.map(c => b(c.id, ctrCorto(c))).join('')}${sin ? b('-', 'Sin contrato') : ''}</div>`;
-}
-function renderMain() {
-  const M = $('#cal-main'); if (!M) return;
-  if (fctr && fctr !== '-' && !contratoPorId(fctr)) fctr = '';
-  if (!mesV) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; }
-  const r = resumen(), c = fctr && fctr !== '-' ? contratoPorId(fctr) : null;
-  const vacio = !TAREAS.length;
-  M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
-    <section class="pl-hero cal-hero">
-      <p class="pl-eb">Calendario PRL</p>
-      <h2>Mis tareas</h2>
-      <p class="pl-ctr">${c ? esc(nombreContrato(c)) : fctr === '-' ? 'Tareas sin contrato' : 'Todos tus contratos'}</p>
-      <div class="pl-kpis"><div><b>${r.hoy}</b><span>Hoy</span></div><div><b>${r.semana}</b><span>Próx. 7 días</span></div><div class="${r.venc ? 'bad' : ''}"><b>${r.venc}</b><span>Vencidas</span></div><div class="ok"><b>${r.hechasMes}</b><span>Hechas</span></div></div>
-    </section>
-    ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…). Cada una con su contrato.</span><button type="button" class="btn primary" data-nueva="">+ Añadir mi primera tarea</button></div>` : `
-    ${ctrsHtml()}
-    <div class="pl-modo" role="group" aria-label="Cómo ver las tareas"><button type="button" data-cmodo="agenda" aria-pressed="${modo === 'agenda'}">Agenda</button><button type="button" data-cmodo="mes" aria-pressed="${modo === 'mes'}">Mes</button></div>
-    <div class="cal-body">${modo === 'mes' ? mesHtml() : agendaHtml()}</div>
-    <div class="cal-ley">${TIPOS.map(x => `<span><i class="dot k-${x.k}"></i>${esc(x.t)}</span>`).join('')}</div>`}`;
-  vista('main');
-}
-function vista(q) {
-  const m = $('#cal-main'), f = $('#cal-form'); if (m) m.hidden = q !== 'main'; if (f) f.hidden = q !== 'form';
-  const b = $('#cal-bar'); if (b) b.hidden = q !== 'main' || $('#view-cal').hidden || !TAREAS.length;
-}
-
-/* ---------- formulario de tarea ---------- */
-function abrirForm(id, fecha) {
-  const t = id ? TAREAS.find(x => x.id === id) : null;
-  const a = snapContrato();
-  ED = t ? JSON.parse(JSON.stringify(t)) : {id:nid(), t:'', k:'', ctr:fctr === '-' ? null : (fctr ? snapContrato(contratoPorId(fctr)) : a), f:fecha || hoy(), rep:'', hasta:'', notas:'', hechas:{}, nueva:true};
-  renderForm(); vista('form'); window.scrollTo({top:0});
-  if (!t) setTimeout(() => { const i = $('#cf-t'); if (i) i.focus(); }, 60);
-}
-function renderForm() {
-  const F = $('#cal-form'); if (!F || !ED) return;
-  const cs = perfilGet().contratos, cid = ED.ctr && ED.ctr.id;
-  const opts = cs.map(c => `<option value="${esc(c.id)}"${c.id === cid ? ' selected' : ''}>${esc(nombreContrato(c) || 'Contrato')}</option>`).join('') + (cid && !cs.some(c => c.id === cid) ? `<option value="${esc(cid)}" selected>${esc(nombreContrato(ED.ctr))}</option>` : '');
-  F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="volver">‹ Calendario</button></div>
-    <section class="block cal-fb">
-      <header class="bh"><h2>${ED.nueva ? 'Nueva tarea' : 'Editar tarea'}</h2></header>
-      <div class="bb cal-ff">
-        <div class="field"><label for="cf-t">Tarea</label><textarea id="cf-t" rows="2" maxlength="200" placeholder="Ej.: Visita a tajo de noche">${esc(ED.t)}</textarea></div>
-        ${ED.nueva ? `<details class="cal-sug"><summary>Ideas rápidas <small>las tareas habituales de PRL</small></summary><div class="chips">${SUG.map((s, i) => `<button type="button" class="chip" data-sug="${i}">${esc(s[0])}</button>`).join('')}</div></details>` : ''}
-        <div class="field"><span class="lbl" id="cf-kl">Tipo</span><div class="chips cal-tipos" role="group" aria-labelledby="cf-kl">${TIPOS.map(x => `<button type="button" class="chip" data-tipo="${x.k}" aria-pressed="${ED.k === x.k}"><i class="dot k-${x.k}"></i>${esc(x.t)}</button>`).join('')}</div></div>
-        <div class="field"><label for="cf-c">Contrato</label><select id="cf-c"><option value="">Sin contrato</option>${opts}</select>${cs.length ? '' : '<p class="help">Aún no tienes contratos. Puedes darlos de alta en Perfil.</p>'}</div>
-        <div class="field"><label for="cf-f">${ED.rep ? 'Primera fecha' : 'Fecha'}</label><input id="cf-f" type="date" value="${esc(ED.f)}"></div>
-        <div class="field"><span class="lbl" id="cf-rl">¿Se repite?</span><div class="chips cal-reps" role="group" aria-labelledby="cf-rl">${REP.map(([k, t]) => `<button type="button" class="chip" data-rep="${k}" aria-pressed="${ED.rep === k}">${esc(t)}</button>`).join('')}</div>
-          <p class="help" id="cf-rh">${repAyuda()}</p></div>
-        <div class="field" id="cf-hw"${ED.rep ? '' : ' hidden'}><label for="cf-h">Hasta <i class="opc">opcional</i></label><input id="cf-h" type="date" value="${esc(ED.hasta || '')}"></div>
-        <div class="field"><label for="cf-n">Notas <i class="opc">opcional</i></label><textarea id="cf-n" rows="2" maxlength="500">${esc(ED.notas || '')}</textarea></div>
-      </div>
-    </section>
-    <div class="cal-fbtns">
-      <button type="button" class="btn primary" data-ca="guardar">${ED.nueva ? 'Añadir al calendario' : 'Guardar cambios'}</button>
-      ${ED.nueva ? '' : '<button type="button" class="btn danger-t" data-ca="borrar">Eliminar tarea</button>'}
-      <button type="button" class="btn" data-ca="volver">Cancelar</button>
-    </div>`;
-}
-function repAyuda() {
-  if (!ED.rep || !ED.f) return ED.rep ? '' : 'Una sola vez, el día que pongas.';
-  const d = pISO(ED.f), dia = d.getDate();
-  const txt = ED.rep === 'sem' ? `Todos los ${DIAS[d.getDay()]}` : ED.rep === 'anu' ? `Cada año, el ${dia} de ${MESES[d.getMonth()]}` : `El día ${dia} ${ED.rep === 'mes' ? 'de cada mes' : 'cada ' + REPM[ED.rep] + ' meses'}${dia > 28 ? ' (o el último día si el mes es más corto)' : ''}`;
-  return txt + (ED.nueva ? '. Los cambios valen para todas las repeticiones.' : '. Al editarla cambian todas las repeticiones; las ya marcadas como hechas se mantienen.');
-}
-function leerForm() {
-  const v = id => ((($('#' + id) || {}).value) || '').trim();
-  ED.t = v('cf-t'); ED.f = v('cf-f'); ED.notas = v('cf-n'); ED.hasta = ED.rep ? v('cf-h') : '';
-  const cid = v('cf-c'); ED.ctr = cid ? (contratoPorId(cid) ? snapContrato(contratoPorId(cid)) : ED.ctr) : null;
-}
-async function guardarForm() {
-  leerForm();
-  if (!ED.t) { toast('Escribe qué hay que hacer.'); $('#cf-t').focus(); return; }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(ED.f)) { toast('Pon la fecha.'); $('#cf-f').focus(); return; }
-  if (ED.hasta && ED.hasta < ED.f) { toast('«Hasta» no puede ser antes de la primera fecha.'); $('#cf-h').focus(); return; }
-  const nueva = !!ED.nueva; delete ED.nueva;
-  if (!ED.k) ED.k = 'otr';
-  if (nueva) ED.creado = Date.now();
-  /* una tarea que se repite empieza a contar desde el día en que la das de alta: no llena de vencidas los meses pasados */
-  if (ED.rep && !ED.desde) ED.desde = hoy();
-  const t = ED; ED = null;
-  await guardar(t);
-  if (modo === 'mes') { const d = pISO(t.f); if (!t.rep) { mesV = [d.getFullYear(), d.getMonth()]; diaSel = t.f; } }
-  renderMain(); window.scrollTo({top:0});
-  toast(nueva ? (t.rep ? `Tarea añadida: ${REPT[t.rep].toLowerCase()}.` : `Tarea añadida para el ${fmtDate(t.f)}.`) : 'Cambios guardados.');
-}
-async function borrar() {
-  if (!ED) return;
-  const t = TAREAS.find(x => x.id === ED.id); if (!t) return;
-  if (!(await ask({title:'¿Eliminar la tarea?', body:`<p>«${esc(t.t)}»${t.rep ? ' y todas sus repeticiones' : ''} se borra del calendario.</p>`, yes:'Eliminar', danger:true}))) return;
-  TAREAS = TAREAS.filter(x => x.id !== t.id);
-  try { await cdb.del(t.id); } catch (e) {}
-  ED = null; renderMain(); refrescaIni(); toast('Tarea eliminada.');
-}
-
-/* ---------- eventos ---------- */
-async function onClick(e) {
-  const hc = e.target.closest('[data-hecha]');
-  if (hc) {
-    const t = TAREAS.find(x => x.id === hc.dataset.hecha), d = hc.dataset.d; if (!t) return;
-    t.hechas = t.hechas || {};
-    const ya = !!t.hechas[d];
-    if (ya) delete t.hechas[d]; else t.hechas[d] = Date.now();
-    const y = window.scrollY; await guardar(t); renderMain(); window.scrollTo({top:y});
-    toast(ya ? 'Vuelve a estar pendiente.' : 'Hecha. ¡Bien!');
-    return;
-  }
-  const ed = e.target.closest('[data-edit]'); if (ed) { abrirForm(ed.dataset.edit); return; }
-  const nv = e.target.closest('[data-nueva]'); if (nv) { abrirForm(null, nv.dataset.nueva || (modo === 'mes' && diaSel && diaSel >= hoy() ? diaSel : hoy())); return; }
-  const md = e.target.closest('[data-cmodo]'); if (md) { modo = md.dataset.cmodo; lsSet('cal-modo', modo); renderMain(); return; }
-  const fc = e.target.closest('[data-fc]'); if (fc) { fctr = fc.dataset.fc; renderMain(); return; }
-  const ms = e.target.closest('[data-mes]');
-  if (ms) { const n = +ms.dataset.mes; if (!n) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; diaSel = hoy(); } else { const d = new Date(mesV[0], mesV[1] + n, 1); mesV = [d.getFullYear(), d.getMonth()]; diaSel = null; } renderMain(); return; }
-  const dia = e.target.closest('[data-dia]'); if (dia) { diaSel = dia.dataset.dia; const y = window.scrollY; renderMain(); window.scrollTo({top:y}); return; }
-  const sg = e.target.closest('[data-sug]');
-  if (sg && ED) { const s = SUG[+sg.dataset.sug]; leerForm(); ED.t = s[0]; ED.k = s[1]; ED.rep = s[2]; renderForm(); toast('Revisa la fecha y guarda.'); const f = $('#cf-f'); if (f) f.focus(); return; }
-  const tp = e.target.closest('[data-tipo]'); if (tp && ED) { ED.k = ED.k === tp.dataset.tipo ? '' : tp.dataset.tipo; tp.parentNode.querySelectorAll('[data-tipo]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tipo === ED.k)); return; }
-  const rp = e.target.closest('[data-rep]');
-  if (rp && ED) { leerForm(); ED.rep = rp.dataset.rep; rp.parentNode.querySelectorAll('[data-rep]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rep === ED.rep)); $('#cf-hw').hidden = !ED.rep; $('#cf-rh').textContent = repAyuda(); const l = $('label[for="cf-f"]'); if (l) l.textContent = ED.rep ? 'Primera fecha' : 'Fecha'; return; }
-  const b = e.target.closest('[data-ca]'); if (!b) return;
-  const a = b.dataset.ca;
-  if (a === 'ini') { showTab('ini'); return; }
-  if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
-  if (a === 'guardar') return guardarForm();
-  if (a === 'borrar') return borrar();
-}
-function onInput(e) { if (ED && e.target.id === 'cf-f') { ED.f = e.target.value; const h = $('#cf-rh'); if (h) h.textContent = repAyuda(); } }
-
-/* ---------- arranque ---------- */
-function montar() {
-  const main = document.createElement('main');
-  main.id = 'view-cal'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
-  main.innerHTML = '<div id="cal-main"></div><div id="cal-form" hidden></div>';
-  const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
-  const bar = document.createElement('div'); bar.className = 'ibar'; bar.id = 'cal-bar'; bar.hidden = true;
-  bar.innerHTML = '<button type="button" class="btn primary" data-nueva="">+ Nueva tarea</button>';
-  document.body.appendChild(bar);
-  main.addEventListener('click', onClick); main.addEventListener('input', onInput); main.addEventListener('change', onInput);
-  bar.addEventListener('click', onClick);
-  cargar();
-}
-window.CAL_API = {
-  lista: () => TAREAS,
-  abrir() { ED = null; showTab('cal'); renderMain(); },
-  /* para el Inicio: todos los contratos */
-  resumen: () => resumen(true),
-  /* para «Hoy y vencidas» del Inicio: una línea por tarea, con la fecha más antigua sin marcar */
-  pendientes() {
-    const h = hoy(), m = new Map();
-    ocurr(masDias(h, -400), h, true).filter(o => !o.ok).forEach(o => { const x = m.get(o.t.id); if (x) x.n++; else m.set(o.t.id, {id:o.t.id, t:o.t.t || '', k:o.t.k || 'otr', ctr:o.t.ctr || null, d:o.d, n:1}); });
-    return [...m.values()];
-  },
-  /* visitas a tajo previstas este mes (tareas de «Visitas» con «visita» en el nombre) */
-  visitasMes(ctrId) {
-    const ym = hoy().slice(0, 7);
-    return ocurr(ym + '-01', ym + '-31', true).filter(o => o.t.k === 'vis' && /visita/i.test(o.t.t || '') && (!ctrId || !(o.t.ctr && o.t.ctr.id) || o.t.ctr.id === ctrId)).length;
-  },
-  editar(id, d) { showTab('cal'); if (TAREAS.some(x => x.id === id)) abrirForm(id, d); },
-  /* 1.24.0 · desde «Tareas del técnico»: el formulario de nueva tarea ya relleno (el técnico revisa y guarda) */
-  nueva(pre) {
-    ED = null; showTab('cal'); abrirForm(null, pre.f);
-    Object.assign(ED, {t:pre.t || '', k:pre.k || '', rep:pre.rep || '', notas:pre.notas || '', ctr:'ctr' in pre ? (pre.ctr || null) : null});
-    if (pre.guia) ED.guia = pre.guia;
-    renderForm(); vista('form');
-  },
-  /* y varias de golpe; las que se repiten cuentan desde hoy (no salen vencidas las de antes) */
-  async agregar(arr) {
-    let n = 0;
-    for (const x of arr || []) {
-      if (!x || !x.t || !/^\d{4}-\d{2}-\d{2}$/.test(x.f || '')) continue;
-      const t = {id:nid(), t:x.t, k:x.k || 'otr', ctr:x.ctr || null, f:x.f, rep:x.rep || '', hasta:'', notas:x.notas || '', hechas:x.hechas || {}, creado:Date.now()};
-      if (x.guia) t.guia = x.guia;
-      if (t.rep) t.desde = hoy();
-      await guardar(t); n++;
-    }
-    if (n && !ED) renderMain();
-    return n;
-  },
-  async importar(arr) {
-    const act = new Map(TAREAS.map(x => [x.id, x])); let n = 0;
-    for (const x of arr) { if (x && x.id && x.t && x.f && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await cdb.put(x); n++; } }
-    if (n) await cargar();
-    return n;
-  },
-  atras() {
-    const v = $('#view-cal'); if (!v || v.hidden) return false;
-    if (ED) { ED = null; renderMain(); return true; }
-    showTab('ini'); return true;
-  },
-  onTab(t) { const b = $('#cal-bar'); if (b) b.hidden = !(t === 'cal' && !ED && TAREAS.length); if (t === 'cal' && !ED) renderMain(); }
-};
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
-})();
-
-/*CAL-JS-END*/
 /*REV-JS-START*/
 /* ================= Revisiones de instalaciones y equipos, con sus certificados ================= */
 (() => {
@@ -10565,6 +10266,385 @@ if (activa()) setTimeout(() => sincronizar(), 2500);
 })();
 
 /*SYNC-JS-END*/
+/*CAL-JS-START*/
+/* ================= Calendario PRL del técnico: empieza en blanco, cada uno añade sus tareas ================= */
+(() => {
+const TIPOS = [
+  {k:'vis', t:'Visitas y planificación'},
+  {k:'inst', t:'Instalaciones'},
+  {k:'veh', t:'Vehículos y maquinaria'},
+  {k:'reg', t:'Índices y registros'},
+  {k:'ma', t:'Medio ambiente'},
+  {k:'hito', t:'Comités, informes y simulacros'},
+  {k:'otr', t:'Otros'}
+];
+const TIPO = Object.fromEntries(TIPOS.map(x => [x.k, x]));
+const REP = [['', 'No se repite'], ['sem', 'Cada semana'], ['mes', 'Cada mes'], ['tri', 'Cada 3 meses'], ['cua', 'Cada 4 meses'], ['semes', 'Cada 6 meses'], ['anu', 'Cada año']];
+const REPT = Object.fromEntries(REP);
+const REPM = {mes:1, tri:3, cua:4, semes:6, anu:12};
+/* ideas rápidas: solo rellenan el formulario, el técnico decide */
+const SUG = [
+  ['Visita a tajo de día', 'vis', 'mes'], ['Visita a tajo de noche', 'vis', 'mes'], ['Revisión de la planificación preventiva', 'vis', 'mes'],
+  ['Índices PRL del mes anterior', 'reg', 'mes'], ['Horas WINSIE', 'reg', 'mes'], ['Gastos PRL del mes', 'reg', 'mes'], ['Hoja trimestral de accidentes', 'reg', 'tri'],
+  ['Revisión de vehículos y maquinaria', 'veh', 'mes'], ['Revisión de pequeña maquinaria', 'veh', 'mes'],
+  ['Revisión trimestral de botiquín, extintores, anticaídas y escaleras', 'inst', 'tri'], ['Control de legionela', 'inst', 'tri'],
+  ['Registro de consumos y residuos', 'ma', 'mes'], ['Indicadores de seguridad vial', 'otr', 'mes'], ['Cartel de sensibilización y tablón', 'otr', 'mes'],
+  ['Comité de Seguridad y Salud', 'hito', 'tri'], ['Informe de seguimiento cuatrimestral', 'hito', 'cua'], ['Simulacro de emergencia', 'hito', 'anu']
+];
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const REPIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 14-4.5M20 13a8 8 0 0 1-14 4.5"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>';
+
+/* ---------- almacén ---------- */
+const cdb = (() => {
+  let p;
+  const open = () => p || (p = new Promise((res, rej) => {
+    try { const r = indexedDB.open('registro-rp-cal', 1); r.onupgradeneeded = () => r.result.createObjectStore('tareas', {keyPath:'id'}); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }
+    catch (e) { rej(e); }
+  }));
+  const tx = (m, f) => open().then(d => new Promise((res, rej) => { const t = d.transaction('tareas', m); const out = f(t.objectStore('tareas')); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }));
+  return { all: () => tx('readonly', s => s.getAll()), put: x => tx('readwrite', s => s.put(x)), del: id => tx('readwrite', s => s.delete(id)) };
+})();
+let TAREAS = [], ED = null, modo = ['mes', 'lista'].includes(lsGet('cal-modo')) ? lsGet('cal-modo') : 'agenda', fctr = '', mesV = null, diaSel = null;
+async function cargar() { try { TAREAS = await cdb.all() || []; } catch (e) { TAREAS = []; } if (!ED) renderMain(); refrescaIni(); }
+async function guardar(t) {
+  t.guardado = Date.now();
+  const i = TAREAS.findIndex(x => x.id === t.id); if (i >= 0) TAREAS[i] = t; else TAREAS.push(t);
+  try { await cdb.put(JSON.parse(JSON.stringify(t))); } catch (e) { toast('No se pudo guardar la tarea.'); }
+  refrescaIni();
+}
+const nid = () => 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+const refrescaIni = () => { if (window.INI_API && INI_API.refrescar) INI_API.refrescar(); };
+
+/* ---------- fechas y repeticiones ---------- */
+const hoy = () => isoDate(new Date());
+const pISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const masDias = (s, n) => { const d = pISO(s); d.setDate(d.getDate() + n); return isoDate(d); };
+const dim = (y, m) => new Date(y, m + 1, 0).getDate();
+const corta = s => { const d = pISO(s); return `${d.getDate()} ${MESES[d.getMonth()].slice(0, 3)}`; };
+const larga = s => { const d = pISO(s); return `${DIAS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`; };
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+/* fechas en que toca la tarea entre a y b (ambas incluidas) */
+function fechas(t, a, b) {
+  if (!t.f) return [];
+  const fin = t.hasta && t.hasta < b ? t.hasta : b;
+  /* las repeticiones anteriores al día en que se creó la tarea no cuentan */
+  const ini = t.rep && t.desde && t.desde > a ? t.desde : a;
+  if (!t.rep) return t.f >= a && t.f <= b ? [t.f] : [];
+  const out = [];
+  if (t.rep === 'sem') {
+    let s = t.f;
+    if (s < ini) { const n = Math.ceil((pISO(ini) - pISO(s)) / 864e5 / 7); s = masDias(s, 7 * n); }
+    for (; s <= fin; s = masDias(s, 7)) out.push(s);
+    return out;
+  }
+  const paso = REPM[t.rep]; if (!paso) return [];
+  const f0 = pISO(t.f), d0 = f0.getDate();
+  const ia = pISO(ini);
+  let k = Math.max(0, Math.floor(((ia.getFullYear() - f0.getFullYear()) * 12 + ia.getMonth() - f0.getMonth()) / paso) - 1);
+  for (let guard = 0; guard < 400; guard++, k++) {
+    const y = f0.getFullYear(), m = f0.getMonth() + k * paso;
+    const d = new Date(y, m, 1); const s = isoDate(new Date(d.getFullYear(), d.getMonth(), Math.min(d0, dim(d.getFullYear(), d.getMonth()))));
+    if (s > fin) break;
+    if (s >= ini) out.push(s);
+  }
+  return out;
+}
+const hecha = (t, d) => !!(t.hechas && t.hechas[d]);
+const delFiltro = t => !fctr || (fctr === '-' ? !(t.ctr && t.ctr.id) : !!(t.ctr && t.ctr.id === fctr));
+/* todas las apariciones (tarea + fecha) en un rango */
+function ocurr(a, b, todas) {
+  const out = [];
+  TAREAS.filter(t => todas || delFiltro(t)).forEach(t => fechas(t, a, b).forEach(d => out.push({t, d, ok:hecha(t, d)})));
+  return out.sort((x, y) => x.d < y.d ? -1 : x.d > y.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
+}
+const vencidas = todas => ocurr(masDias(hoy(), -400), masDias(hoy(), -1), todas).filter(o => !o.ok);
+function resumen(todas) {
+  const h = hoy(), sem = ocurr(h, masDias(h, 7), todas), ym = h.slice(0, 7);
+  const mes = ocurr(ym + '-01', ym + '-31', todas);
+  return {n:TAREAS.length, hoy:sem.filter(o => o.d === h && !o.ok).length, semana:sem.filter(o => !o.ok).length, venc:vencidas(todas).length, hechasMes:mes.filter(o => o.ok).length, mes:mes.length};
+}
+
+/* ---------- pantalla principal (1.26.0: más sencilla, tres pestañas: Pendientes, Mes y Mis tareas) ---------- */
+const ctrCorto = c => c ? (c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : '';
+const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+function filaHtml(o, conFecha = true) {
+  const {t, d, ok} = o, late = !ok && d < hoy();
+  const meta = [conFecha ? `<span>${esc(corta(d))}</span>` : '', t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : '', t.rep ? `<span class="cal-rp">${REPIC}${esc(REPT[t.rep])}</span>` : '', late ? '<span class="cal-late">Vencida</span>' : ''].filter(Boolean).join('');
+  return `<div class="cal-row${ok ? ' st-ok' : ''}${late ? ' st-bad' : ''}">
+    <button type="button" class="cal-ck" data-hecha="${esc(t.id)}" data-d="${d}" aria-pressed="${ok}" aria-label="${ok ? 'Desmarcar' : 'Marcar como hecha'}: ${esc(t.t)}">${CHECK}</button>
+    <button type="button" class="cal-open" data-edit="${esc(t.id)}" data-d="${d}"><b>${esc(t.t)}</b>${meta ? `<span class="cal-meta">${meta}</span>` : ''}</button>
+  </div>`;
+}
+function grupo(tit, list, cls = '', conFecha = true) {
+  if (!list.length) return '';
+  return `<h3 class="cal-gh ${cls}">${esc(tit)}<i>${list.length}</i></h3><div class="cal-list">${list.map(o => filaHtml(o, conFecha)).join('')}</div>`;
+}
+function agendaHtml() {
+  const h = hoy(), v = vencidas(), hoyL = ocurr(h, h), sem = ocurr(masDias(h, 1), masDias(h, 7));
+  /* más adelante: de las que se repiten, solo la siguiente vez; plegado para que la pantalla quede corta */
+  const vistas = new Set([...hoyL, ...sem].map(o => o.t.id)), mas = ocurr(masDias(h, 8), masDias(h, 30)).filter(o => !vistas.has(o.t.id) && (vistas.add(o.t.id), true));
+  const alDia = !v.length && !hoyL.filter(o => !o.ok).length && !sem.length;
+  const masH = mas.length ? `<details class="cal-mas"><summary>Más adelante <small>hasta 30 días</small><i>${mas.length}</i></summary><div class="cal-list">${mas.map(o => filaHtml(o)).join('')}</div></details>` : '';
+  if (alDia && !hoyL.length) return `<div class="cal-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg><b>Nada pendiente esta semana</b></div>${masH || '<p class="help cal-vacio">Tampoco hay nada en los próximos 30 días. Mira el mes entero en «Mes».</p>'}`;
+  return grupo('Vencidas', v, 'g-bad') + grupo('Hoy', hoyL, 'g-hoy', false) + grupo('Esta semana', sem) + masH;
+}
+function mesHtml() {
+  const [y, m] = mesV, a = `${y}-${pad2(m + 1)}-01`, b = `${y}-${pad2(m + 1)}-${pad2(dim(y, m))}`, h = hoy();
+  const os = ocurr(a, b), by = {};
+  os.forEach(o => (by[o.d] = by[o.d] || []).push(o));
+  if (!diaSel || !diaSel.startsWith(a.slice(0, 7))) diaSel = h.startsWith(a.slice(0, 7)) ? h : (Object.keys(by).sort()[0] || a);
+  let g = ['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(x => `<span class="cal-dow">${x}</span>`).join('');
+  const lead = (new Date(y, m, 1).getDay() + 6) % 7;
+  for (let i = 0; i < lead; i++) g += '<span class="cal-d out" aria-hidden="true"></span>';
+  for (let d = 1; d <= dim(y, m); d++) {
+    const s = `${y}-${pad2(m + 1)}-${pad2(d)}`, l = by[s] || [], wd = new Date(y, m, d).getDay();
+    const pend = l.filter(o => !o.ok).length, late = pend && s < h, todo = l.length && !pend;
+    /* un número por día (las que quedan) en vez de puntos de colores: no hace falta leyenda */
+    const marca = todo ? `<i class="cal-c ok" aria-hidden="true">${CHECK}</i>` : pend ? `<i class="cal-c" aria-hidden="true">${pend}</i>` : '';
+    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') : 'sin tareas'}" aria-pressed="${s === diaSel}"><span class="n">${d}</span>${marca}</button>`;
+  }
+  const lm = by[diaSel] || [];
+  const pend = os.filter(o => !o.ok).length;
+  return `<div class="cal-mbar"><button type="button" class="nav-b" data-mes="-1" aria-label="Mes anterior">‹</button><h3>${cap(MESES[m])} ${y}</h3><button type="button" class="nav-b" data-mes="1" aria-label="Mes siguiente">›</button></div>
+    <p class="cal-msum">${plural(os.length, 'tarea', 'tareas')} · ${os.length - pend} ${os.length - pend === 1 ? 'hecha' : 'hechas'}${h.startsWith(a.slice(0, 7)) ? '' : ` · <button type="button" class="linkbtn cal-hoyb" data-mes="0">Volver a hoy</button>`}</p>
+    <div class="cal-grid" role="group" aria-label="${cap(MESES[m])} ${y}">${g}</div>
+    <div class="cal-dhead"><h3 class="cal-gh">${esc(cap(larga(diaSel)))}<i>${lm.length}</i></h3><button type="button" class="cal-addd" data-nueva="${diaSel}">${PLUS}Añadir</button></div>
+    ${lm.length ? `<div class="cal-list">${lm.map(o => filaHtml(o, false)).join('')}</div>` : '<p class="help cal-vacio">Sin tareas este día.</p>'}`;
+}
+/* «Mis tareas»: una línea por tarea (no por fecha) para añadir, cambiar o quitar */
+function proxima(t) {
+  const h = hoy(), v = fechas(t, masDias(h, -400), masDias(h, -1)).filter(d => !hecha(t, d));
+  if (v.length) return {d:v[0], txt:`vencida el ${corta(v[0])}`, late:true};
+  const l = fechas(t, h, masDias(h, 800)).filter(d => !hecha(t, d));
+  if (l.length) return {d:l[0], txt:(l[0] === h ? 'hoy' : corta(l[0]))};
+  if (!t.rep && t.f < h) return {d:t.f, txt:`${corta(t.f)}, ${hecha(t, t.f) ? 'hecha' : 'pasada'}`};
+  return {d:'9999', txt:'sin próximas fechas'};
+}
+function listaHtml() {
+  const l = TAREAS.filter(delFiltro).map(t => ({t, p:proxima(t)})).sort((x, y) => x.p.d < y.p.d ? -1 : x.p.d > y.p.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
+  const filas = l.map(({t, p}) => {
+    const meta = [`<span>${t.rep ? `${REPIC}${esc(REPT[t.rep])}` : 'Una vez'}</span>`, (p.late ? `<span class="cal-late">${cap(esc(p.txt))}</span>` : `<span>${t.rep ? 'Próxima: ' : ''}${esc(p.txt)}</span>`), t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : ''].filter(Boolean).join('');
+    return `<div class="cal-row cal-def">
+      <button type="button" class="cal-open" data-edit="${esc(t.id)}"><b>${esc(t.t)}</b><span class="cal-meta">${meta}</span></button>
+      <button type="button" class="cal-quitar" data-quitar="${esc(t.id)}" aria-label="Quitar: ${esc(t.t)}">${TRASH}<span>Quitar</span></button>
+    </div>`;
+  }).join('');
+  return `<button type="button" class="btn primary cal-add" data-nueva="">${PLUS}Añadir tarea</button>
+    ${l.length ? `<p class="help cal-lh">Toca una tarea para cambiarla. «Quitar» la borra con todas sus repeticiones.</p><div class="cal-list">${filas}</div>` : '<p class="help cal-vacio">No hay tareas con este filtro.</p>'}`;
+}
+function ctrsHtml() {
+  const cs = perfilGet().contratos, sin = TAREAS.some(t => !(t.ctr && t.ctr.id));
+  if (cs.length < 2 && !sin) return '';
+  const o = (id, txt) => `<option value="${esc(id)}"${fctr === id ? ' selected' : ''}>${esc(txt)}</option>`;
+  return `<label class="cal-fcw"><span>Contrato</span><select id="cal-fc">${o('', 'Todos')}${cs.map(c => o(c.id, ctrCorto(c))).join('')}${sin ? o('-', 'Sin contrato') : ''}</select></label>`;
+}
+function resumenHtml(r) {
+  const p = [];
+  if (r.venc) p.push(`<span class="cal-pill bad">${plural(r.venc, 'vencida', 'vencidas')}</span>`);
+  if (r.hoy) p.push(`<span class="cal-pill hoy">${r.hoy} hoy</span>`);
+  if (r.semana - r.hoy > 0) p.push(`<span class="cal-pill">${r.semana - r.hoy} esta semana</span>`);
+  if (!p.length) p.push(`<span class="cal-pill ok">${CHECK}Al día</span>`);
+  return `<p class="cal-res" aria-label="Resumen">${p.join('')}</p>`;
+}
+function renderMain() {
+  const M = $('#cal-main'); if (!M) return;
+  if (fctr && fctr !== '-' && !contratoPorId(fctr)) fctr = '';
+  if (!mesV) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; }
+  const r = resumen(), vacio = !TAREAS.length;
+  const pendN = r.venc + r.semana;
+  const tab = (k, txt, n) => `<button type="button" role="tab" data-cmodo="${k}" aria-selected="${modo === k}" aria-pressed="${modo === k}">${txt}${n ? `<i>${n}</i>` : ''}</button>`;
+  M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
+    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}</header>
+    ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…).</span><button type="button" class="btn primary" data-nueva="">${PLUS}Añadir la primera tarea</button></div>` : `
+    <div class="cal-tabs" role="tablist" aria-label="Cómo ver las tareas">${tab('agenda', 'Pendientes', pendN)}${tab('mes', 'Mes')}${tab('lista', 'Mis tareas', TAREAS.length)}</div>
+    ${ctrsHtml()}
+    <div class="cal-body" role="tabpanel">${modo === 'mes' ? mesHtml() : modo === 'lista' ? listaHtml() : agendaHtml()}</div>`}`;
+  vista('main');
+}
+function vista(q) {
+  const m = $('#cal-main'), f = $('#cal-form'); if (m) m.hidden = q !== 'main'; if (f) f.hidden = q !== 'form';
+  const b = $('#cal-bar'); if (b) b.hidden = q !== 'main' || $('#view-cal').hidden || !TAREAS.length || modo === 'lista';
+}
+
+/* ---------- formulario de tarea (1.26.0: lo justo arriba; tipo, «hasta» y notas en «Más opciones») ---------- */
+function abrirForm(id, fecha) {
+  const t = id ? TAREAS.find(x => x.id === id) : null;
+  const a = snapContrato();
+  ED = t ? JSON.parse(JSON.stringify(t)) : {id:nid(), t:'', k:'', ctr:fctr === '-' ? null : (fctr ? snapContrato(contratoPorId(fctr)) : a), f:fecha || hoy(), rep:'', hasta:'', notas:'', hechas:{}, nueva:true};
+  renderForm(); vista('form'); window.scrollTo({top:0});
+  if (!t) setTimeout(() => { const i = $('#cf-t'); if (i) i.focus(); }, 60);
+}
+function renderForm() {
+  const F = $('#cal-form'); if (!F || !ED) return;
+  const cs = perfilGet().contratos, cid = ED.ctr && ED.ctr.id;
+  const opts = cs.map(c => `<option value="${esc(c.id)}"${c.id === cid ? ' selected' : ''}>${esc(nombreContrato(c) || 'Contrato')}</option>`).join('') + (cid && !cs.some(c => c.id === cid) ? `<option value="${esc(cid)}" selected>${esc(nombreContrato(ED.ctr))}</option>` : '');
+  const masAbierto = !!(ED.notas || ED.hasta);
+  F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="volver">‹ Calendario</button></div>
+    <section class="block cal-fb">
+      <header class="bh"><h2>${ED.nueva ? 'Añadir tarea' : 'Cambiar tarea'}</h2></header>
+      <div class="bb cal-ff">
+        <div class="field"><label for="cf-t">¿Qué hay que hacer?</label><input id="cf-t" type="text" maxlength="200" autocomplete="off" placeholder="Ej.: Visita a tajo de noche" value="${esc(ED.t)}"></div>
+        ${ED.nueva ? `<details class="cal-sug"><summary>Ideas rápidas <small>las tareas habituales de PRL</small></summary><div class="chips">${SUG.map((s, i) => `<button type="button" class="chip" data-sug="${i}">${esc(s[0])}</button>`).join('')}</div></details>` : ''}
+        <div class="field"><label for="cf-f">${ED.rep ? 'Primera fecha' : 'Fecha'}</label><input id="cf-f" type="date" value="${esc(ED.f)}"></div>
+        <div class="field"><span class="lbl" id="cf-rl">¿Se repite?</span><div class="chips cal-reps" role="group" aria-labelledby="cf-rl">${REP.map(([k, t]) => `<button type="button" class="chip" data-rep="${k}" aria-pressed="${ED.rep === k}">${esc(t)}</button>`).join('')}</div>
+          <p class="help" id="cf-rh">${repAyuda()}</p></div>
+        <div class="field"${cs.length || cid ? '' : ' hidden'}><label for="cf-c">Contrato</label><select id="cf-c"><option value="">Sin contrato</option>${opts}</select></div>
+        <details class="cal-masop"${masAbierto ? ' open' : ''}><summary>Más opciones <small>tipo, hasta cuándo y notas</small></summary>
+          <div class="cal-ff">
+            <div class="field"><span class="lbl" id="cf-kl">Tipo</span><div class="chips cal-tipos" role="group" aria-labelledby="cf-kl">${TIPOS.map(x => `<button type="button" class="chip" data-tipo="${x.k}" aria-pressed="${ED.k === x.k}">${esc(x.t)}</button>`).join('')}</div></div>
+            <div class="field" id="cf-hw"${ED.rep ? '' : ' hidden'}><label for="cf-h">Hasta <i class="opc">opcional</i></label><input id="cf-h" type="date" value="${esc(ED.hasta || '')}"></div>
+            <div class="field"><label for="cf-n">Notas <i class="opc">opcional</i></label><textarea id="cf-n" rows="3" maxlength="1500">${esc(ED.notas || '')}</textarea></div>
+          </div>
+        </details>
+      </div>
+    </section>
+    <div class="cal-fbtns">
+      <button type="button" class="btn primary" data-ca="guardar">${ED.nueva ? 'Añadir al calendario' : 'Guardar cambios'}</button>
+      ${ED.nueva ? '' : `<button type="button" class="btn danger-t" data-ca="borrar">${TRASH}Quitar del calendario</button>`}
+      <button type="button" class="btn" data-ca="volver">Cancelar</button>
+    </div>`;
+}
+function repAyuda() {
+  if (!ED.rep || !ED.f) return ED.rep ? '' : 'Una sola vez, el día que pongas.';
+  const d = pISO(ED.f), dia = d.getDate();
+  const txt = ED.rep === 'sem' ? `Todos los ${DIAS[d.getDay()]}` : ED.rep === 'anu' ? `Cada año, el ${dia} de ${MESES[d.getMonth()]}` : `El día ${dia} ${ED.rep === 'mes' ? 'de cada mes' : 'cada ' + REPM[ED.rep] + ' meses'}${dia > 28 ? ' (o el último día si el mes es más corto)' : ''}`;
+  return txt + (ED.nueva ? '. Los cambios valen para todas las repeticiones.' : '. Al editarla cambian todas las repeticiones; las ya marcadas como hechas se mantienen.');
+}
+function leerForm() {
+  const v = id => ((($('#' + id) || {}).value) || '').trim();
+  ED.t = v('cf-t'); ED.f = v('cf-f'); ED.notas = v('cf-n'); ED.hasta = ED.rep ? v('cf-h') : '';
+  const cid = v('cf-c'); ED.ctr = cid ? (contratoPorId(cid) ? snapContrato(contratoPorId(cid)) : ED.ctr) : null;
+}
+async function guardarForm() {
+  leerForm();
+  if (!ED.t) { toast('Escribe qué hay que hacer.'); $('#cf-t').focus(); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ED.f)) { toast('Pon la fecha.'); $('#cf-f').focus(); return; }
+  if (ED.hasta && ED.hasta < ED.f) { toast('«Hasta» no puede ser antes de la primera fecha.'); const mo = $('.cal-masop'); if (mo) mo.open = true; $('#cf-h').focus(); return; }
+  const nueva = !!ED.nueva; delete ED.nueva;
+  if (!ED.k) ED.k = 'otr';
+  if (nueva) ED.creado = Date.now();
+  /* una tarea que se repite empieza a contar desde el día en que la das de alta: no llena de vencidas los meses pasados */
+  if (ED.rep && !ED.desde) ED.desde = hoy();
+  const t = ED; ED = null;
+  await guardar(t);
+  if (modo === 'mes') { const d = pISO(t.f); if (!t.rep) { mesV = [d.getFullYear(), d.getMonth()]; diaSel = t.f; } }
+  renderMain(); window.scrollTo({top:0});
+  toast(nueva ? (t.rep ? `Tarea añadida: ${REPT[t.rep].toLowerCase()}.` : `Tarea añadida para el ${fmtDate(t.f)}.`) : 'Cambios guardados.');
+}
+async function borrar(id) {
+  const t = TAREAS.find(x => x.id === (id || (ED && ED.id))); if (!t) return;
+  if (!(await ask({title:'¿Quitar la tarea?', body:`<p>«${esc(t.t)}»${t.rep ? ' y todas sus repeticiones' : ''} se quita del calendario.</p>`, yes:'Quitar', danger:true}))) return;
+  TAREAS = TAREAS.filter(x => x.id !== t.id);
+  try { await cdb.del(t.id); } catch (e) {}
+  const y = window.scrollY; ED = null; renderMain(); refrescaIni(); if (id) window.scrollTo({top:y}); toast('Tarea quitada.');
+}
+
+/* ---------- eventos ---------- */
+async function onClick(e) {
+  const hc = e.target.closest('[data-hecha]');
+  if (hc) {
+    const t = TAREAS.find(x => x.id === hc.dataset.hecha), d = hc.dataset.d; if (!t) return;
+    t.hechas = t.hechas || {};
+    const ya = !!t.hechas[d];
+    if (ya) delete t.hechas[d]; else t.hechas[d] = Date.now();
+    const y = window.scrollY; await guardar(t); renderMain(); window.scrollTo({top:y});
+    toast(ya ? 'Vuelve a estar pendiente.' : 'Hecha. ¡Bien!');
+    return;
+  }
+  const qt = e.target.closest('[data-quitar]'); if (qt) return borrar(qt.dataset.quitar);
+  const ed = e.target.closest('[data-edit]'); if (ed) { abrirForm(ed.dataset.edit); return; }
+  const nv = e.target.closest('[data-nueva]'); if (nv) { abrirForm(null, nv.dataset.nueva || (modo === 'mes' && diaSel && diaSel >= hoy() ? diaSel : hoy())); return; }
+  const md = e.target.closest('[data-cmodo]'); if (md) { modo = md.dataset.cmodo; lsSet('cal-modo', modo); renderMain(); return; }
+  const ms = e.target.closest('[data-mes]');
+  if (ms) { const n = +ms.dataset.mes; if (!n) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; diaSel = hoy(); } else { const d = new Date(mesV[0], mesV[1] + n, 1); mesV = [d.getFullYear(), d.getMonth()]; diaSel = null; } renderMain(); return; }
+  const dia = e.target.closest('[data-dia]'); if (dia) { diaSel = dia.dataset.dia; const y = window.scrollY; renderMain(); window.scrollTo({top:y}); return; }
+  const sg = e.target.closest('[data-sug]');
+  if (sg && ED) { const s = SUG[+sg.dataset.sug]; leerForm(); ED.t = s[0]; ED.k = s[1]; ED.rep = s[2]; renderForm(); toast('Revisa la fecha y guarda.'); const f = $('#cf-f'); if (f) f.focus(); return; }
+  const tp = e.target.closest('[data-tipo]'); if (tp && ED) { ED.k = ED.k === tp.dataset.tipo ? '' : tp.dataset.tipo; tp.parentNode.querySelectorAll('[data-tipo]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tipo === ED.k)); return; }
+  const rp = e.target.closest('[data-rep]');
+  if (rp && ED) { leerForm(); ED.rep = rp.dataset.rep; rp.parentNode.querySelectorAll('[data-rep]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rep === ED.rep)); $('#cf-hw').hidden = !ED.rep; $('#cf-rh').textContent = repAyuda(); const l = $('label[for="cf-f"]'); if (l) l.textContent = ED.rep ? 'Primera fecha' : 'Fecha'; return; }
+  const b = e.target.closest('[data-ca]'); if (!b) return;
+  const a = b.dataset.ca;
+  if (a === 'ini') { showTab('ini'); return; }
+  if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
+  if (a === 'guardar') return guardarForm();
+  if (a === 'borrar') return borrar();
+}
+function onInput(e) {
+  if (e.target.id === 'cal-fc') { fctr = e.target.value; renderMain(); return; }
+  if (ED && e.target.id === 'cf-f') { ED.f = e.target.value; const h = $('#cf-rh'); if (h) h.textContent = repAyuda(); }
+}
+
+/* ---------- arranque ---------- */
+function montar() {
+  const main = document.createElement('main');
+  main.id = 'view-cal'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
+  main.innerHTML = '<div id="cal-main"></div><div id="cal-form" hidden></div>';
+  const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
+  const bar = document.createElement('div'); bar.className = 'ibar'; bar.id = 'cal-bar'; bar.hidden = true;
+  bar.innerHTML = '<button type="button" class="btn primary" data-nueva="">+ Añadir tarea</button>';
+  document.body.appendChild(bar);
+  main.addEventListener('click', onClick); main.addEventListener('input', onInput); main.addEventListener('change', onInput);
+  bar.addEventListener('click', onClick);
+  cargar();
+}
+window.CAL_API = {
+  lista: () => TAREAS,
+  abrir() { ED = null; showTab('cal'); renderMain(); },
+  /* para el Inicio: todos los contratos */
+  resumen: () => resumen(true),
+  /* para «Hoy y vencidas» del Inicio: una línea por tarea, con la fecha más antigua sin marcar */
+  pendientes() {
+    const h = hoy(), m = new Map();
+    ocurr(masDias(h, -400), h, true).filter(o => !o.ok).forEach(o => { const x = m.get(o.t.id); if (x) x.n++; else m.set(o.t.id, {id:o.t.id, t:o.t.t || '', k:o.t.k || 'otr', ctr:o.t.ctr || null, d:o.d, n:1}); });
+    return [...m.values()];
+  },
+  /* visitas a tajo previstas este mes (tareas de «Visitas» con «visita» en el nombre) */
+  visitasMes(ctrId) {
+    const ym = hoy().slice(0, 7);
+    return ocurr(ym + '-01', ym + '-31', true).filter(o => o.t.k === 'vis' && /visita/i.test(o.t.t || '') && (!ctrId || !(o.t.ctr && o.t.ctr.id) || o.t.ctr.id === ctrId)).length;
+  },
+  editar(id, d) { showTab('cal'); if (TAREAS.some(x => x.id === id)) abrirForm(id, d); },
+  /* 1.24.0 · desde «Tareas del técnico»: el formulario de nueva tarea ya relleno (el técnico revisa y guarda) */
+  nueva(pre) {
+    ED = null; showTab('cal'); abrirForm(null, pre.f);
+    Object.assign(ED, {t:pre.t || '', k:pre.k || '', rep:pre.rep || '', notas:pre.notas || '', ctr:'ctr' in pre ? (pre.ctr || null) : null});
+    if (pre.guia) ED.guia = pre.guia;
+    renderForm(); vista('form');
+  },
+  /* y varias de golpe; las que se repiten cuentan desde hoy (no salen vencidas las de antes) */
+  async agregar(arr) {
+    let n = 0;
+    for (const x of arr || []) {
+      if (!x || !x.t || !/^\d{4}-\d{2}-\d{2}$/.test(x.f || '')) continue;
+      const t = {id:nid(), t:x.t, k:x.k || 'otr', ctr:x.ctr || null, f:x.f, rep:x.rep || '', hasta:'', notas:x.notas || '', hechas:x.hechas || {}, creado:Date.now()};
+      if (x.guia) t.guia = x.guia;
+      if (t.rep) t.desde = hoy();
+      await guardar(t); n++;
+    }
+    if (n && !ED) renderMain();
+    return n;
+  },
+  async importar(arr) {
+    const act = new Map(TAREAS.map(x => [x.id, x])); let n = 0;
+    for (const x of arr) { if (x && x.id && x.t && x.f && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await cdb.put(x); n++; } }
+    if (n) await cargar();
+    return n;
+  },
+  atras() {
+    const v = $('#view-cal'); if (!v || v.hidden) return false;
+    if (ED) { ED = null; renderMain(); return true; }
+    showTab('ini'); return true;
+  },
+  onTab(t) { const b = $('#cal-bar'); if (b) b.hidden = !(t === 'cal' && !ED && TAREAS.length && modo !== 'lista'); if (t === 'cal' && !ED) renderMain(); }
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
+})();
+
+/*CAL-JS-END*/
 /*TAR-JS-START*/
 /* ================= Tareas básicas del técnico de PRL (1.24.0) =================
    La lista de lo que hay que hacer cada mes, cada trimestre, cada año, en cada contrato y cuando pasa algo

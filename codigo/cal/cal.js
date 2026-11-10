@@ -37,7 +37,7 @@ const cdb = (() => {
   const tx = (m, f) => open().then(d => new Promise((res, rej) => { const t = d.transaction('tareas', m); const out = f(t.objectStore('tareas')); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }));
   return { all: () => tx('readonly', s => s.getAll()), put: x => tx('readwrite', s => s.put(x)), del: id => tx('readwrite', s => s.delete(id)) };
 })();
-let TAREAS = [], ED = null, modo = lsGet('cal-modo') === 'mes' ? 'mes' : 'agenda', fctr = '', mesV = null, diaSel = null;
+let TAREAS = [], ED = null, modo = ['mes', 'lista'].includes(lsGet('cal-modo')) ? lsGet('cal-modo') : 'agenda', fctr = '', mesV = null, diaSel = null;
 async function cargar() { try { TAREAS = await cdb.all() || []; } catch (e) { TAREAS = []; } if (!ED) renderMain(); refrescaIni(); }
 async function guardar(t) {
   t.guardado = Date.now();
@@ -97,12 +97,14 @@ function resumen(todas) {
   return {n:TAREAS.length, hoy:sem.filter(o => o.d === h && !o.ok).length, semana:sem.filter(o => !o.ok).length, venc:vencidas(todas).length, hechasMes:mes.filter(o => o.ok).length, mes:mes.length};
 }
 
-/* ---------- pantalla principal ---------- */
+/* ---------- pantalla principal (1.26.0: más sencilla, tres pestañas: Pendientes, Mes y Mis tareas) ---------- */
 const ctrCorto = c => c ? (c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : '';
+const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
 function filaHtml(o, conFecha = true) {
   const {t, d, ok} = o, late = !ok && d < hoy();
   const meta = [conFecha ? `<span>${esc(corta(d))}</span>` : '', t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : '', t.rep ? `<span class="cal-rp">${REPIC}${esc(REPT[t.rep])}</span>` : '', late ? '<span class="cal-late">Vencida</span>' : ''].filter(Boolean).join('');
-  return `<div class="cal-row k-${t.k || 'otr'}${ok ? ' st-ok' : ''}${late ? ' st-bad' : ''}">
+  return `<div class="cal-row${ok ? ' st-ok' : ''}${late ? ' st-bad' : ''}">
     <button type="button" class="cal-ck" data-hecha="${esc(t.id)}" data-d="${d}" aria-pressed="${ok}" aria-label="${ok ? 'Desmarcar' : 'Marcar como hecha'}: ${esc(t.t)}">${CHECK}</button>
     <button type="button" class="cal-open" data-edit="${esc(t.id)}" data-d="${d}"><b>${esc(t.t)}</b>${meta ? `<span class="cal-meta">${meta}</span>` : ''}</button>
   </div>`;
@@ -113,11 +115,12 @@ function grupo(tit, list, cls = '', conFecha = true) {
 }
 function agendaHtml() {
   const h = hoy(), v = vencidas(), hoyL = ocurr(h, h), sem = ocurr(masDias(h, 1), masDias(h, 7));
-  /* más adelante: de las que se repiten, solo la siguiente vez */
+  /* más adelante: de las que se repiten, solo la siguiente vez; plegado para que la pantalla quede corta */
   const vistas = new Set([...hoyL, ...sem].map(o => o.t.id)), mas = ocurr(masDias(h, 8), masDias(h, 30)).filter(o => !vistas.has(o.t.id) && (vistas.add(o.t.id), true));
-  const nada = !v.length && !hoyL.length && !sem.length && !mas.length;
-  if (nada) return `<div class="empty"><b>Nada pendiente en los próximos 30 días</b><span>Pulsa «Mes» para ver el calendario entero o añade una tarea nueva.</span></div>`;
-  return grupo('Vencidas', v, 'g-bad') + grupo('Hoy', hoyL, 'g-hoy', false) + grupo('Próximos 7 días', sem) + grupo('Más adelante (hasta 30 días)', mas);
+  const alDia = !v.length && !hoyL.filter(o => !o.ok).length && !sem.length;
+  const masH = mas.length ? `<details class="cal-mas"><summary>Más adelante <small>hasta 30 días</small><i>${mas.length}</i></summary><div class="cal-list">${mas.map(o => filaHtml(o)).join('')}</div></details>` : '';
+  if (alDia && !hoyL.length) return `<div class="cal-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg><b>Nada pendiente esta semana</b></div>${masH || '<p class="help cal-vacio">Tampoco hay nada en los próximos 30 días. Mira el mes entero en «Mes».</p>'}`;
+  return grupo('Vencidas', v, 'g-bad') + grupo('Hoy', hoyL, 'g-hoy', false) + grupo('Esta semana', sem) + masH;
 }
 function mesHtml() {
   const [y, m] = mesV, a = `${y}-${pad2(m + 1)}-01`, b = `${y}-${pad2(m + 1)}-${pad2(dim(y, m))}`, h = hoy();
@@ -129,51 +132,75 @@ function mesHtml() {
   for (let i = 0; i < lead; i++) g += '<span class="cal-d out" aria-hidden="true"></span>';
   for (let d = 1; d <= dim(y, m); d++) {
     const s = `${y}-${pad2(m + 1)}-${pad2(d)}`, l = by[s] || [], wd = new Date(y, m, d).getDay();
-    const late = l.some(o => !o.ok && s < h), todo = l.length && l.every(o => o.ok);
-    const dots = l.slice(0, 6).map(o => `<i class="dot k-${o.t.k || 'otr'}${o.ok ? ' ok' : ''}"></i>`).join('') + (l.length > 6 ? '<i class="mas">+</i>' : '');
-    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${plural(l.length, 'tarea', 'tareas')}"><span class="n">${d}</span><span class="dots">${dots}</span></button>`;
+    const pend = l.filter(o => !o.ok).length, late = pend && s < h, todo = l.length && !pend;
+    /* un número por día (las que quedan) en vez de puntos de colores: no hace falta leyenda */
+    const marca = todo ? `<i class="cal-c ok" aria-hidden="true">${CHECK}</i>` : pend ? `<i class="cal-c" aria-hidden="true">${pend}</i>` : '';
+    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') : 'sin tareas'}" aria-pressed="${s === diaSel}"><span class="n">${d}</span>${marca}</button>`;
   }
   const lm = by[diaSel] || [];
   const pend = os.filter(o => !o.ok).length;
   return `<div class="cal-mbar"><button type="button" class="nav-b" data-mes="-1" aria-label="Mes anterior">‹</button><h3>${cap(MESES[m])} ${y}</h3><button type="button" class="nav-b" data-mes="1" aria-label="Mes siguiente">›</button></div>
-    <p class="cal-msum">${plural(os.length, 'tarea', 'tareas')} este mes · ${os.length - pend} ${os.length - pend === 1 ? 'hecha' : 'hechas'}${h.startsWith(a.slice(0, 7)) ? '' : ` · <button type="button" class="linkbtn cal-hoyb" data-mes="0">Volver a hoy</button>`}</p>
-    <div class="cal-grid" role="grid" aria-label="${cap(MESES[m])} ${y}">${g}</div>
-    <h3 class="cal-gh">${esc(cap(larga(diaSel)))}<i>${lm.length}</i></h3>
-    ${lm.length ? `<div class="cal-list">${lm.map(o => filaHtml(o, false)).join('')}</div>` : `<p class="help cal-vacio">Sin tareas este día. <button type="button" class="linkbtn" data-nueva="${diaSel}">Añadir una</button></p>`}`;
+    <p class="cal-msum">${plural(os.length, 'tarea', 'tareas')} · ${os.length - pend} ${os.length - pend === 1 ? 'hecha' : 'hechas'}${h.startsWith(a.slice(0, 7)) ? '' : ` · <button type="button" class="linkbtn cal-hoyb" data-mes="0">Volver a hoy</button>`}</p>
+    <div class="cal-grid" role="group" aria-label="${cap(MESES[m])} ${y}">${g}</div>
+    <div class="cal-dhead"><h3 class="cal-gh">${esc(cap(larga(diaSel)))}<i>${lm.length}</i></h3><button type="button" class="cal-addd" data-nueva="${diaSel}">${PLUS}Añadir</button></div>
+    ${lm.length ? `<div class="cal-list">${lm.map(o => filaHtml(o, false)).join('')}</div>` : '<p class="help cal-vacio">Sin tareas este día.</p>'}`;
+}
+/* «Mis tareas»: una línea por tarea (no por fecha) para añadir, cambiar o quitar */
+function proxima(t) {
+  const h = hoy(), v = fechas(t, masDias(h, -400), masDias(h, -1)).filter(d => !hecha(t, d));
+  if (v.length) return {d:v[0], txt:`vencida el ${corta(v[0])}`, late:true};
+  const l = fechas(t, h, masDias(h, 800)).filter(d => !hecha(t, d));
+  if (l.length) return {d:l[0], txt:(l[0] === h ? 'hoy' : corta(l[0]))};
+  if (!t.rep && t.f < h) return {d:t.f, txt:`${corta(t.f)}, ${hecha(t, t.f) ? 'hecha' : 'pasada'}`};
+  return {d:'9999', txt:'sin próximas fechas'};
+}
+function listaHtml() {
+  const l = TAREAS.filter(delFiltro).map(t => ({t, p:proxima(t)})).sort((x, y) => x.p.d < y.p.d ? -1 : x.p.d > y.p.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
+  const filas = l.map(({t, p}) => {
+    const meta = [`<span>${t.rep ? `${REPIC}${esc(REPT[t.rep])}` : 'Una vez'}</span>`, (p.late ? `<span class="cal-late">${cap(esc(p.txt))}</span>` : `<span>${t.rep ? 'Próxima: ' : ''}${esc(p.txt)}</span>`), t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : ''].filter(Boolean).join('');
+    return `<div class="cal-row cal-def">
+      <button type="button" class="cal-open" data-edit="${esc(t.id)}"><b>${esc(t.t)}</b><span class="cal-meta">${meta}</span></button>
+      <button type="button" class="cal-quitar" data-quitar="${esc(t.id)}" aria-label="Quitar: ${esc(t.t)}">${TRASH}<span>Quitar</span></button>
+    </div>`;
+  }).join('');
+  return `<button type="button" class="btn primary cal-add" data-nueva="">${PLUS}Añadir tarea</button>
+    ${l.length ? `<p class="help cal-lh">Toca una tarea para cambiarla. «Quitar» la borra con todas sus repeticiones.</p><div class="cal-list">${filas}</div>` : '<p class="help cal-vacio">No hay tareas con este filtro.</p>'}`;
 }
 function ctrsHtml() {
   const cs = perfilGet().contratos, sin = TAREAS.some(t => !(t.ctr && t.ctr.id));
-  if (!cs.length && !sin) return '';
   if (cs.length < 2 && !sin) return '';
-  const b = (id, txt) => `<button type="button" class="chip" data-fc="${esc(id)}" aria-pressed="${fctr === id}">${esc(txt)}</button>`;
-  return `<div class="chips cal-ctrs" role="group" aria-label="Filtrar por contrato">${b('', 'Todos')}${cs.map(c => b(c.id, ctrCorto(c))).join('')}${sin ? b('-', 'Sin contrato') : ''}</div>`;
+  const o = (id, txt) => `<option value="${esc(id)}"${fctr === id ? ' selected' : ''}>${esc(txt)}</option>`;
+  return `<label class="cal-fcw"><span>Contrato</span><select id="cal-fc">${o('', 'Todos')}${cs.map(c => o(c.id, ctrCorto(c))).join('')}${sin ? o('-', 'Sin contrato') : ''}</select></label>`;
+}
+function resumenHtml(r) {
+  const p = [];
+  if (r.venc) p.push(`<span class="cal-pill bad">${plural(r.venc, 'vencida', 'vencidas')}</span>`);
+  if (r.hoy) p.push(`<span class="cal-pill hoy">${r.hoy} hoy</span>`);
+  if (r.semana - r.hoy > 0) p.push(`<span class="cal-pill">${r.semana - r.hoy} esta semana</span>`);
+  if (!p.length) p.push(`<span class="cal-pill ok">${CHECK}Al día</span>`);
+  return `<p class="cal-res" aria-label="Resumen">${p.join('')}</p>`;
 }
 function renderMain() {
   const M = $('#cal-main'); if (!M) return;
   if (fctr && fctr !== '-' && !contratoPorId(fctr)) fctr = '';
   if (!mesV) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; }
-  const r = resumen(), c = fctr && fctr !== '-' ? contratoPorId(fctr) : null;
-  const vacio = !TAREAS.length;
+  const r = resumen(), vacio = !TAREAS.length;
+  const pendN = r.venc + r.semana;
+  const tab = (k, txt, n) => `<button type="button" role="tab" data-cmodo="${k}" aria-selected="${modo === k}" aria-pressed="${modo === k}">${txt}${n ? `<i>${n}</i>` : ''}</button>`;
   M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
-    <section class="pl-hero cal-hero">
-      <p class="pl-eb">Calendario PRL</p>
-      <h2>Mis tareas</h2>
-      <p class="pl-ctr">${c ? esc(nombreContrato(c)) : fctr === '-' ? 'Tareas sin contrato' : 'Todos tus contratos'}</p>
-      <div class="pl-kpis"><div><b>${r.hoy}</b><span>Hoy</span></div><div><b>${r.semana}</b><span>Próx. 7 días</span></div><div class="${r.venc ? 'bad' : ''}"><b>${r.venc}</b><span>Vencidas</span></div><div class="ok"><b>${r.hechasMes}</b><span>Hechas</span></div></div>
-    </section>
-    ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…). Cada una con su contrato.</span><button type="button" class="btn primary" data-nueva="">+ Añadir mi primera tarea</button></div>` : `
+    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}</header>
+    ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…).</span><button type="button" class="btn primary" data-nueva="">${PLUS}Añadir la primera tarea</button></div>` : `
+    <div class="cal-tabs" role="tablist" aria-label="Cómo ver las tareas">${tab('agenda', 'Pendientes', pendN)}${tab('mes', 'Mes')}${tab('lista', 'Mis tareas', TAREAS.length)}</div>
     ${ctrsHtml()}
-    <div class="pl-modo" role="group" aria-label="Cómo ver las tareas"><button type="button" data-cmodo="agenda" aria-pressed="${modo === 'agenda'}">Agenda</button><button type="button" data-cmodo="mes" aria-pressed="${modo === 'mes'}">Mes</button></div>
-    <div class="cal-body">${modo === 'mes' ? mesHtml() : agendaHtml()}</div>
-    <div class="cal-ley">${TIPOS.map(x => `<span><i class="dot k-${x.k}"></i>${esc(x.t)}</span>`).join('')}</div>`}`;
+    <div class="cal-body" role="tabpanel">${modo === 'mes' ? mesHtml() : modo === 'lista' ? listaHtml() : agendaHtml()}</div>`}`;
   vista('main');
 }
 function vista(q) {
   const m = $('#cal-main'), f = $('#cal-form'); if (m) m.hidden = q !== 'main'; if (f) f.hidden = q !== 'form';
-  const b = $('#cal-bar'); if (b) b.hidden = q !== 'main' || $('#view-cal').hidden || !TAREAS.length;
+  const b = $('#cal-bar'); if (b) b.hidden = q !== 'main' || $('#view-cal').hidden || !TAREAS.length || modo === 'lista';
 }
 
-/* ---------- formulario de tarea ---------- */
+/* ---------- formulario de tarea (1.26.0: lo justo arriba; tipo, «hasta» y notas en «Más opciones») ---------- */
 function abrirForm(id, fecha) {
   const t = id ? TAREAS.find(x => x.id === id) : null;
   const a = snapContrato();
@@ -185,24 +212,29 @@ function renderForm() {
   const F = $('#cal-form'); if (!F || !ED) return;
   const cs = perfilGet().contratos, cid = ED.ctr && ED.ctr.id;
   const opts = cs.map(c => `<option value="${esc(c.id)}"${c.id === cid ? ' selected' : ''}>${esc(nombreContrato(c) || 'Contrato')}</option>`).join('') + (cid && !cs.some(c => c.id === cid) ? `<option value="${esc(cid)}" selected>${esc(nombreContrato(ED.ctr))}</option>` : '');
+  const masAbierto = !!(ED.notas || ED.hasta);
   F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="volver">‹ Calendario</button></div>
     <section class="block cal-fb">
-      <header class="bh"><h2>${ED.nueva ? 'Nueva tarea' : 'Editar tarea'}</h2></header>
+      <header class="bh"><h2>${ED.nueva ? 'Añadir tarea' : 'Cambiar tarea'}</h2></header>
       <div class="bb cal-ff">
-        <div class="field"><label for="cf-t">Tarea</label><textarea id="cf-t" rows="2" maxlength="200" placeholder="Ej.: Visita a tajo de noche">${esc(ED.t)}</textarea></div>
+        <div class="field"><label for="cf-t">¿Qué hay que hacer?</label><input id="cf-t" type="text" maxlength="200" autocomplete="off" placeholder="Ej.: Visita a tajo de noche" value="${esc(ED.t)}"></div>
         ${ED.nueva ? `<details class="cal-sug"><summary>Ideas rápidas <small>las tareas habituales de PRL</small></summary><div class="chips">${SUG.map((s, i) => `<button type="button" class="chip" data-sug="${i}">${esc(s[0])}</button>`).join('')}</div></details>` : ''}
-        <div class="field"><span class="lbl" id="cf-kl">Tipo</span><div class="chips cal-tipos" role="group" aria-labelledby="cf-kl">${TIPOS.map(x => `<button type="button" class="chip" data-tipo="${x.k}" aria-pressed="${ED.k === x.k}"><i class="dot k-${x.k}"></i>${esc(x.t)}</button>`).join('')}</div></div>
-        <div class="field"><label for="cf-c">Contrato</label><select id="cf-c"><option value="">Sin contrato</option>${opts}</select>${cs.length ? '' : '<p class="help">Aún no tienes contratos. Puedes darlos de alta en Perfil.</p>'}</div>
         <div class="field"><label for="cf-f">${ED.rep ? 'Primera fecha' : 'Fecha'}</label><input id="cf-f" type="date" value="${esc(ED.f)}"></div>
         <div class="field"><span class="lbl" id="cf-rl">¿Se repite?</span><div class="chips cal-reps" role="group" aria-labelledby="cf-rl">${REP.map(([k, t]) => `<button type="button" class="chip" data-rep="${k}" aria-pressed="${ED.rep === k}">${esc(t)}</button>`).join('')}</div>
           <p class="help" id="cf-rh">${repAyuda()}</p></div>
-        <div class="field" id="cf-hw"${ED.rep ? '' : ' hidden'}><label for="cf-h">Hasta <i class="opc">opcional</i></label><input id="cf-h" type="date" value="${esc(ED.hasta || '')}"></div>
-        <div class="field"><label for="cf-n">Notas <i class="opc">opcional</i></label><textarea id="cf-n" rows="2" maxlength="500">${esc(ED.notas || '')}</textarea></div>
+        <div class="field"${cs.length || cid ? '' : ' hidden'}><label for="cf-c">Contrato</label><select id="cf-c"><option value="">Sin contrato</option>${opts}</select></div>
+        <details class="cal-masop"${masAbierto ? ' open' : ''}><summary>Más opciones <small>tipo, hasta cuándo y notas</small></summary>
+          <div class="cal-ff">
+            <div class="field"><span class="lbl" id="cf-kl">Tipo</span><div class="chips cal-tipos" role="group" aria-labelledby="cf-kl">${TIPOS.map(x => `<button type="button" class="chip" data-tipo="${x.k}" aria-pressed="${ED.k === x.k}">${esc(x.t)}</button>`).join('')}</div></div>
+            <div class="field" id="cf-hw"${ED.rep ? '' : ' hidden'}><label for="cf-h">Hasta <i class="opc">opcional</i></label><input id="cf-h" type="date" value="${esc(ED.hasta || '')}"></div>
+            <div class="field"><label for="cf-n">Notas <i class="opc">opcional</i></label><textarea id="cf-n" rows="3" maxlength="1500">${esc(ED.notas || '')}</textarea></div>
+          </div>
+        </details>
       </div>
     </section>
     <div class="cal-fbtns">
       <button type="button" class="btn primary" data-ca="guardar">${ED.nueva ? 'Añadir al calendario' : 'Guardar cambios'}</button>
-      ${ED.nueva ? '' : '<button type="button" class="btn danger-t" data-ca="borrar">Eliminar tarea</button>'}
+      ${ED.nueva ? '' : `<button type="button" class="btn danger-t" data-ca="borrar">${TRASH}Quitar del calendario</button>`}
       <button type="button" class="btn" data-ca="volver">Cancelar</button>
     </div>`;
 }
@@ -221,7 +253,7 @@ async function guardarForm() {
   leerForm();
   if (!ED.t) { toast('Escribe qué hay que hacer.'); $('#cf-t').focus(); return; }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(ED.f)) { toast('Pon la fecha.'); $('#cf-f').focus(); return; }
-  if (ED.hasta && ED.hasta < ED.f) { toast('«Hasta» no puede ser antes de la primera fecha.'); $('#cf-h').focus(); return; }
+  if (ED.hasta && ED.hasta < ED.f) { toast('«Hasta» no puede ser antes de la primera fecha.'); const mo = $('.cal-masop'); if (mo) mo.open = true; $('#cf-h').focus(); return; }
   const nueva = !!ED.nueva; delete ED.nueva;
   if (!ED.k) ED.k = 'otr';
   if (nueva) ED.creado = Date.now();
@@ -233,13 +265,12 @@ async function guardarForm() {
   renderMain(); window.scrollTo({top:0});
   toast(nueva ? (t.rep ? `Tarea añadida: ${REPT[t.rep].toLowerCase()}.` : `Tarea añadida para el ${fmtDate(t.f)}.`) : 'Cambios guardados.');
 }
-async function borrar() {
-  if (!ED) return;
-  const t = TAREAS.find(x => x.id === ED.id); if (!t) return;
-  if (!(await ask({title:'¿Eliminar la tarea?', body:`<p>«${esc(t.t)}»${t.rep ? ' y todas sus repeticiones' : ''} se borra del calendario.</p>`, yes:'Eliminar', danger:true}))) return;
+async function borrar(id) {
+  const t = TAREAS.find(x => x.id === (id || (ED && ED.id))); if (!t) return;
+  if (!(await ask({title:'¿Quitar la tarea?', body:`<p>«${esc(t.t)}»${t.rep ? ' y todas sus repeticiones' : ''} se quita del calendario.</p>`, yes:'Quitar', danger:true}))) return;
   TAREAS = TAREAS.filter(x => x.id !== t.id);
   try { await cdb.del(t.id); } catch (e) {}
-  ED = null; renderMain(); refrescaIni(); toast('Tarea eliminada.');
+  const y = window.scrollY; ED = null; renderMain(); refrescaIni(); if (id) window.scrollTo({top:y}); toast('Tarea quitada.');
 }
 
 /* ---------- eventos ---------- */
@@ -254,10 +285,10 @@ async function onClick(e) {
     toast(ya ? 'Vuelve a estar pendiente.' : 'Hecha. ¡Bien!');
     return;
   }
+  const qt = e.target.closest('[data-quitar]'); if (qt) return borrar(qt.dataset.quitar);
   const ed = e.target.closest('[data-edit]'); if (ed) { abrirForm(ed.dataset.edit); return; }
   const nv = e.target.closest('[data-nueva]'); if (nv) { abrirForm(null, nv.dataset.nueva || (modo === 'mes' && diaSel && diaSel >= hoy() ? diaSel : hoy())); return; }
   const md = e.target.closest('[data-cmodo]'); if (md) { modo = md.dataset.cmodo; lsSet('cal-modo', modo); renderMain(); return; }
-  const fc = e.target.closest('[data-fc]'); if (fc) { fctr = fc.dataset.fc; renderMain(); return; }
   const ms = e.target.closest('[data-mes]');
   if (ms) { const n = +ms.dataset.mes; if (!n) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; diaSel = hoy(); } else { const d = new Date(mesV[0], mesV[1] + n, 1); mesV = [d.getFullYear(), d.getMonth()]; diaSel = null; } renderMain(); return; }
   const dia = e.target.closest('[data-dia]'); if (dia) { diaSel = dia.dataset.dia; const y = window.scrollY; renderMain(); window.scrollTo({top:y}); return; }
@@ -273,7 +304,10 @@ async function onClick(e) {
   if (a === 'guardar') return guardarForm();
   if (a === 'borrar') return borrar();
 }
-function onInput(e) { if (ED && e.target.id === 'cf-f') { ED.f = e.target.value; const h = $('#cf-rh'); if (h) h.textContent = repAyuda(); } }
+function onInput(e) {
+  if (e.target.id === 'cal-fc') { fctr = e.target.value; renderMain(); return; }
+  if (ED && e.target.id === 'cf-f') { ED.f = e.target.value; const h = $('#cf-rh'); if (h) h.textContent = repAyuda(); }
+}
 
 /* ---------- arranque ---------- */
 function montar() {
@@ -282,7 +316,7 @@ function montar() {
   main.innerHTML = '<div id="cal-main"></div><div id="cal-form" hidden></div>';
   const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
   const bar = document.createElement('div'); bar.className = 'ibar'; bar.id = 'cal-bar'; bar.hidden = true;
-  bar.innerHTML = '<button type="button" class="btn primary" data-nueva="">+ Nueva tarea</button>';
+  bar.innerHTML = '<button type="button" class="btn primary" data-nueva="">+ Añadir tarea</button>';
   document.body.appendChild(bar);
   main.addEventListener('click', onClick); main.addEventListener('input', onInput); main.addEventListener('change', onInput);
   bar.addEventListener('click', onClick);
@@ -336,7 +370,7 @@ window.CAL_API = {
     if (ED) { ED = null; renderMain(); return true; }
     showTab('ini'); return true;
   },
-  onTab(t) { const b = $('#cal-bar'); if (b) b.hidden = !(t === 'cal' && !ED && TAREAS.length); if (t === 'cal' && !ED) renderMain(); }
+  onTab(t) { const b = $('#cal-bar'); if (b) b.hidden = !(t === 'cal' && !ED && TAREAS.length && modo !== 'lista'); if (t === 'cal' && !ED) renderMain(); }
 };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
 })();

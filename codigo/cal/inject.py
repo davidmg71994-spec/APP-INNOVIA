@@ -55,5 +55,17 @@ if "{v:'1.12.0'" not in h:
   ]},
 """)
     h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.12.0 · 06/11/2026",h,count=1)
+# 1.26.0 · calendario más sencillo (se añade aquí porque el código es del calendario; las versiones anteriores ya están dentro)
+if "{v:'1.26.0'" not in h:
+    h=re.sub(r"const APP_VER = '[^']+';","const APP_VER = '1.26.0';",h,count=1)
+    rep("const NOVEDADES = [\n","""const NOVEDADES = [
+  {v:'1.26.0', fecha:'10/11/2026', items:[
+    '<b>Calendario más sencillo</b>: arriba un resumen corto (vencidas, hoy y esta semana) y tres pestañas: <b>Pendientes</b>, <b>Mes</b> y <b>Mis tareas</b>.',
+    '<b>Mis tareas</b>: todas tus tareas en una lista, con «Añadir tarea» arriba y «Quitar» en cada una.',
+    'Menos ruido: sin bandas de colores ni leyenda; en el mes, cada día dice cuántas tareas le quedan (en rojo si se pasó la fecha).',
+    'Añadir una tarea es más corto: qué, cuándo y si se repite. El tipo, «hasta» y las notas quedan en «Más opciones».'
+  ]},
+""")
+    h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.26.0 · 10/11/2026",h,count=1)
 open(IDX,'w',encoding='utf-8').write(h)
 print('ok', len(h))
