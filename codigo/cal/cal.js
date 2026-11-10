@@ -135,7 +135,10 @@ function mesHtml() {
     const pend = l.filter(o => !o.ok).length, late = pend && s < h, todo = l.length && !pend;
     /* un número por día (las que quedan) en vez de puntos de colores: no hace falta leyenda */
     const marca = todo ? `<i class="cal-c ok" aria-hidden="true">${CHECK}</i>` : pend ? `<i class="cal-c" aria-hidden="true">${pend}</i>` : '';
-    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') : 'sin tareas'}" aria-pressed="${s === diaSel}"><span class="n">${d}</span>${marca}</button>`;
+    /* 1.26.1 · con sitio (ordenador, tableta) el día enseña en pequeño lo que toca: primero lo pendiente; en el móvil, el número */
+    const orden = [...l.filter(o => !o.ok), ...l.filter(o => o.ok)], MAXT = 3;
+    const tits = orden.length ? `<span class="cal-ts" aria-hidden="true">${orden.slice(0, MAXT).map(o => `<span class="cal-tt${o.ok ? ' ok' : !o.ok && s < h ? ' late' : ''}">${esc(o.t.t)}</span>`).join('')}${orden.length > MAXT ? `<span class="cal-tm">+${orden.length - MAXT} más</span>` : ''}</span>` : '';
+    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}${l.length ? ' con' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') + ': ' + esc(orden.map(o => o.t.t).join('; ')) : 'sin tareas'}" aria-pressed="${s === diaSel}"${l.length ? ` title="${esc(orden.map(o => (o.ok ? '✓ ' : '') + o.t.t).join('\n'))}"` : ''}><span class="n">${d}</span>${marca}${tits}</button>`;
   }
   const lm = by[diaSel] || [];
   const pend = os.filter(o => !o.ok).length;

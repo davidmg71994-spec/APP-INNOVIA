@@ -109,4 +109,17 @@
 .cal-fbtns{display:grid;gap:8px}
 .cal-fbtns .btn svg{width:18px;height:18px;vertical-align:-3px;margin-right:6px}
 @media (min-width:600px){.cal-d{min-height:62px}}
+/* 1.26.1 · si la rejilla es ancha, cada día enseña sus tareas en pequeño (hasta 3 y «+N más») en vez del número */
+.cal-body{container:calm/inline-size}
+.cal-ts{display:none}
+@container calm (min-width:620px){
+  .cal-d{min-height:92px;grid-template-rows:auto 1fr;align-items:start;justify-items:stretch;padding:6px 5px 6px;text-align:left}
+  .cal-d .n{justify-self:center}
+  .cal-d .cal-c{display:none}
+  .cal-ts{display:grid;gap:3px;align-content:start;min-width:0}
+  .cal-tt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font:500 12px/1.25 var(--f-body);padding:2px 5px;border-radius:5px;background:var(--corp-soft);color:var(--corp-text);overflow:hidden;overflow-wrap:anywhere;min-width:0}
+  .cal-tt.late{background:var(--bad-soft);color:var(--bad);font-weight:600}
+  .cal-tt.ok{background:none;color:var(--muted);text-decoration:line-through;padding-inline:2px}
+  .cal-tm{font:600 11px/1.2 var(--f-body);color:var(--muted);padding:0 3px}
+}
 .ini-t.bad .ini-n{background:var(--bad-soft);color:var(--bad)}

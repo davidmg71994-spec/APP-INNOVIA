@@ -67,5 +67,13 @@ if "{v:'1.26.0'" not in h:
   ]},
 """)
     h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.26.0 · 10/11/2026",h,count=1)
+if "{v:'1.26.1'" not in h:
+    h=re.sub(r"const APP_VER = '[^']+';","const APP_VER = '1.26.1';",h,count=1)
+    rep("const NOVEDADES = [\n","""const NOVEDADES = [
+  {v:'1.26.1', fecha:'10/11/2026', items:[
+    '<b>Calendario › Mes</b>: en el ordenador (y en pantallas anchas) cada día enseña en pequeño lo que toca, hasta 3 tareas y «+N más». Lo vencido en rojo y lo hecho tachado. En el móvil sigue el número de tareas del día.'
+  ]},
+""")
+    h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.26.1 · 10/11/2026",h,count=1)
 open(IDX,'w',encoding='utf-8').write(h)
 print('ok', len(h))

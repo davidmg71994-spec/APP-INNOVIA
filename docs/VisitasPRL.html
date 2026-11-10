@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-APtQQWww0HTLlwcua7wL421M7QF7GS8SwVFGAuBTsXs='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-NJU8WAT8DFLISi6JP/xcHtAFHHPsYg+is7FqZo1nDqE='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1683,6 +1683,19 @@ body.sub-on.wiz-on .sy-aviso,#view-form:not([hidden])~.sy-aviso{bottom:calc(140p
 .cal-fbtns{display:grid;gap:8px}
 .cal-fbtns .btn svg{width:18px;height:18px;vertical-align:-3px;margin-right:6px}
 @media (min-width:600px){.cal-d{min-height:62px}}
+/* 1.26.1 · si la rejilla es ancha, cada día enseña sus tareas en pequeño (hasta 3 y «+N más») en vez del número */
+.cal-body{container:calm/inline-size}
+.cal-ts{display:none}
+@container calm (min-width:620px){
+  .cal-d{min-height:92px;grid-template-rows:auto 1fr;align-items:start;justify-items:stretch;padding:6px 5px 6px;text-align:left}
+  .cal-d .n{justify-self:center}
+  .cal-d .cal-c{display:none}
+  .cal-ts{display:grid;gap:3px;align-content:start;min-width:0}
+  .cal-tt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font:500 calc(12px*var(--fz,1))/1.25 var(--f-body);padding:2px 5px;border-radius:5px;background:var(--corp-soft);color:var(--corp-text);overflow:hidden;overflow-wrap:anywhere;min-width:0}
+  .cal-tt.late{background:var(--bad-soft);color:var(--bad);font-weight:600}
+  .cal-tt.ok{background:none;color:var(--muted);text-decoration:line-through;padding-inline:2px}
+  .cal-tm{font:600 calc(11px*var(--fz,1))/1.2 var(--f-body);color:var(--muted);padding:0 3px}
+}
 .ini-t.bad .ini-n{background:var(--bad-soft);color:var(--bad)}
 /*CAL-CSS-END*/
 /*TAR-CSS-START*/
@@ -2038,7 +2051,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.26.0 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.26.1 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -4382,8 +4395,11 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.26.0';
+const APP_VER = '1.26.1';
 const NOVEDADES = [
+  {v:'1.26.1', fecha:'10/11/2026', items:[
+    '<b>Calendario › Mes</b>: en el ordenador (y en pantallas anchas) cada día enseña en pequeño lo que toca, hasta 3 tareas y «+N más». Lo vencido en rojo y lo hecho tachado. En el móvil sigue el número de tareas del día.'
+  ]},
   {v:'1.26.0', fecha:'10/11/2026', items:[
     '<b>Calendario más sencillo</b>: arriba un resumen corto (vencidas, hoy y esta semana) y tres pestañas: <b>Pendientes</b>, <b>Mes</b> y <b>Mis tareas</b>.',
     '<b>Mis tareas</b>: todas tus tareas en una lista, con «Añadir tarea» arriba y «Quitar» en cada una.',
@@ -10420,7 +10436,10 @@ function mesHtml() {
     const pend = l.filter(o => !o.ok).length, late = pend && s < h, todo = l.length && !pend;
     /* un número por día (las que quedan) en vez de puntos de colores: no hace falta leyenda */
     const marca = todo ? `<i class="cal-c ok" aria-hidden="true">${CHECK}</i>` : pend ? `<i class="cal-c" aria-hidden="true">${pend}</i>` : '';
-    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') : 'sin tareas'}" aria-pressed="${s === diaSel}"><span class="n">${d}</span>${marca}</button>`;
+    /* 1.26.1 · con sitio (ordenador, tableta) el día enseña en pequeño lo que toca: primero lo pendiente; en el móvil, el número */
+    const orden = [...l.filter(o => !o.ok), ...l.filter(o => o.ok)], MAXT = 3;
+    const tits = orden.length ? `<span class="cal-ts" aria-hidden="true">${orden.slice(0, MAXT).map(o => `<span class="cal-tt${o.ok ? ' ok' : !o.ok && s < h ? ' late' : ''}">${esc(o.t.t)}</span>`).join('')}${orden.length > MAXT ? `<span class="cal-tm">+${orden.length - MAXT} más</span>` : ''}</span>` : '';
+    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}${l.length ? ' con' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') + ': ' + esc(orden.map(o => o.t.t).join('; ')) : 'sin tareas'}" aria-pressed="${s === diaSel}"${l.length ? ` title="${esc(orden.map(o => (o.ok ? '✓ ' : '') + o.t.t).join('\n'))}"` : ''}><span class="n">${d}</span>${marca}${tits}</button>`;
   }
   const lm = by[diaSel] || [];
   const pend = os.filter(o => !o.ok).length;
