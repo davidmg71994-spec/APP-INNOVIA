@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-4a2fvCji6+1uwHD2yy64Wt9r/JrSrIXAv56qZ1szsC8='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-FWfTJpJAWzGWSSXBD4pl9xhlFOpMQ2VTKz6PFapB5O0='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1686,8 +1686,79 @@ body.sub-on.wiz-on .sy-aviso,#view-form:not([hidden])~.sy-aviso{bottom:calc(140p
   .tar-cb{grid-column:1;grid-row:auto;justify-content:flex-start}
   .tar-cb:empty{display:none}
 }
-.ini-mi.m-tar{background:var(--brand-soft);color:var(--brand-text)}
+.ini-mi.m-tar{background:#A3456E;color:#fff}
 /*TAR-CSS-END*/
+/*PANEL-CSS-START*/
+/* Panel con gráficos en Inicio (1.25.0). Colores comprobados con el validador (dataviz):
+   claro #2F6FB3/#E56F0B y estados #1C7A44/#8A8882/#C42B24; oscuro #3F84D6/#D9721F y #2FA661/#5E5C58/#E5534B. */
+:root{--pn-vis:#2F6FB3;--pn-vis-now:#1F5490;--pn-def:#E56F0B;--pn-ok:#1C7A44;--pn-pend:#8A8882;--pn-bad:#C42B24;--pn-warn:#9A6400;--pn-track:#ECEAE6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pn-vis:#3F84D6;--pn-vis-now:#6FA6E6;--pn-def:#D9721F;--pn-ok:#2FA661;--pn-pend:#5E5C58;--pn-bad:#E5534B;--pn-warn:#E0A33A;--pn-track:#2C2A28}}
+:root[data-theme="dark"]{--pn-vis:#3F84D6;--pn-vis-now:#6FA6E6;--pn-def:#D9721F;--pn-ok:#2FA661;--pn-pend:#5E5C58;--pn-bad:#E5534B;--pn-warn:#E0A33A;--pn-track:#2C2A28}
+#ini-panel{order:6;position:relative;container:pn/inline-size}
+.ini-body>#ini-panel{grid-column:1/-1}
+.pn-ctr{font-size:calc(13px*var(--fz,1));color:var(--muted);text-align:right;overflow-wrap:anywhere}
+.pn-grid{display:grid;gap:10px}
+@container pn (min-width:560px){.pn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pn-tar{grid-column:1/-1}}
+@container pn (min-width:960px){.pn-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.pn-vis,.pn-def,.pn-plan{grid-column:span 2}.pn-rev,.pn-tar{grid-column:span 3}}
+.pn-w{margin:0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px;align-content:start;min-width:0}
+.pn-w figcaption{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;align-items:baseline}
+.pn-w figcaption b{font:700 calc(15px*var(--fz,1))/1.25 var(--f-display);color:var(--ink)}
+.pn-w figcaption span{grid-column:1;font-size:calc(13px*var(--fz,1));color:var(--muted)}
+.pn-ir{grid-column:2;grid-row:1/span 2;align-self:center;border:0;background:none;color:var(--brand-text);font:600 calc(13.5px*var(--fz,1)) var(--f-body);cursor:pointer;padding:8px 4px;min-height:36px}
+.pn-vac{margin:0;font-size:calc(14px*var(--fz,1));color:var(--muted);display:flex;gap:6px;align-items:center}
+.pn-vac svg{width:18px;height:18px;color:var(--pn-ok);flex:none}
+/* visitas por mes: columnas finas, una escala, valor escrito solo en el mes actual */
+.pn-cols{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:2px;align-items:end;height:118px;border-bottom:1px solid var(--line)}
+.pn-c{appearance:none;border:0;background:none;padding:0;height:100%;display:grid;grid-template-rows:15px minmax(0,1fr) auto;justify-items:center;align-items:end;cursor:default;min-width:0;color:var(--muted)}
+.pn-c i{grid-row:2;display:block;width:min(70%,16px);background:var(--pn-vis);border-radius:4px 4px 0 0;align-self:end}
+.pn-c.now i{background:var(--pn-vis-now)}
+.pn-c.fut i{height:0!important}
+.pn-c em{grid-row:1;font:700 calc(12px*var(--fz,1))/1 var(--f-display);font-style:normal;color:var(--ink);margin-bottom:3px}
+.pn-c span{grid-row:3;font:600 calc(11px*var(--fz,1))/1 var(--f-mono);padding:5px 0 3px}
+.pn-c.now span{color:var(--ink)}
+.pn-c.fut span{opacity:.55}
+.pn-c:focus-visible,.pn-r:focus-visible,.pn-stack i:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+/* deficiencias por bloque: barras horizontales de un solo color */
+.pn-rows{display:grid;gap:4px}
+.pn-r{appearance:none;border:0;background:none;padding:3px 0;display:grid;grid-template-columns:minmax(70px,34%) minmax(0,1fr) 30px;gap:8px;align-items:center;text-align:left;color:var(--ink);font:inherit;cursor:default;min-height:30px}
+.pn-rl{font-size:calc(13.5px*var(--fz,1));overflow-wrap:anywhere}
+.pn-rb{height:14px;display:block;border-radius:0 4px 4px 0;background:none}
+.pn-rb i{display:block;height:100%;background:var(--pn-def);border-radius:0 4px 4px 0}
+.pn-rv{font:700 calc(13px*var(--fz,1))/1 var(--f-display);text-align:right}
+/* planificación: una barra apilada con hueco de 2px entre tramos, leyenda con icono, texto y número */
+.pn-stack{display:flex;gap:2px;height:18px;border-radius:4px;overflow:hidden;background:var(--surface)}
+.pn-stack i{display:block;min-width:4px}
+.pn-stack .st-ok{background:var(--pn-ok)}.pn-stack .st-pend{background:var(--pn-pend)}.pn-stack .st-bad{background:var(--pn-bad)}
+.pn-leg{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px}
+.pn-leg li{display:flex;align-items:center;gap:5px;font-size:calc(13.5px*var(--fz,1));color:var(--ink)}
+.pn-leg li svg{width:16px;height:16px;flex:none}
+.pn-leg .st-ok svg{color:var(--pn-ok)}.pn-leg .st-pend svg{color:var(--muted)}.pn-leg .st-bad svg{color:var(--pn-bad)}
+.pn-leg b{font:700 calc(13px*var(--fz,1)) var(--f-display)}
+/* revisiones: tres casillas de estado con icono, número y texto */
+.pn-tiles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pn-tiles li{display:grid;justify-items:start;gap:2px;padding:9px 10px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.pn-tiles svg{width:18px;height:18px}
+.pn-tiles b{font:700 calc(22px*var(--fz,1))/1.1 var(--f-display);color:var(--ink)}
+.pn-tiles span{font-size:calc(12.5px*var(--fz,1));color:var(--muted);line-height:1.2}
+.pn-tiles .st-ok svg{color:var(--pn-ok)}.pn-tiles .st-warn svg{color:var(--pn-warn)}.pn-tiles .st-bad svg{color:var(--pn-bad)}
+/* tareas del mes: barra de progreso */
+.pn-prog{height:12px;border-radius:99px;background:var(--pn-track);overflow:hidden}
+.pn-prog i{display:block;height:100%;background:var(--pn-ok);border-radius:99px}
+.pn-pt{margin:0;font-size:calc(14px*var(--fz,1));color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+.pn-pt .pn-bad{margin-left:10px}
+.pn-pt b{color:var(--ink);font:700 calc(15px*var(--fz,1)) var(--f-display)}
+.pn-bad{display:inline-flex;align-items:center;gap:4px;color:var(--bad);font-weight:600}
+.pn-bad svg{width:15px;height:15px}
+/* tabla y aviso flotante */
+.pn-tabla{font-size:calc(14px*var(--fz,1))}
+.pn-tabla summary{cursor:pointer;color:var(--brand-text);font-weight:600;padding:6px 0;min-height:32px}
+.pn-tabla table{width:100%;border-collapse:collapse;margin:6px 0 10px}
+.pn-tabla caption{text-align:left;font-weight:700;padding:4px 0}
+.pn-tabla th,.pn-tabla td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;font-weight:400}
+.pn-tabla td{text-align:right;font-variant-numeric:tabular-nums}
+.pn-tip{position:absolute;z-index:5;max-width:240px;padding:6px 9px;border-radius:8px;background:var(--ink);color:var(--surface);font-size:calc(13px*var(--fz,1));line-height:1.3;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.pn-tip[hidden]{display:none}
+/*PANEL-CSS-END*/
 /*ASP-CSS-START*/
 /* Aspecto (1.23.0): tamaño de la letra */
 :root{--fz:1}
@@ -1929,7 +2000,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.24.0 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.25.0 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -4273,8 +4344,12 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.24.0';
+const APP_VER = '1.25.0';
 const NOVEDADES = [
+  {v:'1.25.0', fecha:'10/11/2026', items:[
+    '<b>Panel con gráficos en Inicio</b>: visitas de cada mes del año, en qué bloques aparecen las deficiencias, cómo va la planificación preventiva, las revisiones (al día, vencen pronto, vencidas) y las tareas del mes.',
+    'Toca una barra para ver su número exacto, o abre «Ver los datos en tabla». Sigue al contrato activo.'
+  ]},
   {v:'1.24.0', fecha:'10/11/2026', items:[
     '<b>Tareas del técnico de PRL</b>: en Consulta y en Inicio, lo que hay que hacer cada mes, cada trimestre y cada año (revisiones, WINSIE, índices, gastos, consumos y residuos, comités, simulacros, formación…), en cada contrato y cuando pasa algo.',
     '<b>Al calendario de un toque</b>: «Añadir las que faltan» mete todas las de fecha fija (último día de mes, día 5, mitad de mes, el mes siguiente al trimestre…) y te salen en Inicio cuando tocan.',
@@ -4560,6 +4635,10 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
+
+
+
 
 
 
@@ -5454,6 +5533,7 @@ function renderHome() {
       ${defHtml(c)}
     </section>
     </div>
+    ${window.PANEL_API ? PANEL_API.html(c) : ''}
     <h2 class="ini-sec">Apartados</h2>
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
@@ -7150,6 +7230,11 @@ window.REV_API = {
   resumen: () => resumen(true),
   /* para «Hoy y vencidas» del Inicio */
   pendientes: () => REVS.map(r => ({r, e:estado(r)})).filter(x => x.e.k === 'bad' || x.e.k === 'warn').map(({r, e}) => ({id:r.id, t:r.nombre || '', ident:r.ident || '', ctr:r.ctr || null, k:e.k, v:e.v, n:e.n})),
+  /* panel de Inicio (1.25.0): las del contrato (y las sin contrato) por estado */
+  resumenDe(ctrId) {
+    const e = REVS.filter(r => !ctrId || !(r.ctr && r.ctr.id) || r.ctr.id === ctrId).map(r => estado(r).k);
+    return {n:e.length, ok:e.filter(k => k === 'ok').length, soon:e.filter(k => k === 'soon').length, warn:e.filter(k => k === 'warn').length, bad:e.filter(k => k === 'bad').length, none:e.filter(k => k === 'none').length};
+  },
   /* anillo del Inicio: las del contrato (y las sin contrato) que no están vencidas */
   alDia(ctrId) {
     const l = REVS.filter(r => !ctrId || !(r.ctr && r.ctr.id) || r.ctr.id === ctrId).map(r => estado(r).k).filter(k => k !== 'none');
@@ -10716,6 +10801,146 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 /*TAR-JS-END*/
+/*PANEL-JS-START*/
+/* ================= Panel con gráficos en Inicio (1.25.0) =================
+   Cinco piezas, del contrato activo (o de todos si no hay): visitas de cada mes del año, en qué bloque aparecen
+   las deficiencias (últimos 12 meses), estado de la planificación preventiva, revisiones de instalaciones y tareas
+   del mes. Todo sale de lo que ya hay en la app (HIST, PLAN_API, REV_API, CAL_API): no guarda nada.
+   Barras finas con el extremo redondeado, una sola escala por gráfico, el valor del mes actual escrito y el resto
+   al pasar o tocar (aviso flotante); los estados llevan icono y texto, nunca solo color; y «Ver los datos en tabla». */
+(() => {
+const MES1 = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+const MESL = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const IOK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const IWARN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v6"/><path d="M12 17v.01"/><circle cx="12" cy="12" r="9"/></svg>';
+const IBAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"/></svg>';
+const IPEND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg>';
+const plural = (n, a, b) => `${n} ${n === 1 ? a : b}`;
+const delCtr = (r, c) => !c || !!(r.contrato && r.contrato.id === c.id);
+const regs = c => (typeof HIST !== 'undefined' && Array.isArray(HIST) ? HIST : []).filter(r => delCtr(r, c));
+const fechaDe = r => String((r.rp && r.rp.fecha) || '');
+
+/* ---------- datos ---------- */
+function visitasAnio(c) {
+  const y = new Date().getFullYear(), m0 = new Date().getMonth(), n = Array(12).fill(0);
+  regs(c).forEach(r => { const f = fechaDe(r); if (f.slice(0, 4) === String(y)) { const m = +f.slice(5, 7) - 1; if (m >= 0 && m < 12) n[m]++; } });
+  return {y, m0, n, total:n.reduce((a, b) => a + b, 0)};
+}
+const BLOQUE = id => { const s = STEPS.find(x => x.id === id); return s ? s.l : 'Obra / tajo'; };
+function defBloques(c) {
+  const d = new Date(), desde = isoDate(new Date(d.getFullYear(), d.getMonth() - 11, 1)), cnt = new Map();
+  let vis = 0;
+  regs(c).forEach(r => {
+    if (fechaDe(r) < desde) return; vis++;
+    Object.entries(r.resp || {}).forEach(([id, x]) => { const it = ITEM[id]; if (it && x && x.v && isBad(it, x.v)) { const b = BLOQUE(it.home); cnt.set(b, (cnt.get(b) || 0) + 1); } });
+  });
+  const l = [...cnt.entries()].map(([b, n]) => ({b, n})).sort((a, b) => b.n - a.n);
+  return {l, total:l.reduce((a, x) => a + x.n, 0), vis};
+}
+const plan = () => window.PLAN_API && PLAN_API.resumenActivo ? PLAN_API.resumenActivo() : null;
+const revs = c => window.REV_API && REV_API.resumenDe ? REV_API.resumenDe(c && c.id) : null;
+const tareas = () => window.CAL_API ? CAL_API.resumen() : null;
+
+/* ---------- piezas ---------- */
+function figVisitas(V) {
+  const max = Math.max(1, ...V.n);
+  const cols = V.n.map((v, i) => {
+    const fut = i > V.m0, now = i === V.m0, h = v ? Math.max(6, Math.round(100 * v / max)) : 0;
+    const tip = `${MESL[i][0].toUpperCase() + MESL[i].slice(1)}: ${fut ? 'aún no ha llegado' : plural(v, 'visita', 'visitas')}`;
+    return `<button type="button" class="pn-c${now ? ' now' : ''}${fut ? ' fut' : ''}" data-tip="${esc(tip)}" aria-label="${esc(tip)}">
+      ${now && v ? `<em>${v}</em>` : ''}<i style="height:${h}%"></i><span>${MES1[i]}</span></button>`;
+  }).join('');
+  return `<figure class="pn-w pn-vis">
+    <figcaption><b>Visitas en ${V.y}</b><span>${plural(V.total, 'visita', 'visitas')} · este mes ${V.n[V.m0]}</span><button type="button" class="pn-ir" data-ini="hist">Historial ›</button></figcaption>
+    ${V.total ? `<div class="pn-cols">${cols}</div>` : '<p class="pn-vac">Aún no hay visitas guardadas este año. Cada visita que guardes sumará aquí, mes a mes.</p>'}
+  </figure>`;
+}
+function figDef(D) {
+  const max = Math.max(1, ...D.l.map(x => x.n));
+  const cuerpo = !D.vis ? '<p class="pn-vac">Cuando guardes visitas verás en qué bloques aparecen las deficiencias.</p>'
+    : !D.l.length ? `<p class="pn-vac">${IOK}Ninguna deficiencia en las ${plural(D.vis, 'visita', 'visitas')} de los últimos 12 meses.</p>`
+    : `<div class="pn-rows">${D.l.slice(0, 7).map(x => {
+        const tip = `${x.b}: ${plural(x.n, 'deficiencia', 'deficiencias')} (${Math.round(100 * x.n / D.total)} %)`;
+        return `<button type="button" class="pn-r" data-tip="${esc(tip)}" aria-label="${esc(tip)}"><span class="pn-rl">${esc(x.b)}</span><span class="pn-rb"><i style="width:${Math.max(3, Math.round(100 * x.n / max))}%"></i></span><span class="pn-rv">${x.n}</span></button>`;
+      }).join('')}</div>`;
+  return `<figure class="pn-w pn-def">
+    <figcaption><b>Dónde aparecen las deficiencias</b><span>Últimos 12 meses${D.total ? ' · ' + plural(D.total, 'deficiencia', 'deficiencias') : ''}</span></figcaption>
+    ${cuerpo}
+  </figure>`;
+}
+function figPlan(Pl) {
+  const segs = Pl && Pl.n ? [['ok', 'Aplicadas', Pl.ok, IOK], ['pend', 'En plazo', Pl.pend, IPEND], ['bad', 'Fuera de plazo', Pl.bad, IBAD]] : [];
+  const tot = segs.reduce((a, s) => a + s[2], 0);
+  const cuerpo = !tot ? '<p class="pn-vac">Sin medidas en la planificación de este año.</p>'
+    : `<div class="pn-stack" role="img" aria-label="${esc(segs.map(s => `${s[1]}: ${s[2]}`).join(', '))}">${segs.filter(s => s[2]).map(s => `<i class="st-${s[0]}" style="flex:${s[2]} 1 0" data-tip="${esc(`${s[1]}: ${plural(s[2], 'medida', 'medidas')} (${Math.round(100 * s[2] / tot)} %)`)}" tabindex="0"></i>`).join('')}</div>
+      <ul class="pn-leg">${segs.map(s => `<li class="st-${s[0]}">${s[3]}<span>${s[1]}</span><b>${s[2]}</b></li>`).join('')}</ul>`;
+  return `<figure class="pn-w pn-plan">
+    <figcaption><b>Planificación preventiva${Pl && Pl.anio ? ' ' + Pl.anio : ''}</b><span>${tot ? Math.round(100 * Pl.ok / tot) + ' % aplicadas · ' + plural(tot, 'medida', 'medidas') : 'Sin planificación'}</span><button type="button" class="pn-ir" data-ini="plan">Abrir ›</button></figcaption>
+    ${cuerpo}
+  </figure>`;
+}
+function figRev(Rv) {
+  const al = Rv ? Rv.ok + Rv.soon : 0;
+  const cuerpo = !Rv || !Rv.n ? '<p class="pn-vac">Sin revisiones dadas de alta.</p>'
+    : `<ul class="pn-tiles">
+        <li class="st-ok">${IOK}<b>${al}</b><span>Al día</span></li>
+        <li class="st-warn">${IWARN}<b>${Rv.warn}</b><span>Vencen pronto</span></li>
+        <li class="st-bad">${IBAD}<b>${Rv.bad}</b><span>Vencidas</span></li>
+      </ul>`;
+  return `<figure class="pn-w pn-rev">
+    <figcaption><b>Revisiones de instalaciones</b><span>${Rv && Rv.n ? plural(Rv.n, 'revisión', 'revisiones') + (Rv.none ? ` · ${Rv.none} sin fecha` : '') : ''}</span><button type="button" class="pn-ir" data-ini="rev">Abrir ›</button></figcaption>
+    ${cuerpo}
+  </figure>`;
+}
+function figTar(T) {
+  const mes = MESL[new Date().getMonth()];
+  const p = T && T.mes ? Math.round(100 * T.hechasMes / T.mes) : 0;
+  const cuerpo = !T || !T.mes ? '<p class="pn-vac">Sin tareas en el calendario este mes. Añádelas desde Consulta › Tareas.</p>'
+    : `<div class="pn-prog" role="progressbar" aria-valuemin="0" aria-valuemax="${T.mes}" aria-valuenow="${T.hechasMes}" aria-label="Tareas de ${mes}: ${T.hechasMes} de ${T.mes} hechas"><i style="width:${p}%"></i></div>
+      <p class="pn-pt"><b>${p} %</b> hechas${T.venc ? `<span class="pn-bad">${IBAD}${plural(T.venc, 'vencida', 'vencidas')}</span>` : ''}</p>`;
+  return `<figure class="pn-w pn-tar">
+    <figcaption><b>Tareas de ${mes}</b><span>${T && T.mes ? `${T.hechasMes} de ${T.mes} hechas` : ''}</span><button type="button" class="pn-ir" data-ini="cal">Calendario ›</button></figcaption>
+    ${cuerpo}
+  </figure>`;
+}
+function tabla(V, D, Pl, Rv, T) {
+  const f = (a, b) => `<tr><th scope="row">${esc(a)}</th><td>${esc(String(b))}</td></tr>`;
+  return `<details class="pn-tabla"><summary>Ver los datos en tabla</summary>
+    <table><caption>Visitas en ${V.y}</caption><tbody>${V.n.map((v, i) => i <= V.m0 ? f(MESL[i][0].toUpperCase() + MESL[i].slice(1), v) : '').join('')}</tbody></table>
+    ${D.l.length ? `<table><caption>Deficiencias por bloque (últimos 12 meses)</caption><tbody>${D.l.map(x => f(x.b, x.n)).join('')}</tbody></table>` : ''}
+    ${Pl && Pl.n ? `<table><caption>Planificación preventiva</caption><tbody>${f('Aplicadas', Pl.ok)}${f('En plazo', Pl.pend)}${f('Fuera de plazo', Pl.bad)}</tbody></table>` : ''}
+    ${Rv && Rv.n ? `<table><caption>Revisiones</caption><tbody>${f('Al día', Rv.ok + Rv.soon)}${f('Vencen pronto', Rv.warn)}${f('Vencidas', Rv.bad)}${Rv.none ? f('Sin fecha', Rv.none) : ''}</tbody></table>` : ''}
+    ${T && T.mes ? `<table><caption>Tareas del mes</caption><tbody>${f('Hechas', T.hechasMes)}${f('Total', T.mes)}${f('Vencidas (todas)', T.venc)}</tbody></table>` : ''}
+  </details>`;
+}
+function html(c) {
+  const V = visitasAnio(c), D = defBloques(c), Pl = plan(), Rv = revs(c), T = tareas();
+  return `<section class="ini-card ini-panel" id="ini-panel" aria-labelledby="pn-h">
+    <div class="ini-ch"><h2 id="pn-h">Panel</h2><span class="pn-ctr">${c ? esc(c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : 'Todos los contratos'}</span></div>
+    <div class="pn-grid">${figVisitas(V)}${figDef(D)}${figPlan(Pl)}${figRev(Rv)}${figTar(T)}</div>
+    ${tabla(V, D, Pl, Rv, T)}
+    <div class="pn-tip" id="pn-tip" role="tooltip" hidden></div>
+  </section>`;
+}
+
+/* ---------- aviso flotante al pasar o tocar ---------- */
+function muestra(el) {
+  const p = $('#ini-panel'), t = $('#pn-tip'); if (!p || !t || !el) return;
+  t.textContent = el.dataset.tip; t.hidden = false;
+  const rp = p.getBoundingClientRect(), re = el.getBoundingClientRect();
+  const w = t.offsetWidth, x = Math.max(8, Math.min(rp.width - w - 8, re.left - rp.left + re.width / 2 - w / 2));
+  t.style.left = x + 'px'; t.style.top = Math.max(4, re.top - rp.top - t.offsetHeight - 8) + 'px';
+}
+const oculta = () => { const t = $('#pn-tip'); if (t) t.hidden = true; };
+document.addEventListener('pointerover', e => { const el = e.target.closest && e.target.closest('#ini-panel [data-tip]'); if (el) muestra(el); else if (e.target.closest && !e.target.closest('#ini-panel')) oculta(); });
+document.addEventListener('focusin', e => { const el = e.target.closest && e.target.closest('#ini-panel [data-tip]'); if (el) muestra(el); else oculta(); });
+document.addEventListener('click', e => { const el = e.target.closest && e.target.closest('#ini-panel [data-tip]'); if (el) muestra(el); else if (!e.target.closest || !e.target.closest('#ini-panel')) oculta(); });
+addEventListener('scroll', oculta, {passive:true});
+
+window.PANEL_API = {html, datos:c => ({visitas:visitasAnio(c), def:defBloques(c), plan:plan(), rev:revs(c), tareas:tareas()})};
+})();
+
+/*PANEL-JS-END*/
 /*ASP-JS-START*/
 /* ================= Aspecto: tema y tamaño de la letra (1.23.0) =================
    Perfil › Aspecto. El tema se guarda en «tema» (auto | light | dark) y pone data-theme en <html>: todo el CSS de la app ya
