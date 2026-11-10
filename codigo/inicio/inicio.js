@@ -11,6 +11,7 @@ const IC = {
   hoy: SVG('<path d="M6.5 9a5.5 5.5 0 0 1 11 0c0 5.5 2.5 7 2.5 7H4s2.5-1.5 2.5-7"/><path d="M10 19.5a2 2 0 0 0 4 0"/>'),
   cal: SVG('<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h.01M8 17.2h2M12 17.2h2"/>'),
   rev: SVG('<path d="M14.7 6.3a4 4 0 0 0-5 5L3.5 17.5l3 3 6.2-6.2a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z"/>'),
+  tar: SVG('<path d="M10 6.5h10M10 12h10M10 17.5h10"/><path d="M3.8 6.5l1.4 1.4 2.6-2.6M3.8 12l1.4 1.4 2.6-2.6M3.8 17.5l1.4 1.4 2.6-2.6"/>'),
   norma: SVG('<path d="M5 4.5h10.5L19 8v11.5H5z"/><path d="M8.5 9.5h7M8.5 13h7M8.5 16.5h4"/>'),
   mas: SVG('<path d="M12 5v14M5 12h14"/>'),
   sig: SVG('<path d="m9 6 6 6-6 6"/>'),
@@ -234,6 +235,7 @@ function renderHome() {
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
       ${modulo({act:'cal', c:'cal', ic:IC.cal, t:'Calendario', s:calSub(), n:rc && rc.venc})}
+      ${modulo({act:'tar', c:'tar', ic:IC.tar, t:'Tareas del técnico', s:window.TAREAS_API ? TAREAS_API.subtitulo() : 'Mes, trimestre y año'})}
       ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe cuatrimestral', s:plural(ins.length, 'informe', 'informes')})}
       ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación preventiva', s:planSub(), n:rp && rp.bad})}
       ${modulo({act:'evrl', c:'evrl', ic:IC.evrl, t:'Evaluación de riesgos laborales', s:evrlSub()})}
@@ -440,6 +442,7 @@ async function onClick(e) {
   if (a === 'cal') { if (window.CAL_API) CAL_API.abrir(); return; }
   if (a === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
   if (a === 'norma') { if (window.NORMA_API) NORMA_API.abrir(); return; }
+  if (a === 'tar') { if (window.TAREAS_API) TAREAS_API.abrir(); return; }
   if (a === 'pss') { if (window.PSS_API) PSS_API.abrir(); return; }
   if (a === 'pssc') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null}); } return; }
   if (a === 'pssq') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null, buscar:true}); } return; }
@@ -475,7 +478,7 @@ function onInput(e) {
 }
 
 /* ---------- barra de abajo por grupos y subpestañas arriba ---------- */
-const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', evrl:'doc', sen:'con', norma:'con', pss:'con', seg:'pf'};
+const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', evrl:'doc', sen:'con', norma:'con', pss:'con', tar:'con', seg:'pf'};
 let tabAct = 'ini';
 function navSync(t) {
   if (t) tabAct = t;
@@ -508,6 +511,7 @@ function montarNav() {
   mover('tab-sen', 'con');
   nueva('tab-norma', 'con', IC.norma, 'Normativa').addEventListener('click', () => { if (window.NORMA_API) NORMA_API.abrir(); });
   nueva('tab-pss', 'con', IC.pss, 'PSS/DGP').addEventListener('click', () => { if (window.PSS_API) PSS_API.abrir(); });
+  nueva('tab-tar', 'con', IC.tar, 'Tareas').addEventListener('click', () => { if (window.TAREAS_API) TAREAS_API.abrir(); });
   const tin = $('.top-in'), steps = $('#steps'); tin.insertBefore(sub, steps);
   /* barra de abajo: 5 secciones */
   const ti = $('#tab-ini'); ti.dataset.grp = 'ini';

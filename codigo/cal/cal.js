@@ -305,6 +305,26 @@ window.CAL_API = {
     return ocurr(ym + '-01', ym + '-31', true).filter(o => o.t.k === 'vis' && /visita/i.test(o.t.t || '') && (!ctrId || !(o.t.ctr && o.t.ctr.id) || o.t.ctr.id === ctrId)).length;
   },
   editar(id, d) { showTab('cal'); if (TAREAS.some(x => x.id === id)) abrirForm(id, d); },
+  /* 1.24.0 · desde «Tareas del técnico»: el formulario de nueva tarea ya relleno (el técnico revisa y guarda) */
+  nueva(pre) {
+    ED = null; showTab('cal'); abrirForm(null, pre.f);
+    Object.assign(ED, {t:pre.t || '', k:pre.k || '', rep:pre.rep || '', notas:pre.notas || '', ctr:'ctr' in pre ? (pre.ctr || null) : null});
+    if (pre.guia) ED.guia = pre.guia;
+    renderForm(); vista('form');
+  },
+  /* y varias de golpe; las que se repiten cuentan desde hoy (no salen vencidas las de antes) */
+  async agregar(arr) {
+    let n = 0;
+    for (const x of arr || []) {
+      if (!x || !x.t || !/^\d{4}-\d{2}-\d{2}$/.test(x.f || '')) continue;
+      const t = {id:nid(), t:x.t, k:x.k || 'otr', ctr:x.ctr || null, f:x.f, rep:x.rep || '', hasta:'', notas:x.notas || '', hechas:x.hechas || {}, creado:Date.now()};
+      if (x.guia) t.guia = x.guia;
+      if (t.rep) t.desde = hoy();
+      await guardar(t); n++;
+    }
+    if (n && !ED) renderMain();
+    return n;
+  },
   async importar(arr) {
     const act = new Map(TAREAS.map(x => [x.id, x])); let n = 0;
     for (const x of arr) { if (x && x.id && x.t && x.f && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await cdb.put(x); n++; } }

@@ -1,5 +1,5 @@
 # Inyecta «Aspecto: tema y tamaño de la letra» (1.23.0) en index.html. Se puede repetir.
-# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, sync, aspecto y, siempre el último, seg (pone la CSP).
+# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, sync, tareas, aspecto y, siempre el último, seg (pone la CSP).
 # Va casi al final porque pasa los tamaños de letra de TODO el CSS de la página a calc(Npx*var(--fz,1)):
 # si después se vuelve a inyectar otro módulo, hay que volver a pasar este (es idempotente).
 import re

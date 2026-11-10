@@ -1,0 +1,39 @@
+/* Tareas del técnico de PRL (1.24.0) */
+.tar-res .bb{display:grid;gap:10px}
+.tar-rn{margin:0;font-size:15px;line-height:1.45}
+.tar-res .btn.primary{justify-self:start}
+.tar-filtros{margin:4px 0 2px}
+.tar-gs{margin:0 0 10px}
+.tar-l{display:grid;gap:8px}
+.tar-it{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tar-tx{display:grid;gap:3px;min-width:0}
+.tar-tx b{font-size:16px;line-height:1.3}
+.tar-tx span{font-size:14px;line-height:1.4;color:var(--muted)}
+.tar-tx .tar-cu{color:var(--brand-text);font-weight:600}
+.tar-tx .tar-nota{color:var(--ink);background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:8px;padding:6px 9px;margin-top:3px}
+.tar-acc{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
+.tar-add{min-height:40px;padding:0 12px;font-size:14px;white-space:nowrap}
+.tar-est{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:600 13px/1.25 var(--f-body);cursor:pointer;text-align:left}
+.tar-est svg{width:15px;height:15px;flex:none}
+.tar-est.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.tar-est.par{background:var(--surface-2);color:var(--muted);font-weight:500}
+.tar-ir{font-size:14px}
+.tar-ctrs{display:grid;gap:6px;width:100%}
+.tar-ctr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--surface-2)}
+.tar-cn{font-weight:600;font-size:14px;min-width:0;overflow-wrap:anywhere}
+.tar-st{grid-column:1;font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:5px}
+.tar-st svg{width:14px;height:14px}
+.tar-st.ok{color:var(--ok);font-weight:600}.tar-st.warn{color:var(--brand-text);font-weight:600}.tar-st.bad{color:var(--bad);font-weight:600}
+.tar-cb{grid-column:2;grid-row:1/span 2;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.tar-mini{min-height:38px;padding:0 10px;font-size:13.5px}
+.tar-ul{margin:6px 0;padding-left:20px;display:grid;gap:3px;font-size:14px;max-height:45vh;overflow:auto}
+.tar-it:has(.tar-ctrs){grid-template-columns:1fr}
+.tar-it:has(.tar-ctrs) .tar-acc{justify-content:stretch}
+@media (max-width:520px){
+  .tar-it{grid-template-columns:1fr}
+  .tar-acc{justify-content:flex-start}
+  .tar-ctr{grid-template-columns:1fr}
+  .tar-cb{grid-column:1;grid-row:auto;justify-content:flex-start}
+  .tar-cb:empty{display:none}
+}
+.ini-mi.m-tar{background:var(--brand-soft);color:var(--brand-text)}

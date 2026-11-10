@@ -157,7 +157,7 @@ const escribiendo = el => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SEL
 const hayDialogo = () => [...document.querySelectorAll('[role="dialog"],[aria-modal="true"]')].some(d => !d.hidden && d.getClientRects().length);
 
 /* ---------- pestañas con el nombre completo (en el móvil, el corto) ---------- */
-const LARGOS = {'tab-form':'Registro de visita', 'tab-hist':'Historial de visitas', 'tab-inf':'Informe cuatrimestral', 'tab-plan':'Planificación preventiva', 'tab-evrl':'Evaluación de riesgos laborales', 'tab-sen':'Señalización (manual de obras fijas)', 'tab-norma':'Normativa legal'};
+const LARGOS = {'tab-form':'Registro de visita', 'tab-hist':'Historial de visitas', 'tab-inf':'Informe cuatrimestral', 'tab-plan':'Planificación preventiva', 'tab-evrl':'Evaluación de riesgos laborales', 'tab-sen':'Señalización (manual de obras fijas)', 'tab-norma':'Normativa legal', 'tab-tar':'Tareas del técnico'};
 function nombres() {
   Object.entries(LARGOS).forEach(([id, l]) => {
     const b = document.getElementById(id); if (!b || b.dataset.escL) return;
@@ -256,6 +256,7 @@ function apartados() {
     A('ap', 'Revisiones de instalaciones', 'Equipos y certificados', () => iniAccion('rev')),
     A('ap', 'Señalización (manual de obras fijas)', 'Consulta · Norma 8.3-IC', () => iniAccion('sen')),
     A('ap', 'Normativa legal', 'Consulta · fichas y enlace al BOE', () => iniAccion('norma'), 'leyes reales decretos'),
+    A('ap', 'Tareas del técnico', 'Consulta · cada mes, trimestre y año', () => iniAccion('tar'), 'tareas mensuales trimestrales anuales winsie indices revisiones'),
     A('ap', 'PSS/DGP', 'Consulta · carpeta del plan de seguridad', () => iniAccion('pss'), 'plan de seguridad y salud documento de gestion preventiva'),
     A('ap', 'Mi perfil', 'Datos y contratos', () => { const b = $('#nav-pf'); if (b) b.click(); }, 'contratos nombre cargo'),
     window.SEG_API ? A('ap', 'Privacidad y seguridad', 'Bloqueo, copias cifradas, código de verificación', () => SEG_API.ver(), 'contraseña') : null,
@@ -293,6 +294,7 @@ function resultados(q) {
     return A('vis', rp.ubicacion || 'Sin ubicación', [r.codigo, fmtDate(rp.fecha), r.contrato && r.contrato.id ? nombreContrato(r.contrato) : '', n ? plural(n, 'incidencia', 'incidencias') : 'sin incidencias'].filter(Boolean).join(' · '), () => verRegistro(r.id), [rp.nombre, rp.actividad, rp.fecha].join(' '));
   }), 5)});
   G.push({g:'Preguntas de la visita', l:top(ITEMS.map(it => A('preg', it.q, 'Ir a la pregunta en el registro', () => irPregunta(it.id))), 5)});
+  if (window.TAREAS_API) G.push({g:'Tareas del técnico', l:top(TAREAS_API.lista().map(x => A('tar', x.t, x.cuando, () => TAREAS_API.abrir(x.k), [x.det, x.g].join(' '))), 5)});
   if (window.NORMA_API) G.push({g:'Normativa legal', l:top(NORMA_API.lista().map(x => A('norma', x.c + ' · ' + x.n, x.f || '', () => NORMA_API.abrir(x.id), Object.entries(x).filter(([k, v]) => k !== 'u' && typeof v === 'string').map(([, v]) => v).join(' '))), 5)});
   G.push({g:'Señalización', l:top(SEN.map(e => A('sen', senTitle(e) + ' · ' + e.zona, SEN_G[e.g], () => { showTab('sen'); senFrom = null; senOpenOne(e.p); }, [e.ej, e.fig, e.n].join(' '))), 5)});
   if (window.REV_API) G.push({g:'Revisiones de instalaciones', l:top(REV_API.lista().map(r => A('rev', r.nombre || 'Revisión', [r.ident, r.ctr && r.ctr.nombre].filter(Boolean).join(' · '), () => REV_API.editar(r.id), r.ident || '')), 4)});
@@ -304,7 +306,7 @@ function resultados(q) {
   }
   return G.filter(x => x.l.length);
 }
-const ICG = {ap:'→', vis:'V', preg:'?', norma:'§', sen:'△', rev:'R', pss:'P'};
+const ICG = {ap:'→', vis:'V', preg:'?', norma:'§', sen:'△', rev:'R', pss:'P', tar:'T'};
 let PL = [], PS = 0;
 function pintaPaleta() {
   const q = $('#esc-kq').value, G = resultados(q);

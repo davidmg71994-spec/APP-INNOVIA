@@ -463,6 +463,16 @@ window.REV_API = {
     const l = REVS.filter(r => !ctrId || !(r.ctr && r.ctr.id) || r.ctr.id === ctrId).map(r => estado(r).k).filter(k => k !== 'none');
     return {n:l.length, ok:l.filter(k => k !== 'bad').length};
   },
+  /* 1.24.0 · desde «Tareas del técnico»: alta con el nombre, la periodicidad y las casillas del informe ya puestas */
+  nueva(o) {
+    if (ED && ED.tab) aparcar(); else if (ED) { ED = null; nuevosDocs = []; }
+    showTab('rev'); abrirForm();
+    ED.nombre = o.n || ''; ED.cada = o.cada || 12; ED.inf = [...(o.inf || [])]; ED.infTocado = true; ED.aviso = ED.cada >= 12 ? 30 : ED.cada >= 6 ? 15 : 7;
+    if (o.guia) ED.guia = o.guia;
+    renderForm(); vista('form');
+    toast('Pon la fecha de la última revisión y guarda.');
+    setTimeout(() => { const u = $('#rf-u'); if (u) u.focus(); }, 80);
+  },
   editar(id) {
     if (ED && ED.tab) aparcar(); else if (ED) { ED = null; nuevosDocs = []; }
     showTab('rev'); if (REVS.some(x => x.id === id)) abrirForm(id); else renderMain();
