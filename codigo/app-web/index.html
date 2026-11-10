@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-NJcilEY4QRLDGQkCtLs76EQ80hl6E3SRBVNyR0w21Dk='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-o3Kh71yVmR+PL2sipxOVSU+QM0EPwu8gwolyPaLBt7k='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1648,6 +1648,47 @@ body.sub-on.wiz-on .sy-aviso,#view-form:not([hidden])~.sy-aviso{bottom:calc(140p
 @keyframes syLatido{50%{opacity:.3}}
 @media print{.sy-aviso,.sy-pie{display:none!important}}
 /*SYNC-CSS-END*/
+/*TAR-CSS-START*/
+/* Tareas del técnico de PRL (1.24.0) */
+.tar-res .bb{display:grid;gap:10px}
+.tar-rn{margin:0;font-size:calc(15px*var(--fz,1));line-height:1.45}
+.tar-res .btn.primary{justify-self:start}
+.tar-filtros{margin:4px 0 2px}
+.tar-gs{margin:0 0 10px}
+.tar-l{display:grid;gap:8px}
+.tar-it{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tar-tx{display:grid;gap:3px;min-width:0}
+.tar-tx b{font-size:calc(16px*var(--fz,1));line-height:1.3}
+.tar-tx span{font-size:calc(14px*var(--fz,1));line-height:1.4;color:var(--muted)}
+.tar-tx .tar-cu{color:var(--brand-text);font-weight:600}
+.tar-tx .tar-nota{color:var(--ink);background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:8px;padding:6px 9px;margin-top:3px}
+.tar-acc{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
+.tar-add{min-height:40px;padding:0 12px;font-size:calc(14px*var(--fz,1));white-space:nowrap}
+.tar-est{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:600 calc(13px*var(--fz,1))/1.25 var(--f-body);cursor:pointer;text-align:left}
+.tar-est svg{width:15px;height:15px;flex:none}
+.tar-est.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.tar-est.par{background:var(--surface-2);color:var(--muted);font-weight:500}
+.tar-ir{font-size:calc(14px*var(--fz,1))}
+.tar-ctrs{display:grid;gap:6px;width:100%}
+.tar-ctr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--surface-2)}
+.tar-cn{font-weight:600;font-size:calc(14px*var(--fz,1));min-width:0;overflow-wrap:anywhere}
+.tar-st{grid-column:1;font-size:calc(13px*var(--fz,1));color:var(--muted);display:inline-flex;align-items:center;gap:5px}
+.tar-st svg{width:14px;height:14px}
+.tar-st.ok{color:var(--ok);font-weight:600}.tar-st.warn{color:var(--brand-text);font-weight:600}.tar-st.bad{color:var(--bad);font-weight:600}
+.tar-cb{grid-column:2;grid-row:1/span 2;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.tar-mini{min-height:38px;padding:0 10px;font-size:calc(13.5px*var(--fz,1))}
+.tar-ul{margin:6px 0;padding-left:20px;display:grid;gap:3px;font-size:calc(14px*var(--fz,1));max-height:45vh;overflow:auto}
+.tar-it:has(.tar-ctrs){grid-template-columns:1fr}
+.tar-it:has(.tar-ctrs) .tar-acc{justify-content:stretch}
+@media (max-width:520px){
+  .tar-it{grid-template-columns:1fr}
+  .tar-acc{justify-content:flex-start}
+  .tar-ctr{grid-template-columns:1fr}
+  .tar-cb{grid-column:1;grid-row:auto;justify-content:flex-start}
+  .tar-cb:empty{display:none}
+}
+.ini-mi.m-tar{background:var(--brand-soft);color:var(--brand-text)}
+/*TAR-CSS-END*/
 /*ASP-CSS-START*/
 /* Aspecto (1.23.0): tamaño de la letra */
 :root{--fz:1}
@@ -1889,7 +1930,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.23.0 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.24.0 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -3875,13 +3916,14 @@ function copiar() {
 
 /* ================= navigation ================= */
 function showTab(t) {
-  [['ini', '#view-ini', '#tab-ini'], ['form', '#view-form', '#tab-form'], ['hist', '#view-hist', '#tab-hist'], ['sen', '#view-sen', '#tab-sen'], ['inf', '#view-inf', '#tab-inf'], ['plan', '#view-plan', '#tab-plan'], ['cal', '#view-cal', '#tab-cal'], ['rev', '#view-rev', '#tab-rev'], ['norma', '#view-norma', '#tab-norma'], ['evrl', '#view-evrl', '#tab-evrl'], ['pss', '#view-pss', '#tab-pss'], ['seg', '#view-seg', '#tab-seg']].forEach(([k, v, b]) => { const ev = $(v), eb = $(b); if (ev) ev.hidden = t !== k; if (eb) eb.setAttribute('aria-selected', t === k); });
+  [['ini', '#view-ini', '#tab-ini'], ['form', '#view-form', '#tab-form'], ['hist', '#view-hist', '#tab-hist'], ['sen', '#view-sen', '#tab-sen'], ['inf', '#view-inf', '#tab-inf'], ['plan', '#view-plan', '#tab-plan'], ['cal', '#view-cal', '#tab-cal'], ['rev', '#view-rev', '#tab-rev'], ['norma', '#view-norma', '#tab-norma'], ['tar', '#view-tar', '#tab-tar'], ['evrl', '#view-evrl', '#tab-evrl'], ['pss', '#view-pss', '#tab-pss'], ['seg', '#view-seg', '#tab-seg']].forEach(([k, v, b]) => { const ev = $(v), eb = $(b); if (ev) ev.hidden = t !== k; if (eb) eb.setAttribute('aria-selected', t === k); });
   if (window.INF_API) INF_API.onTab(t);
   if (window.INI_API) INI_API.onTab(t);
   if (window.PLAN_API) PLAN_API.onTab(t);
   if (window.CAL_API) CAL_API.onTab(t);
   if (window.REV_API) REV_API.onTab(t);
   if (window.NORMA_API) NORMA_API.onTab(t);
+  if (window.TAREAS_API) TAREAS_API.onTab(t);
   if (window.EVRL_API) EVRL_API.onTab(t);
   if (window.PSS_API) PSS_API.onTab(t);
   if (window.ESC_API) ESC_API.onTab(t);
@@ -4215,8 +4257,13 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.23.0';
+const APP_VER = '1.24.0';
 const NOVEDADES = [
+  {v:'1.24.0', fecha:'10/11/2026', items:[
+    '<b>Tareas del técnico de PRL</b>: en Consulta y en Inicio, lo que hay que hacer cada mes, cada trimestre y cada año (revisiones, WINSIE, índices, gastos, consumos y residuos, comités, simulacros, formación…), en cada contrato y cuando pasa algo.',
+    '<b>Al calendario de un toque</b>: «Añadir las que faltan» mete todas las de fecha fija (último día de mes, día 5, mitad de mes, el mes siguiente al trimestre…) y te salen en Inicio cuando tocan.',
+    'Las revisiones anuales con certificado se dan de alta en Revisiones de instalaciones, y las de cada contrato (ergonomía, ruido y vibraciones, PVD, fichas de químicos) se marcan como hechas en cada uno.'
+  ]},
   {v:'1.23.0', fecha:'10/11/2026', items:[
     '<b>Tema claro, oscuro o automático</b>: en Perfil › Aspecto. Automático sigue al móvil u ordenador.',
     '<b>Tamaño de la letra</b>: pequeña, normal, grande o muy grande, en Perfil › Aspecto. Los PDF y los Word no cambian.'
@@ -4497,6 +4544,7 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
 
 
 
@@ -5170,6 +5218,7 @@ const IC = {
   hoy: SVG('<path d="M6.5 9a5.5 5.5 0 0 1 11 0c0 5.5 2.5 7 2.5 7H4s2.5-1.5 2.5-7"/><path d="M10 19.5a2 2 0 0 0 4 0"/>'),
   cal: SVG('<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h.01M8 17.2h2M12 17.2h2"/>'),
   rev: SVG('<path d="M14.7 6.3a4 4 0 0 0-5 5L3.5 17.5l3 3 6.2-6.2a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z"/>'),
+  tar: SVG('<path d="M10 6.5h10M10 12h10M10 17.5h10"/><path d="M3.8 6.5l1.4 1.4 2.6-2.6M3.8 12l1.4 1.4 2.6-2.6M3.8 17.5l1.4 1.4 2.6-2.6"/>'),
   norma: SVG('<path d="M5 4.5h10.5L19 8v11.5H5z"/><path d="M8.5 9.5h7M8.5 13h7M8.5 16.5h4"/>'),
   mas: SVG('<path d="M12 5v14M5 12h14"/>'),
   sig: SVG('<path d="m9 6 6 6-6 6"/>'),
@@ -5393,6 +5442,7 @@ function renderHome() {
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
       ${modulo({act:'cal', c:'cal', ic:IC.cal, t:'Calendario', s:calSub(), n:rc && rc.venc})}
+      ${modulo({act:'tar', c:'tar', ic:IC.tar, t:'Tareas del técnico', s:window.TAREAS_API ? TAREAS_API.subtitulo() : 'Mes, trimestre y año'})}
       ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe cuatrimestral', s:plural(ins.length, 'informe', 'informes')})}
       ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación preventiva', s:planSub(), n:rp && rp.bad})}
       ${modulo({act:'evrl', c:'evrl', ic:IC.evrl, t:'Evaluación de riesgos laborales', s:evrlSub()})}
@@ -5599,6 +5649,7 @@ async function onClick(e) {
   if (a === 'cal') { if (window.CAL_API) CAL_API.abrir(); return; }
   if (a === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
   if (a === 'norma') { if (window.NORMA_API) NORMA_API.abrir(); return; }
+  if (a === 'tar') { if (window.TAREAS_API) TAREAS_API.abrir(); return; }
   if (a === 'pss') { if (window.PSS_API) PSS_API.abrir(); return; }
   if (a === 'pssc') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null}); } return; }
   if (a === 'pssq') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null, buscar:true}); } return; }
@@ -5634,7 +5685,7 @@ function onInput(e) {
 }
 
 /* ---------- barra de abajo por grupos y subpestañas arriba ---------- */
-const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', evrl:'doc', sen:'con', norma:'con', pss:'con', seg:'pf'};
+const GRUPO = {form:'vis', hist:'vis', inf:'doc', plan:'doc', evrl:'doc', sen:'con', norma:'con', pss:'con', tar:'con', seg:'pf'};
 let tabAct = 'ini';
 function navSync(t) {
   if (t) tabAct = t;
@@ -5667,6 +5718,7 @@ function montarNav() {
   mover('tab-sen', 'con');
   nueva('tab-norma', 'con', IC.norma, 'Normativa').addEventListener('click', () => { if (window.NORMA_API) NORMA_API.abrir(); });
   nueva('tab-pss', 'con', IC.pss, 'PSS/DGP').addEventListener('click', () => { if (window.PSS_API) PSS_API.abrir(); });
+  nueva('tab-tar', 'con', IC.tar, 'Tareas').addEventListener('click', () => { if (window.TAREAS_API) TAREAS_API.abrir(); });
   const tin = $('.top-in'), steps = $('#steps'); tin.insertBefore(sub, steps);
   /* barra de abajo: 5 secciones */
   const ti = $('#tab-ini'); ti.dataset.grp = 'ini';
@@ -6584,6 +6636,26 @@ window.CAL_API = {
     return ocurr(ym + '-01', ym + '-31', true).filter(o => o.t.k === 'vis' && /visita/i.test(o.t.t || '') && (!ctrId || !(o.t.ctr && o.t.ctr.id) || o.t.ctr.id === ctrId)).length;
   },
   editar(id, d) { showTab('cal'); if (TAREAS.some(x => x.id === id)) abrirForm(id, d); },
+  /* 1.24.0 · desde «Tareas del técnico»: el formulario de nueva tarea ya relleno (el técnico revisa y guarda) */
+  nueva(pre) {
+    ED = null; showTab('cal'); abrirForm(null, pre.f);
+    Object.assign(ED, {t:pre.t || '', k:pre.k || '', rep:pre.rep || '', notas:pre.notas || '', ctr:'ctr' in pre ? (pre.ctr || null) : null});
+    if (pre.guia) ED.guia = pre.guia;
+    renderForm(); vista('form');
+  },
+  /* y varias de golpe; las que se repiten cuentan desde hoy (no salen vencidas las de antes) */
+  async agregar(arr) {
+    let n = 0;
+    for (const x of arr || []) {
+      if (!x || !x.t || !/^\d{4}-\d{2}-\d{2}$/.test(x.f || '')) continue;
+      const t = {id:nid(), t:x.t, k:x.k || 'otr', ctr:x.ctr || null, f:x.f, rep:x.rep || '', hasta:'', notas:x.notas || '', hechas:x.hechas || {}, creado:Date.now()};
+      if (x.guia) t.guia = x.guia;
+      if (t.rep) t.desde = hoy();
+      await guardar(t); n++;
+    }
+    if (n && !ED) renderMain();
+    return n;
+  },
   async importar(arr) {
     const act = new Map(TAREAS.map(x => [x.id, x])); let n = 0;
     for (const x of arr) { if (x && x.id && x.t && x.f && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await cdb.put(x); n++; } }
@@ -7066,6 +7138,16 @@ window.REV_API = {
   alDia(ctrId) {
     const l = REVS.filter(r => !ctrId || !(r.ctr && r.ctr.id) || r.ctr.id === ctrId).map(r => estado(r).k).filter(k => k !== 'none');
     return {n:l.length, ok:l.filter(k => k !== 'bad').length};
+  },
+  /* 1.24.0 · desde «Tareas del técnico»: alta con el nombre, la periodicidad y las casillas del informe ya puestas */
+  nueva(o) {
+    if (ED && ED.tab) aparcar(); else if (ED) { ED = null; nuevosDocs = []; }
+    showTab('rev'); abrirForm();
+    ED.nombre = o.n || ''; ED.cada = o.cada || 12; ED.inf = [...(o.inf || [])]; ED.infTocado = true; ED.aviso = ED.cada >= 12 ? 30 : ED.cada >= 6 ? 15 : 7;
+    if (o.guia) ED.guia = o.guia;
+    renderForm(); vista('form');
+    toast('Pon la fecha de la última revisión y guarda.');
+    setTimeout(() => { const u = $('#rf-u'); if (u) u.focus(); }, 80);
   },
   editar(id) {
     if (ED && ED.tab) aparcar(); else if (ED) { ED = null; nuevosDocs = []; }
@@ -9182,7 +9264,7 @@ const escribiendo = el => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SEL
 const hayDialogo = () => [...document.querySelectorAll('[role="dialog"],[aria-modal="true"]')].some(d => !d.hidden && d.getClientRects().length);
 
 /* ---------- pestañas con el nombre completo (en el móvil, el corto) ---------- */
-const LARGOS = {'tab-form':'Registro de visita', 'tab-hist':'Historial de visitas', 'tab-inf':'Informe cuatrimestral', 'tab-plan':'Planificación preventiva', 'tab-evrl':'Evaluación de riesgos laborales', 'tab-sen':'Señalización (manual de obras fijas)', 'tab-norma':'Normativa legal'};
+const LARGOS = {'tab-form':'Registro de visita', 'tab-hist':'Historial de visitas', 'tab-inf':'Informe cuatrimestral', 'tab-plan':'Planificación preventiva', 'tab-evrl':'Evaluación de riesgos laborales', 'tab-sen':'Señalización (manual de obras fijas)', 'tab-norma':'Normativa legal', 'tab-tar':'Tareas del técnico'};
 function nombres() {
   Object.entries(LARGOS).forEach(([id, l]) => {
     const b = document.getElementById(id); if (!b || b.dataset.escL) return;
@@ -9281,6 +9363,7 @@ function apartados() {
     A('ap', 'Revisiones de instalaciones', 'Equipos y certificados', () => iniAccion('rev')),
     A('ap', 'Señalización (manual de obras fijas)', 'Consulta · Norma 8.3-IC', () => iniAccion('sen')),
     A('ap', 'Normativa legal', 'Consulta · fichas y enlace al BOE', () => iniAccion('norma'), 'leyes reales decretos'),
+    A('ap', 'Tareas del técnico', 'Consulta · cada mes, trimestre y año', () => iniAccion('tar'), 'tareas mensuales trimestrales anuales winsie indices revisiones'),
     A('ap', 'PSS/DGP', 'Consulta · carpeta del plan de seguridad', () => iniAccion('pss'), 'plan de seguridad y salud documento de gestion preventiva'),
     A('ap', 'Mi perfil', 'Datos y contratos', () => { const b = $('#nav-pf'); if (b) b.click(); }, 'contratos nombre cargo'),
     window.SEG_API ? A('ap', 'Privacidad y seguridad', 'Bloqueo, copias cifradas, código de verificación', () => SEG_API.ver(), 'contraseña') : null,
@@ -9318,6 +9401,7 @@ function resultados(q) {
     return A('vis', rp.ubicacion || 'Sin ubicación', [r.codigo, fmtDate(rp.fecha), r.contrato && r.contrato.id ? nombreContrato(r.contrato) : '', n ? plural(n, 'incidencia', 'incidencias') : 'sin incidencias'].filter(Boolean).join(' · '), () => verRegistro(r.id), [rp.nombre, rp.actividad, rp.fecha].join(' '));
   }), 5)});
   G.push({g:'Preguntas de la visita', l:top(ITEMS.map(it => A('preg', it.q, 'Ir a la pregunta en el registro', () => irPregunta(it.id))), 5)});
+  if (window.TAREAS_API) G.push({g:'Tareas del técnico', l:top(TAREAS_API.lista().map(x => A('tar', x.t, x.cuando, () => TAREAS_API.abrir(x.k), [x.det, x.g].join(' '))), 5)});
   if (window.NORMA_API) G.push({g:'Normativa legal', l:top(NORMA_API.lista().map(x => A('norma', x.c + ' · ' + x.n, x.f || '', () => NORMA_API.abrir(x.id), Object.entries(x).filter(([k, v]) => k !== 'u' && typeof v === 'string').map(([, v]) => v).join(' '))), 5)});
   G.push({g:'Señalización', l:top(SEN.map(e => A('sen', senTitle(e) + ' · ' + e.zona, SEN_G[e.g], () => { showTab('sen'); senFrom = null; senOpenOne(e.p); }, [e.ej, e.fig, e.n].join(' '))), 5)});
   if (window.REV_API) G.push({g:'Revisiones de instalaciones', l:top(REV_API.lista().map(r => A('rev', r.nombre || 'Revisión', [r.ident, r.ctr && r.ctr.nombre].filter(Boolean).join(' · '), () => REV_API.editar(r.id), r.ident || '')), 4)});
@@ -9329,7 +9413,7 @@ function resultados(q) {
   }
   return G.filter(x => x.l.length);
 }
-const ICG = {ap:'→', vis:'V', preg:'?', norma:'§', sen:'△', rev:'R', pss:'P'};
+const ICG = {ap:'→', vis:'V', preg:'?', norma:'§', sen:'△', rev:'R', pss:'P', tar:'T'};
 let PL = [], PS = 0;
 function pintaPaleta() {
   const q = $('#esc-kq').value, G = resultados(q);
@@ -10396,6 +10480,226 @@ if (activa()) setTimeout(() => sincronizar(), 2500);
 })();
 
 /*SYNC-JS-END*/
+/*TAR-JS-START*/
+/* ================= Tareas básicas del técnico de PRL (1.24.0) =================
+   La lista de lo que hay que hacer cada mes, cada trimestre, cada año, en cada contrato y cuando pasa algo
+   (documento «Revisiones TPRL» de David). Cada tarea dice cuándo toca y está unida a donde se lleva en la app:
+   - con fecha fija → Calendario (una a una con el formulario relleno, o todas las que falten de golpe);
+   - revisiones con certificado → Revisiones de instalaciones (con su caducidad);
+   - una vez en cada contrato → «Ya está hecho» o «Programar» por contrato (quedan en el Calendario);
+   - cuando pasa algo → recordatorio y, si hay, el apartado de la app donde se hace.
+   Lo que se marca vive en el Calendario y en Revisiones: entra en la copia de seguridad y en la sincronización. */
+(() => {
+/* r: regla del Calendario {k: tipo, rep, dia (31 = último día del mes), m: primer mes (1-12) para trimestrales y anuales}.
+   fija: la fecha la dice el documento → entra en «Añadir las que faltan». kw: para reconocer una tarea parecida ya creada a mano. */
+const GRUPOS = [
+  {id:'mes', t:'Cada mes', s:'Maquinaria, vehículos e instalaciones.', items:[
+    {k:'veh-mes', t:'Revisión mensual de vehículos', cuando:'El último día de cada mes', r:{k:'veh', rep:'mes', dia:31}, fija:true, kw:/revisi[oó]n.*veh[ií]culo|veh[ií]culos.*(y|e) maquinaria/i},
+    {k:'maq-mes', t:'Revisión mensual de pequeña maquinaria', cuando:'El último día de cada mes', r:{k:'veh', rep:'mes', dia:31}, fija:true, kw:/peque[ñn]a maquinaria/i},
+    {k:'acc-winsie', t:'Introducir los accidentes en WINSIE', det:'Si ha habido alguno ese mes.', cuando:'El último día de cada mes', r:{k:'reg', rep:'mes', dia:31}, fija:true, kw:/accidentes.*winsie|winsie.*accidente/i},
+    {k:'indices-prl', t:'Volcar los índices PRL', cuando:'En la primera semana del mes siguiente', r:{k:'reg', rep:'mes', dia:7}, fija:true, kw:/[ií]ndices (prl|del mes)/i},
+    {k:'gastos', t:'Gastos PRL y datos PRL', cuando:'En la última semana del mes', r:{k:'reg', rep:'mes', dia:25}, fija:true, kw:/gastos/i},
+    {k:'plan-mes', t:'Actualizar la planificación preventiva', cuando:'Cada mes', r:{k:'vis', rep:'mes', dia:31}, fija:true, kw:/planificaci[oó]n/i, ir:'plan'}
+  ]},
+  {id:'coord', t:'Cada mes · como coordinador', items:[
+    {k:'horas-winsie', t:'Introducir las horas en WINSIE', cuando:'El último día de cada mes', r:{k:'reg', rep:'mes', dia:31}, fija:true, kw:/horas.*winsie|winsie.*horas/i},
+    {k:'indices-coord', t:'Índices del coordinador', cuando:'Antes del día 5 de cada mes', r:{k:'reg', rep:'mes', dia:5}, fija:true, kw:/[ií]ndices.*coordinador/i}
+  ]},
+  {id:'cma', t:'Cada mes · calidad y medio ambiente', items:[
+    {k:'consumos', t:'Registro de consumos', cuando:'A mitad de mes', r:{k:'ma', rep:'mes', dia:15}, fija:true, kw:/consumo/i},
+    {k:'residuos', t:'Listado de residuos', cuando:'A mitad de mes', r:{k:'ma', rep:'mes', dia:15}, fija:true, kw:/residuo/i},
+    {k:'ppi', t:'PPI', cuando:'A mitad de mes', r:{k:'ma', rep:'mes', dia:15}, fija:true, kw:/\bppi\b/i},
+    {k:'barredora-mes', t:'Barredora', det:'Revisión mensual de calidad y medio ambiente.', cuando:'El primer día del mes siguiente', r:{k:'ma', rep:'mes', dia:1}, fija:true, kw:/barredora/i}
+  ]},
+  {id:'tri', t:'Cada trimestre', s:'El aviso llega el mes siguiente al trimestre: lo de enero, febrero y marzo, en abril; y así con los demás.', items:[
+    {k:'inst-tri', t:'Revisión trimestral de instalaciones', det:'Botiquín, extintores (PCI), equipos anticaída, equipos de izado y escaleras manuales.', nota:'Los equipos anticaída y los de izado necesitan además una revisión anual por empresa externa.', cuando:'En enero, abril, julio y octubre', r:{k:'inst', rep:'tri', dia:10, m:1}, fija:true, kw:/trimestral.*(botiqu|instalaci)|botiqu[ií]n.*extintor/i, ir:'rev'},
+    {k:'acc-tri', t:'Entregar la hoja trimestral de accidentes', cuando:'En enero, abril, julio y octubre', r:{k:'reg', rep:'tri', dia:10, m:1}, fija:true, kw:/hoja.*accidentes|accidentes.*trimestral/i},
+    {k:'comite', t:'Comité o comisión de Seguridad y Salud', cuando:'Una vez cada trimestre (pon tú el día de la reunión)', r:{k:'hito', rep:'tri'}, kw:/comit[eé]|comisi[oó]n de seguridad/i}
+  ]},
+  {id:'anu', t:'Cada año', s:'Las revisiones anuales van según la caducidad de su certificado: dalas de alta en Revisiones de instalaciones con la fecha de la última y la app te avisa antes de que caduquen.', items:[
+    {k:'rv-cesta', t:'Furgón cesta', det:'Empresa externa.', cuando:'Según la caducidad del certificado', rev:{n:'Plataforma elevadora (furgón cesta)', cada:12, inf:['elev']}, kw:/cesta/i},
+    {k:'rv-pluma', t:'Camión pluma', det:'Empresa externa.', cuando:'Según la caducidad del certificado', rev:{n:'Camión pluma', cada:12, inf:['elev']}, kw:/pluma/i},
+    {k:'rv-pulpo', t:'Camión pulpo', det:'Empresa externa.', cuando:'Según la caducidad del certificado', rev:{n:'Camión pulpo', cada:12, inf:['elev']}, kw:/pulpo/i},
+    {k:'rv-carretilla', t:'Carretilla', det:'Empresa externa.', cuando:'Según la caducidad del certificado', rev:{n:'Carretilla elevadora', cada:12, inf:[]}, kw:/carretilla/i},
+    {k:'rv-barredora', t:'Barredora', det:'Es propia: la revisión la hacemos nosotros.', cuando:'Una vez al año', rev:{n:'Barredora', cada:12, inf:[]}, kw:/barredora/i},
+    {k:'senal-int', t:'Señalización interna', det:'Registro interno de las instalaciones.', cuando:'Una vez al año, el último día del mes', r:{k:'inst', rep:'anu'}, kw:/se[ñn]alizaci[oó]n interna/i},
+    {k:'rv-tierra', t:'Sistema de puesta a tierra', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Puesta a tierra', cada:12, inf:['tierra']}, kw:/puesta a tierra/i},
+    {k:'rv-aire', t:'Aires acondicionados', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Aire acondicionado', cada:12, inf:['aire']}, kw:/aire acondicionado|aires acondicionados/i},
+    {k:'rv-elev', t:'Aparatos elevadores', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Aparatos elevadores', cada:12, inf:['elev']}, kw:/aparatos elevadores|ascensor/i},
+    {k:'rv-pci', t:'Protección contra incendios (PCI)', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Protección contra incendios (PCI)', cada:12, inf:['pci']}, kw:/\bpci\b|contra incendios|extintores/i},
+    {k:'rv-bt', t:'Instalación eléctrica', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Instalación eléctrica BT', cada:12, inf:['bt']}, kw:/instalaci[oó]n el[eé]ctrica/i},
+    {k:'rv-ct', t:'Centros de transformación', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Centro de transformación', cada:12, inf:['otros']}, kw:/centro(s)? de transformaci[oó]n/i},
+    {k:'rv-legio', t:'Legionela', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Legionela, anual (PPCL)', cada:12, inf:['legio']}, kw:/legionel/i},
+    {k:'rv-portones', t:'Portones', det:'Revisión externa.', cuando:'Según la caducidad del certificado', rev:{n:'Portones', cada:12, inf:['otros']}, kw:/port[oó]n|puertas (basculantes|correderas)/i},
+    {k:'sim-amb', t:'Simulacro ambiental', cuando:'Una vez al año', r:{k:'hito', rep:'anu'}, kw:/simulacro.*ambient/i},
+    {k:'sim-vial', t:'Simulacro de seguridad vial', cuando:'Una vez al año', r:{k:'hito', rep:'anu'}, kw:/simulacro.*vial/i},
+    {k:'sim-prl', t:'Simulacro de PRL (emergencia)', cuando:'Una vez al año', r:{k:'hito', rep:'anu'}, kw:/simulacro.*(prl|emergencia)/i},
+    {k:'formacion', t:'Renovar la formación de medio ambiente y PRL', cuando:'Una vez al año', r:{k:'otr', rep:'anu'}, kw:/formaci[oó]n/i}
+  ]},
+  {id:'ctr', t:'En cada contrato', s:'Se hacen una vez por contrato (las fichas de los productos químicos, una vez al año). Márcalas en cada uno.', items:[
+    {k:'ergo', t:'Mediciones ergonómicas', cuando:'Una vez en cada contrato', ctr:true, r:{k:'otr'}},
+    {k:'ruido', t:'Estudio de ruido y vibraciones', cuando:'Una vez en cada contrato', ctr:true, r:{k:'otr'}},
+    {k:'pvd', t:'Estudio de PVD (pantallas de visualización de datos)', cuando:'Una vez en cada contrato', ctr:true, r:{k:'otr'}},
+    {k:'fds', t:'Revisar las fichas de seguridad de los productos químicos', det:'Por si hay fichas nuevas.', cuando:'Una vez al año en cada contrato', ctr:true, anual:true, r:{k:'otr'}}
+  ]},
+  {id:'cuando', t:'Cuando toque', s:'No tienen fecha fija: hay que acordarse cuando pasa algo.', items:[
+    {k:'inf-acc', t:'Informar a los trabajadores de los accidentes', det:'Dejando registro de que se ha informado.', cuando:'Cada vez que haya un accidente'},
+    {k:'cae', t:'Actas CAE (coordinación de actividades empresariales)', cuando:'Siempre que entre una subcontrata nueva'},
+    {k:'anexos', t:'Anexos al PSS', cuando:'Si una tarea nueva lo requiere y no está contemplada en el PSS', ir:'pss'}
+  ]}
+];
+const TODAS = GRUPOS.flatMap(g => g.items.map(it => ({...it, g:g.id})));
+const FILTROS = [['', 'Todas'], ['mes', 'Cada mes'], ['tri', 'Cada trimestre'], ['anu', 'Cada año'], ['ctr', 'En cada contrato'], ['cuando', 'Cuando toque']];
+const IRT = {plan:'Abrir la planificación', rev:'Abrir Revisiones', pss:'Abrir PSS/DGP'};
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+let filtro = lsGet('tar-filtro') || '';
+if (!FILTROS.some(f => f[0] === filtro)) filtro = '';
+
+/* ---------- fechas ---------- */
+const hoy = () => isoDate(new Date());
+const pad = n => String(n).padStart(2, '0');
+const fmt = s => s ? fmtDate(s) : '';
+/* primera fecha de la regla: el año empieza en enero (o en el mes m) y «desde hoy» deja fuera lo pasado */
+function primera(r) {
+  const y = new Date().getFullYear();
+  if (r.rep === 'mes') return `${y}-01-${pad(Math.min(r.dia || 1, 31))}`;
+  if (r.rep === 'tri' && r.dia) return `${y}-${pad(r.m || 1)}-${pad(r.dia)}`;
+  return hoy();
+}
+const sumaAnio = s => { const [y, m, d] = s.split('-').map(Number); return isoDate(new Date(y + 1, m - 1, d)); };
+
+/* ---------- dónde está cada una ---------- */
+const calLista = () => window.CAL_API ? CAL_API.lista() : [];
+const revLista = () => window.REV_API ? REV_API.lista() : [];
+const nombreCtr = c => c ? (c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : '';
+function enCal(it) {
+  const l = calLista();
+  const exacta = l.find(t => t.guia === it.k) || l.find(t => (t.t || '').trim().toLowerCase() === it.t.toLowerCase());
+  if (exacta) return {t:exacta, igual:true};
+  const par = it.kw && l.find(t => it.kw.test(t.t || ''));
+  return par ? {t:par, igual:false} : null;
+}
+function enRev(it) {
+  const l = revLista();
+  return l.find(r => r.guia === it.k) || l.find(r => (r.nombre || '').toLowerCase() === it.rev.n.toLowerCase()) || (it.kw && l.find(r => it.kw.test(r.nombre || ''))) || null;
+}
+/* por contrato: la última vez que se marcó hecha y si está programada */
+function enCtr(it, c) {
+  const l = calLista().filter(t => t.guia === it.k && t.ctr && t.ctr.id === c.id);
+  const hechas = l.flatMap(t => Object.keys(t.hechas || {}).filter(d => t.hechas[d])).sort();
+  const ult = hechas[hechas.length - 1] || '';
+  const prog = l.find(t => !Object.keys(t.hechas || {}).some(d => t.hechas[d]) && t.f >= hoy());
+  const vence = it.anual && ult ? sumaAnio(ult) : '';
+  return {ult, prog, vence, tocaOtra:!!(it.anual && ult && vence <= hoy()), tarea:l[0] || null};
+}
+function resumen() {
+  const fijas = TODAS.filter(it => it.fija), faltan = fijas.filter(it => !enCal(it));
+  const revs = TODAS.filter(it => it.rev), revFaltan = revs.filter(it => !enRev(it));
+  return {fijas:fijas.length, faltan, revs:revs.length, revFaltan};
+}
+
+/* ---------- pantalla ---------- */
+const estadoCal = (it, e) => e
+  ? `<button type="button" class="tar-est ${e.igual ? 'ok' : 'par'}" data-tar-cal="${esc(e.t.id)}">${e.igual ? CHECK + 'En tu calendario' : 'Parecida en tu calendario: «' + esc(e.t.t) + '»'}</button>`
+  : `<button type="button" class="btn tar-add" data-tar-nueva="${it.k}">+ Al calendario</button>`;
+function filaHtml(it) {
+  let acc = '';
+  if (it.rev) {
+    const r = enRev(it);
+    acc = r ? `<button type="button" class="tar-est ok" data-tar-rev="${esc(r.id)}">${CHECK}En Revisiones: «${esc(r.nombre || it.rev.n)}»</button>`
+      : `<button type="button" class="btn tar-add" data-tar-alta="${it.k}">+ Dar de alta en Revisiones</button>`;
+  } else if (it.ctr) {
+    const cs = perfilGet().contratos;
+    acc = cs.length ? `<div class="tar-ctrs">${cs.map(c => {
+      const e = enCtr(it, c);
+      const est = e.tocaOtra ? `<span class="tar-st bad">Toca otra vez (hecho el ${esc(fmt(e.ult))})</span>`
+        : e.ult ? `<span class="tar-st ok">${CHECK}Hecho el ${esc(fmt(e.ult))}${e.vence ? ' · la próxima, antes del ' + esc(fmt(e.vence)) : ''}</span>`
+        : e.prog ? `<span class="tar-st">Programado para el ${esc(fmt(e.prog.f))}</span>` : '<span class="tar-st warn">Pendiente</span>';
+      return `<div class="tar-ctr"><span class="tar-cn">${esc(nombreCtr(c))}</span>${est}<span class="tar-cb">
+        ${!e.ult || e.tocaOtra ? `<button type="button" class="btn tar-mini" data-tar-hecho="${it.k}" data-ctr="${esc(c.id)}">Ya está hecho</button>` : ''}
+        ${!e.prog && (!e.ult || e.tocaOtra) ? `<button type="button" class="btn tar-mini" data-tar-prog="${it.k}" data-ctr="${esc(c.id)}">Programar</button>` : ''}</span></div>`;
+    }).join('')}</div>` : '<p class="help">Da de alta tus contratos en Perfil para marcarlo en cada uno.</p>';
+  } else if (it.r) acc = estadoCal(it, enCal(it));
+  const ir = it.ir ? `<button type="button" class="linkbtn tar-ir" data-tar-ir="${it.ir}">${IRT[it.ir]} ›</button>` : '';
+  return `<div class="tar-it" id="tar-${it.k}">
+    <div class="tar-tx"><b>${esc(it.t)}</b>${it.det ? `<span>${esc(it.det)}</span>` : ''}<span class="tar-cu">${esc(it.cuando)}</span>${it.nota ? `<span class="tar-nota">${esc(it.nota)}</span>` : ''}</div>
+    ${acc || ir ? `<div class="tar-acc">${acc}${ir}</div>` : ''}
+  </div>`;
+}
+function render() {
+  const M = $('#view-tar'); if (!M) return;
+  const R = resumen();
+  const gs = GRUPOS.filter(g => !filtro || g.id === filtro || (filtro === 'mes' && (g.id === 'coord' || g.id === 'cma')));
+  M.innerHTML = `<section class="pl-hero tar-hero">
+      <p class="pl-eb">Consulta</p>
+      <h2>Tareas del técnico de PRL</h2>
+      <p class="pl-ctr">Lo que hay que hacer cada mes, cada trimestre y cada año, en cada contrato y cuando pasa algo.</p>
+    </section>
+    <section class="block tar-res">
+      <div class="bb">
+        <p class="tar-rn"><b>${R.fijas - R.faltan.length} de ${R.fijas}</b> tareas con fecha fija ya están en tu calendario${R.revs ? ` · <b>${R.revs - R.revFaltan.length} de ${R.revs}</b> revisiones anuales en Revisiones` : ''}.</p>
+        ${R.faltan.length ? `<button type="button" class="btn primary" data-tar-todas="1">Añadir al calendario las ${R.faltan.length} que faltan</button><p class="help">Con la fecha que dice cada una (último día de mes, día 5, mitad de mes…). Luego puedes cambiarlas en el Calendario.</p>` : '<p class="help">Todas las de fecha fija están en el calendario: te saldrán en Inicio › Hoy y vencidas cuando toquen.</p>'}
+      </div>
+    </section>
+    <div class="chips nm-filtros tar-filtros" role="group" aria-label="Filtrar tareas">
+      ${FILTROS.map(([k, t]) => `<button type="button" class="chip" data-tar-f="${k}" aria-pressed="${filtro === k}">${esc(t)}</button>`).join('')}
+    </div>
+    ${gs.map(g => `<section class="block tar-g" id="tar-g-${g.id}">
+      <header class="bh"><h2>${esc(g.t)}</h2><span class="pill">${g.items.length}</span></header>
+      <div class="bb">${g.s ? `<p class="help tar-gs">${esc(g.s)}</p>` : ''}<div class="tar-l">${g.items.map(it => filaHtml({...it, g:g.id})).join('')}</div></div>
+    </section>`).join('')}`;
+}
+
+/* ---------- acciones ---------- */
+const POR = Object.fromEntries(TODAS.map(it => [it.k, it]));
+function tareaCal(it, extra = {}) {
+  const r = it.r || {k:'otr'};
+  return {t:it.t, k:r.k || 'otr', rep:r.rep || '', f:r.rep && (r.dia || r.rep === 'mes') ? primera(r) : (extra.f || hoy()), notas:[it.det, 'Cuándo: ' + it.cuando.toLowerCase() + '.', it.nota].filter(Boolean).join(' '), guia:it.k, ...extra};
+}
+async function todas() {
+  const R = resumen(); if (!R.faltan.length || !window.CAL_API) return;
+  const ok = await ask({title:'Añadir al calendario', yes:'Añadir ' + R.faltan.length, body:`<p>Se añaden al calendario, sin contrato y repitiéndose solas:</p><ul class="tar-ul">${R.faltan.map(it => `<li><b>${esc(it.t)}</b> · ${esc(it.cuando.toLowerCase())}</li>`).join('')}</ul><p class="help">Empiezan a contar desde hoy: no salen como vencidas las de meses pasados.</p>`});
+  if (ok !== true) return;
+  const n = await CAL_API.agregar(R.faltan.map(it => tareaCal(it)));
+  render(); toast(`Añadidas ${n} tareas al calendario.`);
+}
+async function onClick(e) {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.tarF != null) { filtro = b.dataset.tarF; lsSet('tar-filtro', filtro); render(); const f = $(`[data-tar-f="${filtro}"]`); if (f) f.focus(); return; }
+  if (b.dataset.tarTodas) return todas();
+  if (b.dataset.tarCal) { if (window.CAL_API) CAL_API.editar(b.dataset.tarCal); return; }
+  if (b.dataset.tarRev) { if (window.REV_API) REV_API.editar(b.dataset.tarRev); return; }
+  if (b.dataset.tarIr) { const a = b.dataset.tarIr; if (a === 'plan' && window.PLAN_API) PLAN_API.abrirInicio(); else if (a === 'rev' && window.REV_API) REV_API.abrir(); else if (a === 'pss' && window.PSS_API) PSS_API.abrir(); return; }
+  const it = POR[b.dataset.tarNueva || b.dataset.tarAlta || b.dataset.tarHecho || b.dataset.tarProg]; if (!it) return;
+  if (b.dataset.tarNueva) { if (window.CAL_API) CAL_API.nueva(tareaCal(it)); return; }
+  if (b.dataset.tarAlta) { if (window.REV_API) REV_API.nueva({...it.rev, guia:it.k}); return; }
+  const c = perfilGet().contratos.find(x => x.id === b.dataset.ctr); if (!c || !window.CAL_API) return;
+  const ctr = {id:c.id, nombre:c.nombre || '', sie:c.sie || ''};
+  if (b.dataset.tarHecho) {
+    const h = hoy();
+    await CAL_API.agregar([{...tareaCal(it, {f:h}), rep:'', ctr, hechas:{[h]:true}}]);
+    render(); toast(`«${it.t}» hecho en ${nombreCtr(c)}.`);
+    return;
+  }
+  if (b.dataset.tarProg) CAL_API.nueva({...tareaCal(it, {f:hoy()}), rep:'', ctr});
+}
+function montar() {
+  if ($('#view-tar')) return;
+  const main = document.createElement('main');
+  main.id = 'view-tar'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
+  const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
+  main.addEventListener('click', onClick);
+}
+window.TAREAS_API = {
+  abrir(k) { showTab('tar'); render(); window.scrollTo({top:0}); if (k) { const el = $('#tar-' + k); if (el) el.scrollIntoView({block:'center'}); } },
+  onTab(t) { if (t === 'tar') render(); },
+  lista: () => TODAS.map(it => ({k:it.k, t:it.t, cuando:it.cuando, det:it.det || '', g:(GRUPOS.find(g => g.id === it.g) || {}).t || ''})),
+  subtitulo() { const R = resumen(); return R.faltan.length ? `${R.fijas - R.faltan.length} de ${R.fijas} en tu calendario` : 'Mes, trimestre y año'; }
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
+})();
+
+/*TAR-JS-END*/
 /*ASP-JS-START*/
 /* ================= Aspecto: tema y tamaño de la letra (1.23.0) =================
    Perfil › Aspecto. El tema se guarda en «tema» (auto | light | dark) y pone data-theme en <html>: todo el CSS de la app ya
