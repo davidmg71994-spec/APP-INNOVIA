@@ -77,7 +77,7 @@ function detectarBorrados() {
 }
 const anotarVisto = () => { CFG.visto = {}; Object.keys(MOD).forEach(m => { CFG.visto[m] = MOD[m].l().map(x => x.id); }); };
 async function datos() {
-  return {app:'registro-rp', tipo:'sincro', version:1, disp:AND() ? 'movil' : 'ordenador', id:CFG.id, escrito:Date.now(),
+  return {app:'registro-rp', tipo:'sincro', version:1, appVer:APP_VER, disp:AND() ? 'movil' : 'ordenador', id:CFG.id, escrito:Date.now(),
     registros:HIST, informes:MOD.inf.l(), planes:MOD.plan.l(), calendario:MOD.cal.l(),
     revisiones:window.REV_API ? await REV_API.exportar() : null, evrl:MOD.evrl.l(),
     perfil:{...perfilGet(), nombre:lsGet('rp-nombre') || ''}, borrados:borrados()};
@@ -274,16 +274,16 @@ async function sincronizar(o = {}) {
       if (!d.registros && d.tipo !== 'sincro') continue;   // no es de la app
       const n = await aplicar(d, !!o.preguntar);
       Object.keys(total).forEach(kk => { total[kk] += n[kk] || 0; });
-      CFG.otros[k] = {nombre:x.nombre, h, mod:x.mod, tam:x.tam, leido:Date.now(), disp:d.disp || '', escrito:d.escrito || 0, pendiente:!!CFG.pendBorrar};
+      CFG.otros[k] = {nombre:x.nombre, h, mod:x.mod, tam:x.tam, leido:Date.now(), disp:d.disp || '', escrito:d.escrito || 0, ver:d.appVer || '', pendiente:!!CFG.pendBorrar};
       if (CFG.pendBorrar) CFG.otros[k].h = '';   // se vuelve a mirar en la próxima vuelta
     }
     /* 2. escribir el mío si ha cambiado algo */
     const f = firmaLocal();
-    if (f !== CFG.firma || o.forzar || !CFG.escrito) {
+    if (f !== CFG.firma || o.forzar || !CFG.escrito || CFG.verEscrita !== APP_VER) {
       const env = await SEG_API.cifrarSync(JSON.stringify(await datos()));
       if (!env) throw new Error('Sin la contraseña de las copias no se puede sincronizar.');
       if (AND()) await andEscribir(env); else await webEscribir(env);
-      CFG.firma = f; CFG.escrito = Date.now();
+      CFG.firma = f; CFG.escrito = Date.now(); CFG.verEscrita = APP_VER;
       lsSet('seg-copia-fuera', String(CFG.escrito));   // el archivo compartido ya es una copia fuera del dispositivo
     }
     anotarVisto();
@@ -293,6 +293,7 @@ async function sincronizar(o = {}) {
       toast('Sincronizado: ' + [r && r + ' del otro dispositivo', total.del && plural(total.del, 'borrado', 'borrados')].filter(Boolean).join(' · ') + '.');
       refrescarVista();
     }
+    avisarVersion();
     return total;
   } catch (e) {
     CFG.error = (e && e.message) || 'No se pudo sincronizar'; CFG.estado = 'error';
@@ -365,6 +366,36 @@ async function desactivar() {
 }
 
 /* ---------- en pantalla: tarjeta del Perfil, pie de la barra lateral y aviso ---------- */
+/* ---------- 1.22.1: avisar si el otro dispositivo tiene otra versión de la app ---------- */
+const APK_URL = 'https://github.com/davidmg71994-spec/APP-INNOVIA/raw/main/VisitasPRL.apk';
+function cmpVer(a, b) {
+  const x = String(a || '0').split('.').map(n => parseInt(n, 10) || 0), y = String(b || '0').split('.').map(n => parseInt(n, 10) || 0);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) { const d = (x[i] || 0) - (y[i] || 0); if (d) return d > 0 ? 1 : -1; }
+  return 0;
+}
+const nomDisp = d => d === 'movil' ? 'móvil' : d === 'ordenador' ? 'ordenador' : 'otro dispositivo';
+/* el aviso más importante: primero, si ESTE va por detrás */
+function difVersion() {
+  const ot = Object.values(CFG.otros || {}).filter(x => x && x.escrito && !x.error);
+  const nuevo = ot.filter(x => x.ver && cmpVer(x.ver, APP_VER) > 0).sort((a, b) => cmpVer(b.ver, a.ver))[0];
+  if (nuevo) return {aqui:true, disp:nuevo.disp, ver:nuevo.ver};
+  const viejo = ot.find(x => !x.ver || cmpVer(x.ver, APP_VER) < 0);
+  if (viejo) return {aqui:false, disp:viejo.disp, ver:viejo.ver || ''};
+  return null;
+}
+function textoVersion(v, html) {
+  const otro = nomDisp(v.disp), b = s => html ? '<b>' + s + '</b>' : s;
+  if (v.aqui) return AND()
+    ? `El ${otro} tiene una versión más nueva (${b(v.ver)}) que este móvil (${APP_VER}). ` + (html ? `Instala la nueva: <a href="${APK_URL}">descargar el APK</a>.` : 'Instala el APK nuevo.')
+    : `El ${otro} tiene una versión más nueva (${b(v.ver)}) que este ordenador (${APP_VER}): recarga la página con ${b('Ctrl+F5')}.`;
+  const cual = v.ver ? 'la ' + v.ver : 'una versión anterior a la 1.22.1';
+  return `El ${otro} tiene ${cual} y aquí está la ${b(APP_VER)}: actualiza el ${otro}` + (v.disp === 'movil' ? ' instalando el APK nuevo.' : v.disp === 'ordenador' ? ' abriendo la app y pulsando Ctrl+F5.' : '.');
+}
+function avisarVersion() {
+  const v = difVersion(), k = v ? (v.aqui ? 'aqui:' : 'otro:') + v.disp + ':' + (v.ver || '-') + ':' + APP_VER : '';
+  if (k && CFG.avisoVer !== k) toast(textoVersion(v, false));
+  CFG.avisoVer = k;
+}
 function lineas() {
   const L = [];
   if (!activa()) return L;
@@ -376,7 +407,8 @@ function lineas() {
   if (AND() && !enCarpeta && AND_CARPETA()) L.push(['warn', 'Nuevo: pulsa «Elegir carpeta» y elige <b>Descargas › Visitas PRL</b>. Así el móvil encuentra siempre el archivo más reciente del ordenador.']);
   else if (AND() && !enCarpeta && !(ea.otros || []).length) L.push(['warn', 'Falta elegir el archivo del ordenador.']);
   if (AND() && ea.propio != null && ea.propioOk === false) L.push(['warn', enCarpeta ? 'El móvil no tiene permiso permanente para la carpeta: pulsa «Cambiar carpeta» y elígela otra vez.' : 'El móvil no tiene permiso permanente para escribir su archivo: pulsa «Desactivar» y vuelve a activarlo.']);
-  ot.forEach(([k, x]) => L.push([x.error ? 'warn' : '', `Lee <b>${esc(x.nombre || k)}</b>${x.error ? ' · ' + esc(x.error) : x.escrito ? ` · copia del ${x.disp === 'movil' ? 'móvil' : x.disp === 'ordenador' ? 'ordenador' : 'otro dispositivo'} de ${hora(x.escrito)}` : ''}`]));
+  ot.forEach(([k, x]) => L.push([x.error ? 'warn' : '', `Lee <b>${esc(x.nombre || k)}</b>${x.error ? ' · ' + esc(x.error) : x.escrito ? ` · copia del ${x.disp === 'movil' ? 'móvil' : x.disp === 'ordenador' ? 'ordenador' : 'otro dispositivo'} de ${hora(x.escrito)}${x.ver ? ' · versión ' + esc(x.ver) : ''}` : ''}`]));
+  const dv = difVersion(); if (dv) L.push(['warn', textoVersion(dv, true)]);
   if (enCarpeta && !ot.length && CFG.ultima) L.push(['', AND() ? 'Aún no hay archivo del ordenador en la carpeta: actívalo también en el ordenador y elige la misma carpeta.' : 'Aún no hay archivo del móvil en la carpeta: actívalo también en el móvil.']);
   if (CFG.estado === 'permiso') L.push(['warn', 'Hace falta volver a dar permiso a la carpeta: pulsa «Sincronizar ahora».']);
   if (CFG.estado === 'carpeta') L.push(['warn', 'Este navegador ha olvidado la carpeta: pulsa «Cambiar carpeta» y elige otra vez la carpeta compartida.']);
@@ -410,7 +442,7 @@ function pinta() {
     let p = $('#sy-pie');
     if (activa()) {
       if (!p) { nav.insertAdjacentHTML('beforeend', '<button type="button" class="sy-pie" id="sy-pie" data-sy="ya"></button>'); p = $('#sy-pie'); }
-      const mal = CFG.estado === 'permiso' || CFG.estado === 'carpeta' || CFG.estado === 'error' || CFG.error || CFG.pendBorrar;
+      const mal = CFG.estado === 'permiso' || CFG.estado === 'carpeta' || CFG.estado === 'error' || CFG.error || CFG.pendBorrar || !!difVersion();
       p.className = 'sy-pie' + (mal ? ' warn' : '') + (CFG.estado === 'sincronizando' ? ' on' : '');
       p.innerHTML = `<i aria-hidden="true"></i><span>${CFG.estado === 'sincronizando' ? 'Sincronizando…' : CFG.estado === 'permiso' ? 'Sincronizar: pulsa para seguir' : mal ? 'Sincronizar: revisar' : CFG.ultima ? 'Sincronizado · ' + hora(CFG.ultima).replace('hoy a las ', '') : 'Sincronizar'}</span>`;
       p.title = 'Sincronizar ahora';

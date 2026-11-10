@@ -46,5 +46,13 @@ if "{v:'1.21.2'" not in h:
   ]},
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.21.2 · 09/11/2026", h, count=1)
+if "{v:'1.22.1'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.22.1';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.22.1', fecha:'10/11/2026', items:[
+    '<b>Aviso de versión al sincronizar</b>: si el móvil y el ordenador tienen versiones distintas de la app, te lo dice al sincronizar y en Perfil › Sincronizar, con lo que tienes que hacer (en el móvil, un enlace para descargar el APK nuevo; en el ordenador, recargar con Ctrl+F5).'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.22.1 · 10/11/2026", h, count=1)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ok', len(h))
