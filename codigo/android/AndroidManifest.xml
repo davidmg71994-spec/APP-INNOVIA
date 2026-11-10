@@ -6,11 +6,20 @@
          Se mantiene este permiso porque el componente WebView de Android lo necesita para funcionar. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Visita manos libres (1.22.0): escuchar las respuestas. Solo se usa mientras está activada. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <!-- Para abrir la cámara del móvil desde la app (Android 11 o superior). -->
     <queries>
         <intent>
             <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <!-- Visita manos libres: reconocimiento de voz y lectura en voz alta del sistema. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
     </queries>
 

@@ -25,6 +25,13 @@ import android.os.Vibrator;
 import android.provider.DocumentsContract;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Base64;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
@@ -47,6 +54,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -292,9 +300,145 @@ public class MainActivity extends Activity {
         });
     }
 
+    /* ---------- 1.22.0 · visita manos libres: leer en voz alta y escuchar (todo en el móvil) ---------- */
+    static final int REQ_MIC = 6;
+    private TextToSpeech tts;
+    private boolean ttsListo, ttsFallo;
+    private final List<String[]> ttsCola = new ArrayList<String[]>();
+    private SpeechRecognizer oido;
+    private int hablaN = 0;
+
+    private void vozAviso(String k, boolean ok, String info) {
+        js("window.MANOS_API&&MANOS_API.nativo(" + JSONObject.quote(k) + "," + ok + "," + JSONObject.quote(info == null ? "" : info) + ")");
+    }
+
+    String vozDisponible() {
+        try {
+            JSONObject o = new JSONObject();
+            o.put("stt", SpeechRecognizer.isRecognitionAvailable(this));
+            o.put("tts", !ttsFallo);
+            o.put("mic", Build.VERSION.SDK_INT < 23 || checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED);
+            return o.toString();
+        } catch (Exception e) {
+            return "{}";
+        }
+    }
+
+    void vozHablar(String texto, String uid) {
+        final String id = uid != null && uid.length() > 0 ? uid : "h" + (++hablaN);
+        if (tts == null) {
+            ttsCola.add(new String[]{id, texto});
+            tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                public void onInit(int st) {
+                    if (st != TextToSpeech.SUCCESS) { ttsFallo = true; for (String[] c : ttsCola) vozAviso("hablado", false, c[0]); ttsCola.clear(); return; }
+                    int r = tts.setLanguage(new Locale("es", "ES"));
+                    if (r == TextToSpeech.LANG_MISSING_DATA || r == TextToSpeech.LANG_NOT_SUPPORTED) tts.setLanguage(new Locale("es"));
+                    tts.setSpeechRate(1.05f);
+                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        public void onStart(String u) { }
+                        public void onDone(String u) { vozAviso("hablado", true, u); }
+                        public void onError(String u) { vozAviso("hablado", false, u); }
+                        public void onStop(String u, boolean interrumpido) { vozAviso("hablado", false, u); }
+                    });
+                    ttsListo = true;
+                    for (String[] c : ttsCola) tts.speak(c[1], TextToSpeech.QUEUE_FLUSH, null, c[0]);
+                    ttsCola.clear();
+                }
+            });
+            return;
+        }
+        if (ttsFallo) { vozAviso("hablado", false, id); return; }
+        if (!ttsListo) { ttsCola.clear(); ttsCola.add(new String[]{id, texto}); return; }
+        tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, id);
+    }
+
+    void vozEscuchar() {
+        if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQ_MIC);
+            return;
+        }
+        empezarAOir();
+    }
+
+    private void empezarAOir() {
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) { vozAviso("oido", false, "sin-reconocimiento"); return; }
+        try {
+            if (oido == null) {
+                oido = SpeechRecognizer.createSpeechRecognizer(this);
+                oido.setRecognitionListener(new RecognitionListener() {
+                    public void onReadyForSpeech(Bundle b) { vozAviso("listo", true, ""); }
+                    public void onBeginningOfSpeech() { }
+                    public void onRmsChanged(float v) { }
+                    public void onBufferReceived(byte[] b) { }
+                    public void onEndOfSpeech() { }
+                    public void onPartialResults(Bundle b) { }
+                    public void onEvent(int t, Bundle b) { }
+                    public void onError(int e) {
+                        String n;
+                        switch (e) {
+                            case SpeechRecognizer.ERROR_NO_MATCH: case SpeechRecognizer.ERROR_SPEECH_TIMEOUT: n = "nada"; break;
+                            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS: n = "permiso"; break;
+                            case SpeechRecognizer.ERROR_NETWORK: case SpeechRecognizer.ERROR_NETWORK_TIMEOUT: case SpeechRecognizer.ERROR_SERVER: n = "red"; break;
+                            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY: n = "ocupado"; break;
+                            case SpeechRecognizer.ERROR_AUDIO: n = "audio"; break;
+                            default: n = "error-" + e;
+                        }
+                        vozAviso("oido", false, n);
+                    }
+                    public void onResults(Bundle b) {
+                        ArrayList<String> l = b == null ? null : b.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                        JSONArray a = new JSONArray();
+                        if (l != null) for (String x : l) a.put(x);
+                        if (a.length() == 0) vozAviso("oido", false, "nada");
+                        else vozAviso("oido", true, a.toString());
+                    }
+                });
+            }
+            Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES");
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "es-ES");
+            i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+            i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+            if (Build.VERSION.SDK_INT >= 23) i.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+            i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 1500);
+            i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 1500);
+            oido.startListening(i);
+        } catch (Exception e) {
+            vozAviso("oido", false, "error");
+        }
+    }
+
+    void vozParar() {
+        try { if (tts != null) tts.stop(); } catch (Exception e) { /* nada */ }
+        try { if (oido != null) oido.cancel(); } catch (Exception e) { /* nada */ }
+    }
+
+    void vozPantalla(boolean on) {
+        if (on) getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int req, String[] perms, int[] res) {
+        super.onRequestPermissionsResult(req, perms, res);
+        if (req != REQ_MIC) return;
+        if (res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED) empezarAOir();
+        else vozAviso("oido", false, "permiso");
+    }
+
+    @Override
+    protected void onDestroy() {
+        try { if (tts != null) tts.shutdown(); } catch (Exception e) { /* nada */ }
+        try { if (oido != null) oido.destroy(); } catch (Exception e) { /* nada */ }
+        super.onDestroy();
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
+        vozParar();
+        if (web != null) web.evaluateJavascript("window.MANOS_API&&MANOS_API.alSalir()", null);
         paradaMs = SystemClock.elapsedRealtime();
         if (web != null) web.evaluateJavascript("window.SYNC_API&&SYNC_API.alSalir()", null);
     }
@@ -308,6 +452,7 @@ public class MainActivity extends Activity {
             web.evaluateJavascript("window.SEG_API&&SEG_API.vuelve(" + fuera + ")", null);
             web.evaluateJavascript("window.SYNC_API&&SYNC_API.alVolver()", null);
         }
+        if (web != null) web.evaluateJavascript("window.MANOS_API&&MANOS_API.alVolver()", null);
     }
 
     @Override
@@ -1071,6 +1216,31 @@ public class MainActivity extends Activity {
                     a.syncElegirPropio(nombre);
                 }
             });
+        }
+
+        @JavascriptInterface
+        public String vozDisponible() {
+            return a.vozDisponible();
+        }
+
+        @JavascriptInterface
+        public void vozHablar(final String texto, final String id) {
+            a.runOnUiThread(new Runnable() { public void run() { a.vozHablar(texto, id); } });
+        }
+
+        @JavascriptInterface
+        public void vozEscuchar() {
+            a.runOnUiThread(new Runnable() { public void run() { a.vozEscuchar(); } });
+        }
+
+        @JavascriptInterface
+        public void vozParar() {
+            a.runOnUiThread(new Runnable() { public void run() { a.vozParar(); } });
+        }
+
+        @JavascriptInterface
+        public void vozPantalla(final boolean on) {
+            a.runOnUiThread(new Runnable() { public void run() { a.vozPantalla(on); } });
         }
 
         @JavascriptInterface
