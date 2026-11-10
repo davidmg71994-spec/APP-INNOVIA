@@ -36,4 +36,4 @@
   .tar-cb{grid-column:1;grid-row:auto;justify-content:flex-start}
   .tar-cb:empty{display:none}
 }
-.ini-mi.m-tar{background:var(--brand-soft);color:var(--brand-text)}
+.ini-mi.m-tar{background:#A3456E;color:#fff}

@@ -1,0 +1,69 @@
+/* Panel con gráficos en Inicio (1.25.0). Colores comprobados con el validador (dataviz):
+   claro #2F6FB3/#E56F0B y estados #1C7A44/#8A8882/#C42B24; oscuro #3F84D6/#D9721F y #2FA661/#5E5C58/#E5534B. */
+:root{--pn-vis:#2F6FB3;--pn-vis-now:#1F5490;--pn-def:#E56F0B;--pn-ok:#1C7A44;--pn-pend:#8A8882;--pn-bad:#C42B24;--pn-warn:#9A6400;--pn-track:#ECEAE6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pn-vis:#3F84D6;--pn-vis-now:#6FA6E6;--pn-def:#D9721F;--pn-ok:#2FA661;--pn-pend:#5E5C58;--pn-bad:#E5534B;--pn-warn:#E0A33A;--pn-track:#2C2A28}}
+:root[data-theme="dark"]{--pn-vis:#3F84D6;--pn-vis-now:#6FA6E6;--pn-def:#D9721F;--pn-ok:#2FA661;--pn-pend:#5E5C58;--pn-bad:#E5534B;--pn-warn:#E0A33A;--pn-track:#2C2A28}
+#ini-panel{order:6;position:relative;container:pn/inline-size}
+.ini-body>#ini-panel{grid-column:1/-1}
+.pn-ctr{font-size:13px;color:var(--muted);text-align:right;overflow-wrap:anywhere}
+.pn-grid{display:grid;gap:10px}
+@container pn (min-width:560px){.pn-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pn-tar{grid-column:1/-1}}
+@container pn (min-width:960px){.pn-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.pn-vis,.pn-def,.pn-plan{grid-column:span 2}.pn-rev,.pn-tar{grid-column:span 3}}
+.pn-w{margin:0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);display:grid;gap:10px;align-content:start;min-width:0}
+.pn-w figcaption{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;align-items:baseline}
+.pn-w figcaption b{font:700 15px/1.25 var(--f-display);color:var(--ink)}
+.pn-w figcaption span{grid-column:1;font-size:13px;color:var(--muted)}
+.pn-ir{grid-column:2;grid-row:1/span 2;align-self:center;border:0;background:none;color:var(--brand-text);font:600 13.5px var(--f-body);cursor:pointer;padding:8px 4px;min-height:36px}
+.pn-vac{margin:0;font-size:14px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.pn-vac svg{width:18px;height:18px;color:var(--pn-ok);flex:none}
+/* visitas por mes: columnas finas, una escala, valor escrito solo en el mes actual */
+.pn-cols{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:2px;align-items:end;height:118px;border-bottom:1px solid var(--line)}
+.pn-c{appearance:none;border:0;background:none;padding:0;height:100%;display:grid;grid-template-rows:15px minmax(0,1fr) auto;justify-items:center;align-items:end;cursor:default;min-width:0;color:var(--muted)}
+.pn-c i{grid-row:2;display:block;width:min(70%,16px);background:var(--pn-vis);border-radius:4px 4px 0 0;align-self:end}
+.pn-c.now i{background:var(--pn-vis-now)}
+.pn-c.fut i{height:0!important}
+.pn-c em{grid-row:1;font:700 12px/1 var(--f-display);font-style:normal;color:var(--ink);margin-bottom:3px}
+.pn-c span{grid-row:3;font:600 11px/1 var(--f-mono);padding:5px 0 3px}
+.pn-c.now span{color:var(--ink)}
+.pn-c.fut span{opacity:.55}
+.pn-c:focus-visible,.pn-r:focus-visible,.pn-stack i:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+/* deficiencias por bloque: barras horizontales de un solo color */
+.pn-rows{display:grid;gap:4px}
+.pn-r{appearance:none;border:0;background:none;padding:3px 0;display:grid;grid-template-columns:minmax(70px,34%) minmax(0,1fr) 30px;gap:8px;align-items:center;text-align:left;color:var(--ink);font:inherit;cursor:default;min-height:30px}
+.pn-rl{font-size:13.5px;overflow-wrap:anywhere}
+.pn-rb{height:14px;display:block;border-radius:0 4px 4px 0;background:none}
+.pn-rb i{display:block;height:100%;background:var(--pn-def);border-radius:0 4px 4px 0}
+.pn-rv{font:700 13px/1 var(--f-display);text-align:right}
+/* planificación: una barra apilada con hueco de 2px entre tramos, leyenda con icono, texto y número */
+.pn-stack{display:flex;gap:2px;height:18px;border-radius:4px;overflow:hidden;background:var(--surface)}
+.pn-stack i{display:block;min-width:4px}
+.pn-stack .st-ok{background:var(--pn-ok)}.pn-stack .st-pend{background:var(--pn-pend)}.pn-stack .st-bad{background:var(--pn-bad)}
+.pn-leg{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px}
+.pn-leg li{display:flex;align-items:center;gap:5px;font-size:13.5px;color:var(--ink)}
+.pn-leg li svg{width:16px;height:16px;flex:none}
+.pn-leg .st-ok svg{color:var(--pn-ok)}.pn-leg .st-pend svg{color:var(--muted)}.pn-leg .st-bad svg{color:var(--pn-bad)}
+.pn-leg b{font:700 13px var(--f-display)}
+/* revisiones: tres casillas de estado con icono, número y texto */
+.pn-tiles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pn-tiles li{display:grid;justify-items:start;gap:2px;padding:9px 10px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.pn-tiles svg{width:18px;height:18px}
+.pn-tiles b{font:700 22px/1.1 var(--f-display);color:var(--ink)}
+.pn-tiles span{font-size:12.5px;color:var(--muted);line-height:1.2}
+.pn-tiles .st-ok svg{color:var(--pn-ok)}.pn-tiles .st-warn svg{color:var(--pn-warn)}.pn-tiles .st-bad svg{color:var(--pn-bad)}
+/* tareas del mes: barra de progreso */
+.pn-prog{height:12px;border-radius:99px;background:var(--pn-track);overflow:hidden}
+.pn-prog i{display:block;height:100%;background:var(--pn-ok);border-radius:99px}
+.pn-pt{margin:0;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+.pn-pt .pn-bad{margin-left:10px}
+.pn-pt b{color:var(--ink);font:700 15px var(--f-display)}
+.pn-bad{display:inline-flex;align-items:center;gap:4px;color:var(--bad);font-weight:600}
+.pn-bad svg{width:15px;height:15px}
+/* tabla y aviso flotante */
+.pn-tabla{font-size:14px}
+.pn-tabla summary{cursor:pointer;color:var(--brand-text);font-weight:600;padding:6px 0;min-height:32px}
+.pn-tabla table{width:100%;border-collapse:collapse;margin:6px 0 10px}
+.pn-tabla caption{text-align:left;font-weight:700;padding:4px 0}
+.pn-tabla th,.pn-tabla td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;font-weight:400}
+.pn-tabla td{text-align:right;font-variant-numeric:tabular-nums}
+.pn-tip{position:absolute;z-index:5;max-width:240px;padding:6px 9px;border-radius:8px;background:var(--ink);color:var(--surface);font-size:13px;line-height:1.3;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.pn-tip[hidden]{display:none}

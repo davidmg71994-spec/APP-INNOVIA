@@ -458,6 +458,11 @@ window.REV_API = {
   resumen: () => resumen(true),
   /* para «Hoy y vencidas» del Inicio */
   pendientes: () => REVS.map(r => ({r, e:estado(r)})).filter(x => x.e.k === 'bad' || x.e.k === 'warn').map(({r, e}) => ({id:r.id, t:r.nombre || '', ident:r.ident || '', ctr:r.ctr || null, k:e.k, v:e.v, n:e.n})),
+  /* panel de Inicio (1.25.0): las del contrato (y las sin contrato) por estado */
+  resumenDe(ctrId) {
+    const e = REVS.filter(r => !ctrId || !(r.ctr && r.ctr.id) || r.ctr.id === ctrId).map(r => estado(r).k);
+    return {n:e.length, ok:e.filter(k => k === 'ok').length, soon:e.filter(k => k === 'soon').length, warn:e.filter(k => k === 'warn').length, bad:e.filter(k => k === 'bad').length, none:e.filter(k => k === 'none').length};
+  },
   /* anillo del Inicio: las del contrato (y las sin contrato) que no están vencidas */
   alDia(ctrId) {
     const l = REVS.filter(r => !ctrId || !(r.ctr && r.ctr.id) || r.ctr.id === ctrId).map(r => estado(r).k).filter(k => k !== 'none');

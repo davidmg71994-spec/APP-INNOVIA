@@ -2,7 +2,7 @@
 
 App para los técnicos de PRL de Innovia: registro de comprobación del recurso preventivo en obra, informe de seguimiento cuatrimestral, planificación preventiva y evaluación de riesgos, con salida en PDF, Word y Excel, y el PSS/DGP de cada obra a mano.
 
-**Versión 1.24.0 · 10/11/2026**
+**Versión 1.25.0 · 10/11/2026**
 
 ## Cómo usarla
 
@@ -15,7 +15,7 @@ Los datos (visitas, informes, planificaciones, evaluaciones de riesgos, calendar
 
 ## Qué hace
 
-- **Inicio**: tres anillos (visitas del mes, medidas aplicadas de la planificación y revisiones al día), una lista con lo vencido y lo de hoy, el gráfico de deficiencias de los últimos 6 meses, la carpeta del PSS/DGP de la obra activa y los nueve apartados en una cuadrícula de colores con aviso cuando hay algo vencido.
+- **Inicio**: tres anillos (visitas del mes, medidas aplicadas de la planificación y revisiones al día), una lista con lo vencido y lo de hoy, el gráfico de deficiencias de los últimos 6 meses, la carpeta del PSS/DGP de la obra activa, un **panel con gráficos** del contrato (visitas de cada mes del año, en qué bloques aparecen las deficiencias, planificación, revisiones y tareas del mes, con el dato exacto al tocar y vista en tabla) y los apartados en una cuadrícula de colores con aviso cuando hay algo vencido.
 - **Perfil y contratos**: cada técnico pone sus datos y los contratos que lleva (nombre, Nº SIE, objeto). Todo se guarda ligado a su contrato.
 - **Visitas**: registro de comprobación paso a paso, con fotos, firma y PDF; historial filtrado por contrato.
 - **Documentos**

@@ -231,6 +231,7 @@ function renderHome() {
       ${defHtml(c)}
     </section>
     </div>
+    ${window.PANEL_API ? PANEL_API.html(c) : ''}
     <h2 class="ini-sec">Apartados</h2>
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
