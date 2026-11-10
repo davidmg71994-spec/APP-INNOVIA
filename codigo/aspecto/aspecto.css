@@ -1,0 +1,22 @@
+/* Aspecto (1.23.0): tamaño de la letra */
+:root{--fz:1}
+:root[data-letra="0.9"]{--fz:.9}
+:root[data-letra="1.15"]{--fz:1.15}
+:root[data-letra="1.3"]{--fz:1.3}
+.asp-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.asp-seg.asp-letra{grid-template-columns:repeat(4,minmax(0,1fr))}
+.asp-seg button{appearance:none;min-height:46px;padding:4px 6px;border:1.5px solid var(--line-strong);background:var(--surface);color:var(--ink);font:600 15px/1.1 var(--f-body);border-radius:8px;cursor:pointer}
+.asp-seg button{font-size:calc(15px*min(var(--fz,1),1.1))}
+.asp-seg button:hover{border-color:var(--muted)}
+.asp-seg button[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.asp-seg button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.asp-a{font-family:var(--f-display);font-weight:700;line-height:1}
+.asp-a09{font-size:14px}.asp-a1{font-size:17px}.asp-a115{font-size:20px}.asp-a13{font-size:23px}
+/* con la letra grande en el móvil: «Anterior» se queda en «‹» y el centro de la barra no parte palabras */
+@media (max-width:520px){
+  :root[data-letra="1.15"] #wiz-prev,:root[data-letra="1.3"] #wiz-prev{font-size:0;min-width:48px;padding-inline:0;justify-content:center}
+  :root[data-letra="1.15"] #wiz-prev::before,:root[data-letra="1.3"] #wiz-prev::before{content:'‹';font-size:calc(26px*min(var(--fz,1),1.1));line-height:1}
+}
+:root[data-letra] .wiz-c span,:root[data-letra] .wiz-c b{overflow-wrap:normal}
+:root[data-letra] .wiz-c b{font-size:calc(12px*min(var(--fz,1),1.1))}
+:root[data-letra] .wiz-c span{font-size:calc(14px*min(var(--fz,1),1.1))}

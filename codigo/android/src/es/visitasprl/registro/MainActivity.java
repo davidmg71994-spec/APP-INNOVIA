@@ -27,6 +27,9 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.view.View;
+import android.view.Window;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -412,6 +415,22 @@ public class MainActivity extends Activity {
     void vozParar() {
         try { if (tts != null) tts.stop(); } catch (Exception e) { /* nada */ }
         try { if (oido != null) oido.cancel(); } catch (Exception e) { /* nada */ }
+    }
+
+    /* 1.23.0: barras del sistema según el tema elegido en la app (auto | claro | oscuro) */
+    void barras(String modo) {
+        boolean noche = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        boolean oscuro = "oscuro".equals(modo) || (!"claro".equals(modo) && noche);
+        Window w = getWindow();
+        int c = oscuro ? 0xFF1D1C1B : 0xFFFFFFFF;
+        w.setStatusBarColor(c);
+        w.setNavigationBarColor(c);
+        View d = w.getDecorView();
+        int f = d.getSystemUiVisibility();
+        if (oscuro) f &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; else f |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        if (Build.VERSION.SDK_INT >= 26) { if (oscuro) f &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR; else f |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR; }
+        d.setSystemUiVisibility(f);
+        if (web != null) web.setBackgroundColor(c);
     }
 
     void vozPantalla(boolean on) {
@@ -1236,6 +1255,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void vozParar() {
             a.runOnUiThread(new Runnable() { public void run() { a.vozParar(); } });
+        }
+
+        @JavascriptInterface
+        public void barras(final String modo) {
+            a.runOnUiThread(new Runnable() { public void run() { a.barras(modo); } });
         }
 
         @JavascriptInterface

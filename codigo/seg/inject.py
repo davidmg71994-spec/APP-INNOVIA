@@ -144,6 +144,8 @@ if "{v:'1.18.1'" not in h:
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.18.1 · 09/11/2026", h, count=1)
 
 # --- 8. política de seguridad del contenido ---
+sys.path.insert(0, '/home/claude/pwa/aspecto'); import letra
+h = letra.escalar_html(h)   # 1.23.0: letra ajustable también en el CSS de este módulo
 h = csp.aplicar(h)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ok', len(h))
