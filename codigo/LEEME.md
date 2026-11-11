@@ -218,6 +218,7 @@ En el PDF, el registro mantiene el orden del formulario original; la tabla de tr
 - Lo que se borra en un equipo queda apuntado (`localStorage['vis-borradas']`, desde `hdb.del`): al importar no vuelve, salvo que se marque «Importarla también».
 - La contraseña de otro dispositivo se recuerda al abrir su copia (`seg.js`, `sdb` `sync:<sal>`): no hay que escribirla en cada importación.
 - Pruebas: `test-pasar.js` (las de la sincronización quedan en `tests-antiguos/`).
+- 1.28.1: al importar, un archivo de 0 bytes (descarga a medias desde Dropbox) se explica con su propio aviso en vez de «no es una copia válida».
 
 ## Sincronizar: solo visitas, del móvil al ordenador (1.27.0)
 - Petición de David: «que solo se pueda sincronizar visitas de tajo del móvil al ordenador; el ordenador no sincroniza nada al móvil» (`sync/sync.js`).

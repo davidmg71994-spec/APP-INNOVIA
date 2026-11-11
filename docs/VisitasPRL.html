@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-BG3IfNKY7p4Za/Xc4Ki5lI7hIFgvDm2YoQB5XYT0bQ0='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-gCUlN2aeU0ZZA4LNpQU4NNNYW+XfFi3Q7zxAwT/ey+E='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -2029,7 +2029,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.28.0 · 11/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.28.1 · 11/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -3064,7 +3064,9 @@ async function importBackup(e) {
   if (!files.length) return;
   const porId = new Map(), infPorId = new Map();
   let malos = 0, planesImp = 0, calImp = 0, revImp = 0, evrlImp = 0, pssImp = 0, segMal = 0;
+  let xvVacios = 0;
   for (const f of files) {
+    if (!f.size) { xvVacios++; malos++; continue; }
     try {
       let j = JSON.parse(await f.text());
       if (j && !Array.isArray(j) && j.cifrado && window.SEG_API) j = await SEG_API.descifrarCopia(j, f.name);
@@ -3092,7 +3094,8 @@ async function importBackup(e) {
     await INF_API.importar(nuevosI); toast(`Importados ${plural(nuevosI.length, 'informe', 'informes')}.`); return;
   }
   if (!porId.size && segMal && segMal === malos) { toast('No se abrió la copia cifrada: la contraseña no es correcta o se saltó.'); return; }
-  if (!porId.size) { toast(files.length === 1 ? 'El archivo no es una copia válida de Registro RP.' : 'Ninguno de los archivos es una copia válida de Registro RP.'); return; }
+  if (!porId.size && xvVacios === files.length) { await ask({title:files.length === 1 ? 'El archivo está vacío' : 'Los archivos están vacíos', single:true, yes:'Entendido', body:`<p>${files.length === 1 ? esc(files[0].name) + ' tiene 0 bytes' : 'Todos tienen 0 bytes'}: no se terminó de descargar (o de subir a Dropbox desde el móvil).</p><p>Vuelve a descargarlo y elige el que pese algo (en Descargas puede llamarse igual con «(1)» al final).</p>`}); return; }
+  if (!porId.size) { toast(files.length === 1 ? 'El archivo no es una copia válida de Visitas PRL.' : 'Ninguno de los archivos es una copia válida de Visitas PRL.'); return; }
   const actual = new Map(HIST.map(r => [r.id, r]));
   const borradas = [...porId.values()].filter(r => !actual.has(r.id) && visBorrada(r));
   const todos = [...porId.values()].filter(r => !borradas.includes(r));
@@ -4386,8 +4389,11 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.28.0';
+const APP_VER = '1.28.1';
 const NOVEDADES = [
+  {v:'1.28.1', fecha:'11/11/2026', items:[
+    'Al importar, si el archivo está vacío (0 bytes, una descarga a medias) la app te lo dice y te explica qué hacer, en vez de «no es una copia válida».'
+  ]},
   {v:'1.28.0', fecha:'11/11/2026', items:[
     '<b>Pasar visitas al ordenador, a mano</b>: en Visitas › Historial, en el móvil pulsa <b>«Exportar visitas»</b> y guarda el archivo en Dropbox (u OneDrive); en el ordenador pulsa <b>«Importar visitas»</b> y elige ese archivo. Solo viajan las visitas y del ordenador no llega nada al móvil.',
     'Se quita la sincronización automática: ya nada se pasa solo entre el móvil y el ordenador.',

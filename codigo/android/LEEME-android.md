@@ -70,6 +70,7 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 | 1.26.1 | 38 | 10/11/2026 | Calendario › Mes: en el ordenador cada día enseña en pequeño lo que toca (hasta 3 tareas y «+N más»). |
 | 1.27.0 | 39 | 11/11/2026 | Sincronizar: solo las visitas y solo del móvil al ordenador; el ordenador no envía nada al móvil. La web en el móvil se presenta como «móvil». |
 | 1.28.0 | 40 | 11/11/2026 | Sin sincronización automática: «Exportar visitas» en el móvil e «Importar visitas» en el ordenador (solo visitas; lo borrado no vuelve). |
+| 1.28.1 | 41 | 11/11/2026 | Importar: aviso claro si el archivo está vacío (0 bytes). |
 
 ## Cómo funciona en el móvil
 - **PDF y copias de seguridad**: «Compartir» los envía por WhatsApp, correo, Drive…; «Guardar» los deja en **Descargas › Visitas PRL**. Con el PDF el botón es **«Guardar y abrir»**: lo guarda y lo abre con el visor del móvil para revisarlo.
@@ -188,6 +189,7 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 - Lo que se borra en un equipo queda apuntado (`localStorage['vis-borradas']`, desde `hdb.del`): al importar no vuelve, salvo que se marque «Importarla también».
 - La contraseña de otro dispositivo se recuerda al abrir su copia (`seg.js`, `sdb` `sync:<sal>`): no hay que escribirla en cada importación.
 - Pruebas: `test-pasar.js` (las de la sincronización quedan en `tests-antiguos/`).
+- 1.28.1: al importar, un archivo de 0 bytes (descarga a medias desde Dropbox) se explica con su propio aviso en vez de «no es una copia válida».
 
 ## Sincronizar: solo visitas, del móvil al ordenador (1.27.0)
 - Petición de David: «que solo se pueda sincronizar visitas de tajo del móvil al ordenador; el ordenador no sincroniza nada al móvil» (`sync/sync.js`).

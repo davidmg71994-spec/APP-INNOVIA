@@ -59,6 +59,19 @@ if 'const borradas = [...porId.values()]' not in h:
   if (!aImportar.length) return;
 """)
 
+# 5a. (1.28.1) un archivo vacío (descarga a medias) se explica en vez de «no es una copia válida»
+if 'let xvVacios = 0;' not in h:
+    rep("""  for (const f of files) {
+    try {
+      let j = JSON.parse(await f.text());""", """  let xvVacios = 0;
+  for (const f of files) {
+    if (!f.size) { xvVacios++; malos++; continue; }
+    try {
+      let j = JSON.parse(await f.text());""")
+    rep("""  if (!porId.size) { toast(files.length === 1 ? 'El archivo no es una copia válida de Registro RP.' : 'Ninguno de los archivos es una copia válida de Registro RP.'); return; }""",
+        """  if (!porId.size && xvVacios === files.length) { await ask({title:files.length === 1 ? 'El archivo está vacío' : 'Los archivos están vacíos', single:true, yes:'Entendido', body:`<p>${files.length === 1 ? esc(files[0].name) + ' tiene 0 bytes' : 'Todos tienen 0 bytes'}: no se terminó de descargar (o de subir a Dropbox desde el móvil).</p><p>Vuelve a descargarlo y elige el que pese algo (en Descargas puede llamarse igual con «(1)» al final).</p>`}); return; }
+  if (!porId.size) { toast(files.length === 1 ? 'El archivo no es una copia válida de Visitas PRL.' : 'Ninguno de los archivos es una copia válida de Visitas PRL.'); return; }""")
+
 # 5b. textos: la copia de seguridad ya no es la forma de pasar visitas al ordenador
 h = h.replace("Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span>",
               "Exporta una copia de vez en cuando y antes de cambiar de teléfono.</span>")
@@ -75,5 +88,13 @@ if "{v:'1.28.0'" not in h:
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.28.0 · 11/11/2026", h, count=1)
 
+if "{v:'1.28.1'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.28.1';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.28.1', fecha:'11/11/2026', items:[
+    'Al importar, si el archivo está vacío (0 bytes, una descarga a medias) la app te lo dice y te explica qué hacer, en vez de «no es una copia válida».'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.28.1 · 11/11/2026", h, count=1)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('pasar ok', len(h))
