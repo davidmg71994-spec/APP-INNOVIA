@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-NJU8WAT8DFLISi6JP/xcHtAFHHPsYg+is7FqZo1nDqE='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-nJzPYcSgrLVOYKFo58wI9pEnqFZec9KebIVhZHB8DtY='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -874,6 +874,133 @@ body.onb-on{overflow:hidden}
 .pl-mes.vacio .pl-mh{font-size:calc(14.5px*var(--fz,1));color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:8px}
 .pl-mes.hoy .pl-mh{color:var(--corp-text)}
 /*PLAN-CSS-END*/
+/*CAL-CSS-START*/
+/* Calendario PRL (1.26.0: más sencillo). Sin bandas de color ni leyenda: una lista limpia, tres pestañas y un número por día en el mes. */
+:root{--k-vis:#1F5FA8;--k-inst:#B4530F;--k-veh:#8A6A00;--k-reg:#2C7A3F;--k-ma:#0E7490;--k-hito:#7A3FA0;--k-otr:#5B6470}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}}
+:root[data-theme="dark"]{--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}
+#view-cal{gap:12px}
+#view-cal>div{min-width:0}
+#cal-main:not([hidden]),#cal-form:not([hidden]){display:grid;gap:12px;min-width:0}
+#cal-main>*,#cal-form>*{min-width:0}
+.k-vis{--kc:var(--k-vis)}.k-inst{--kc:var(--k-inst)}.k-veh{--kc:var(--k-veh)}.k-reg{--kc:var(--k-reg)}.k-ma{--kc:var(--k-ma)}.k-hito{--kc:var(--k-hito)}.k-otr{--kc:var(--k-otr)}
+#view-cal .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--kc);flex:none}
+/* cabecera corta: título y un resumen en pastillas */
+.cal-top{display:grid;gap:8px}
+.cal-top h2{margin:0;font:700 calc(26px*var(--fz,1))/1.15 var(--f-display);color:var(--ink)}
+.cal-res{margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.cal-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:99px;font:600 calc(14px*var(--fz,1))/1 var(--f-body);background:var(--surface-2);border:1px solid var(--line);color:var(--ink)}
+.cal-pill.bad{background:var(--bad-soft);border-color:transparent;color:var(--bad)}
+.cal-pill.hoy{background:var(--corp);border-color:transparent;color:var(--corp-ink)}
+.cal-pill.ok{color:var(--ok)}
+.cal-pill svg{width:15px;height:15px}
+.cal-blank{gap:10px}
+.cal-blank .btn{justify-self:start;margin-top:4px;display:inline-flex;align-items:center;gap:6px}
+.cal-blank .btn svg{width:18px;height:18px}
+/* pestañas */
+.cal-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-tabs button{appearance:none;border:0;background:none;border-radius:9px;min-height:44px;padding:6px 4px;font:600 calc(15px*var(--fz,1))/1.1 var(--f-body);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-width:0}
+.cal-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12),inset 0 0 0 1px var(--line-strong)}
+.cal-tabs button i{font:600 calc(12px*var(--fz,1))/1 var(--f-mono);font-style:normal;padding:3px 7px;border-radius:99px;background:var(--line);color:var(--ink)}
+.cal-tabs button[aria-selected="true"] i{background:var(--corp);color:var(--corp-ink)}
+.cal-tabs button:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.cal-fcw{display:flex;align-items:center;gap:8px;font-size:calc(14px*var(--fz,1));color:var(--muted)}
+.cal-fcw select{flex:1;min-width:0;min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 calc(15px*var(--fz,1)) var(--f-body)}
+.cal-body{display:grid;gap:10px;min-width:0}
+/* grupos y filas: una tarjeta con líneas finas entre tareas */
+.cal-gh{display:flex;align-items:center;gap:8px;margin:6px 2px 0;font:600 calc(12.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cal-gh i{font-style:normal;font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-gh.g-bad{color:var(--bad)}
+.cal-gh.g-bad i{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.cal-gh.g-hoy{color:var(--corp-text)}
+.cal-list{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cal-row{display:flex;align-items:center;gap:12px;padding:10px 12px;min-width:0;border-top:1px solid var(--line)}
+.cal-row:first-child{border-top:0}
+.cal-row.st-bad .cal-ck{border-color:var(--bad)}
+.cal-ck{appearance:none;flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:transparent}
+.cal-ck svg{width:17px;height:17px}
+.cal-ck[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--on-ok)}
+.cal-ck:active{transform:scale(.94)}
+.cal-ck:focus-visible,.cal-open:focus-visible,.cal-quitar:focus-visible,.cal-d:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.cal-open{appearance:none;flex:1;min-width:0;background:none;border:0;padding:2px 0;margin:0;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;display:grid;gap:3px}
+.cal-open b{font:600 calc(15px*var(--fz,1))/1.3 var(--f-body);overflow-wrap:anywhere}
+.cal-row.st-ok .cal-open b{text-decoration:line-through;color:var(--muted)}
+.cal-meta{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;font-size:calc(13px*var(--fz,1));color:var(--muted)}
+.cal-meta span{display:inline-flex;align-items:center;gap:4px}
+.cal-tc{font-weight:600;color:var(--corp-text)}
+.cal-meta svg{width:13px;height:13px}
+.cal-late{font-weight:600;color:var(--bad)}
+.cal-mas{display:grid;gap:8px}
+.cal-mas summary{cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 2px;font:600 calc(12.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);list-style:none}
+.cal-mas summary::-webkit-details-marker{display:none}
+.cal-mas summary::before{content:'›';font:700 calc(18px*var(--fz,1))/1 var(--f-display);letter-spacing:0;transition:transform .15s}
+.cal-mas[open] summary::before{transform:rotate(90deg)}
+.cal-mas summary small{font:400 calc(12px*var(--fz,1)) var(--f-body);letter-spacing:0;text-transform:none}
+.cal-mas summary i{font-style:normal;font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-ok{display:flex;align-items:center;gap:10px;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);color:var(--ok)}
+.cal-ok svg{width:26px;height:26px;flex:none}
+.cal-ok b{color:var(--ink);font:600 calc(16px*var(--fz,1)) var(--f-body)}
+.cal-vacio{margin:0}
+/* Mis tareas: añadir arriba, «Quitar» en cada una */
+.cal-add{display:flex;align-items:center;justify-content:center;gap:8px}
+.cal-add svg{width:20px;height:20px}
+.cal-lh{margin:0}
+.cal-quitar{appearance:none;flex:none;display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:6px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--bad);font:600 calc(14px*var(--fz,1)) var(--f-body);cursor:pointer}
+.cal-quitar svg{width:17px;height:17px}
+.cal-quitar:hover{border-color:var(--bad)}
+@media (max-width:360px){.cal-quitar span{display:none}}
+/* mes: un número por día con lo que queda */
+.cal-mbar{display:flex;align-items:center;gap:10px}
+.cal-mbar h3{flex:1;margin:0;text-align:center;font:700 calc(19px*var(--fz,1))/1.2 var(--f-display)}
+.nav-b{appearance:none;width:42px;height:40px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:600 calc(22px*var(--fz,1))/1 var(--f-display);cursor:pointer}
+.cal-msum{margin:-4px 0 0;text-align:center;font-size:calc(13.5px*var(--fz,1));color:var(--muted)}
+.cal-hoyb{padding:2px 4px;font-size:calc(13.5px*var(--fz,1));color:var(--corp-text);text-decoration:underline;text-underline-offset:3px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal-dow{font:600 calc(11px*var(--fz,1))/1 var(--f-mono);color:var(--muted);text-align:center;padding:4px 0 2px}
+.cal-d{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:9px;min-height:50px;padding:6px 2px 5px;display:grid;grid-template-rows:auto 1fr;justify-items:center;align-items:center;gap:2px;cursor:pointer;color:var(--ink);min-width:0}
+.cal-d.out{visibility:hidden}
+.cal-d.we{background:var(--surface-2)}
+.cal-d .n{font:600 calc(13px*var(--fz,1))/1 var(--f-mono)}
+.cal-d.hoy .n{background:var(--corp);color:var(--corp-ink);border-radius:99px;padding:3px 6px;margin-top:-2px}
+.cal-d.sel{border-color:var(--corp-text);box-shadow:inset 0 0 0 1.5px var(--corp-text)}
+.cal-c{font:700 calc(11.5px*var(--fz,1))/1 var(--f-mono);font-style:normal;min-width:18px;height:18px;padding:0 4px;border-radius:99px;display:grid;place-items:center;background:var(--corp-soft,var(--surface-2));color:var(--corp-text)}
+.cal-d.late .cal-c{background:var(--bad);color:#fff}
+.cal-c.ok{background:none;color:var(--ok);padding:0}
+.cal-c.ok svg{width:15px;height:15px}
+.cal-dhead{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.cal-dhead .cal-gh{margin:0}
+.cal-addd{appearance:none;display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:4px 10px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);color:var(--corp-text);font:600 calc(14px*var(--fz,1)) var(--f-body);cursor:pointer}
+.cal-addd svg{width:16px;height:16px}
+/* formulario */
+.cal-ff{display:grid;gap:16px}
+.cal-ff .opc{font-style:normal;font-weight:500;opacity:.8}
+.cal-ff textarea{resize:vertical}
+.cal-tipos,.cal-reps{gap:6px}
+.cal-tipos .chip,.cal-reps .chip{padding:9px 12px;font-size:calc(14px*var(--fz,1))}
+.cal-sug,.cal-masop{border:1px dashed var(--line-strong);border-radius:10px;padding:0 12px}
+.cal-sug summary,.cal-masop summary{cursor:pointer;padding:11px 0;font:600 calc(14.5px*var(--fz,1))/1.2 var(--f-body);color:var(--corp-text)}
+.cal-sug summary small,.cal-masop summary small{font-weight:400;color:var(--muted);margin-left:4px}
+.cal-sug .chips{gap:6px;padding:0 0 12px}
+.cal-sug .chip{padding:8px 11px;font-size:calc(13.5px*var(--fz,1));text-align:left}
+.cal-masop>.cal-ff{padding:2px 0 14px}
+.cal-fbtns{display:grid;gap:8px}
+.cal-fbtns .btn svg{width:18px;height:18px;vertical-align:-3px;margin-right:6px}
+@media (min-width:600px){.cal-d{min-height:62px}}
+/* 1.26.1 · si la rejilla es ancha, cada día enseña sus tareas en pequeño (hasta 3 y «+N más») en vez del número */
+.cal-body{container:calm/inline-size}
+.cal-ts{display:none}
+@container calm (min-width:620px){
+  .cal-d{min-height:92px;grid-template-rows:auto 1fr;align-items:start;justify-items:stretch;padding:6px 5px 6px;text-align:left}
+  .cal-d .n{justify-self:center}
+  .cal-d .cal-c{display:none}
+  .cal-ts{display:grid;gap:3px;align-content:start;min-width:0}
+  .cal-tt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font:500 calc(12px*var(--fz,1))/1.25 var(--f-body);padding:2px 5px;border-radius:5px;background:var(--corp-soft);color:var(--corp-text);overflow:hidden;overflow-wrap:anywhere;min-width:0}
+  .cal-tt.late{background:var(--bad-soft);color:var(--bad);font-weight:600}
+  .cal-tt.ok{background:none;color:var(--muted);text-decoration:line-through;padding-inline:2px}
+  .cal-tm{font:600 calc(11px*var(--fz,1))/1.2 var(--f-body);color:var(--muted);padding:0 3px}
+}
+.ini-t.bad .ini-n{background:var(--bad-soft);color:var(--bad)}
+/*CAL-CSS-END*/
 /*REV-CSS-START*/
 /* Revisiones: cabecera azul como planificación y calendario; tarjetas con el estado a la vista y tabla como la del Calendario PRL */
 #view-rev{gap:12px}
@@ -1571,133 +1698,6 @@ body.sub-on.wiz-on .sy-aviso,#view-form:not([hidden])~.sy-aviso{bottom:calc(140p
 @keyframes syLatido{50%{opacity:.3}}
 @media print{.sy-aviso,.sy-pie{display:none!important}}
 /*SYNC-CSS-END*/
-/*CAL-CSS-START*/
-/* Calendario PRL (1.26.0: más sencillo). Sin bandas de color ni leyenda: una lista limpia, tres pestañas y un número por día en el mes. */
-:root{--k-vis:#1F5FA8;--k-inst:#B4530F;--k-veh:#8A6A00;--k-reg:#2C7A3F;--k-ma:#0E7490;--k-hito:#7A3FA0;--k-otr:#5B6470}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}}
-:root[data-theme="dark"]{--k-vis:#8FBCF0;--k-inst:#F0A468;--k-veh:#E6C85A;--k-reg:#7FD18F;--k-ma:#66CBE0;--k-hito:#CFA0EC;--k-otr:#B4BCC6}
-#view-cal{gap:12px}
-#view-cal>div{min-width:0}
-#cal-main:not([hidden]),#cal-form:not([hidden]){display:grid;gap:12px;min-width:0}
-#cal-main>*,#cal-form>*{min-width:0}
-.k-vis{--kc:var(--k-vis)}.k-inst{--kc:var(--k-inst)}.k-veh{--kc:var(--k-veh)}.k-reg{--kc:var(--k-reg)}.k-ma{--kc:var(--k-ma)}.k-hito{--kc:var(--k-hito)}.k-otr{--kc:var(--k-otr)}
-#view-cal .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--kc);flex:none}
-/* cabecera corta: título y un resumen en pastillas */
-.cal-top{display:grid;gap:8px}
-.cal-top h2{margin:0;font:700 calc(26px*var(--fz,1))/1.15 var(--f-display);color:var(--ink)}
-.cal-res{margin:0;display:flex;flex-wrap:wrap;gap:6px}
-.cal-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:99px;font:600 calc(14px*var(--fz,1))/1 var(--f-body);background:var(--surface-2);border:1px solid var(--line);color:var(--ink)}
-.cal-pill.bad{background:var(--bad-soft);border-color:transparent;color:var(--bad)}
-.cal-pill.hoy{background:var(--corp);border-color:transparent;color:var(--corp-ink)}
-.cal-pill.ok{color:var(--ok)}
-.cal-pill svg{width:15px;height:15px}
-.cal-blank{gap:10px}
-.cal-blank .btn{justify-self:start;margin-top:4px;display:inline-flex;align-items:center;gap:6px}
-.cal-blank .btn svg{width:18px;height:18px}
-/* pestañas */
-.cal-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
-.cal-tabs button{appearance:none;border:0;background:none;border-radius:9px;min-height:44px;padding:6px 4px;font:600 calc(15px*var(--fz,1))/1.1 var(--f-body);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-width:0}
-.cal-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12),inset 0 0 0 1px var(--line-strong)}
-.cal-tabs button i{font:600 calc(12px*var(--fz,1))/1 var(--f-mono);font-style:normal;padding:3px 7px;border-radius:99px;background:var(--line);color:var(--ink)}
-.cal-tabs button[aria-selected="true"] i{background:var(--corp);color:var(--corp-ink)}
-.cal-tabs button:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
-.cal-fcw{display:flex;align-items:center;gap:8px;font-size:calc(14px*var(--fz,1));color:var(--muted)}
-.cal-fcw select{flex:1;min-width:0;min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 calc(15px*var(--fz,1)) var(--f-body)}
-.cal-body{display:grid;gap:10px;min-width:0}
-/* grupos y filas: una tarjeta con líneas finas entre tareas */
-.cal-gh{display:flex;align-items:center;gap:8px;margin:6px 2px 0;font:600 calc(12.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.cal-gh i{font-style:normal;font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
-.cal-gh.g-bad{color:var(--bad)}
-.cal-gh.g-bad i{background:var(--bad-soft);color:var(--bad);border-color:transparent}
-.cal-gh.g-hoy{color:var(--corp-text)}
-.cal-list{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.cal-row{display:flex;align-items:center;gap:12px;padding:10px 12px;min-width:0;border-top:1px solid var(--line)}
-.cal-row:first-child{border-top:0}
-.cal-row.st-bad .cal-ck{border-color:var(--bad)}
-.cal-ck{appearance:none;flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:transparent}
-.cal-ck svg{width:17px;height:17px}
-.cal-ck[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--on-ok)}
-.cal-ck:active{transform:scale(.94)}
-.cal-ck:focus-visible,.cal-open:focus-visible,.cal-quitar:focus-visible,.cal-d:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.cal-open{appearance:none;flex:1;min-width:0;background:none;border:0;padding:2px 0;margin:0;text-align:left;color:var(--ink);font-family:var(--f-body);cursor:pointer;display:grid;gap:3px}
-.cal-open b{font:600 calc(15px*var(--fz,1))/1.3 var(--f-body);overflow-wrap:anywhere}
-.cal-row.st-ok .cal-open b{text-decoration:line-through;color:var(--muted)}
-.cal-meta{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;font-size:calc(13px*var(--fz,1));color:var(--muted)}
-.cal-meta span{display:inline-flex;align-items:center;gap:4px}
-.cal-tc{font-weight:600;color:var(--corp-text)}
-.cal-meta svg{width:13px;height:13px}
-.cal-late{font-weight:600;color:var(--bad)}
-.cal-mas{display:grid;gap:8px}
-.cal-mas summary{cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 2px;font:600 calc(12.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);list-style:none}
-.cal-mas summary::-webkit-details-marker{display:none}
-.cal-mas summary::before{content:'›';font:700 calc(18px*var(--fz,1))/1 var(--f-display);letter-spacing:0;transition:transform .15s}
-.cal-mas[open] summary::before{transform:rotate(90deg)}
-.cal-mas summary small{font:400 calc(12px*var(--fz,1)) var(--f-body);letter-spacing:0;text-transform:none}
-.cal-mas summary i{font-style:normal;font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:0;border-radius:99px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line)}
-.cal-ok{display:flex;align-items:center;gap:10px;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);color:var(--ok)}
-.cal-ok svg{width:26px;height:26px;flex:none}
-.cal-ok b{color:var(--ink);font:600 calc(16px*var(--fz,1)) var(--f-body)}
-.cal-vacio{margin:0}
-/* Mis tareas: añadir arriba, «Quitar» en cada una */
-.cal-add{display:flex;align-items:center;justify-content:center;gap:8px}
-.cal-add svg{width:20px;height:20px}
-.cal-lh{margin:0}
-.cal-quitar{appearance:none;flex:none;display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:6px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--bad);font:600 calc(14px*var(--fz,1)) var(--f-body);cursor:pointer}
-.cal-quitar svg{width:17px;height:17px}
-.cal-quitar:hover{border-color:var(--bad)}
-@media (max-width:360px){.cal-quitar span{display:none}}
-/* mes: un número por día con lo que queda */
-.cal-mbar{display:flex;align-items:center;gap:10px}
-.cal-mbar h3{flex:1;margin:0;text-align:center;font:700 calc(19px*var(--fz,1))/1.2 var(--f-display)}
-.nav-b{appearance:none;width:42px;height:40px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:600 calc(22px*var(--fz,1))/1 var(--f-display);cursor:pointer}
-.cal-msum{margin:-4px 0 0;text-align:center;font-size:calc(13.5px*var(--fz,1));color:var(--muted)}
-.cal-hoyb{padding:2px 4px;font-size:calc(13.5px*var(--fz,1));color:var(--corp-text);text-decoration:underline;text-underline-offset:3px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.cal-dow{font:600 calc(11px*var(--fz,1))/1 var(--f-mono);color:var(--muted);text-align:center;padding:4px 0 2px}
-.cal-d{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:9px;min-height:50px;padding:6px 2px 5px;display:grid;grid-template-rows:auto 1fr;justify-items:center;align-items:center;gap:2px;cursor:pointer;color:var(--ink);min-width:0}
-.cal-d.out{visibility:hidden}
-.cal-d.we{background:var(--surface-2)}
-.cal-d .n{font:600 calc(13px*var(--fz,1))/1 var(--f-mono)}
-.cal-d.hoy .n{background:var(--corp);color:var(--corp-ink);border-radius:99px;padding:3px 6px;margin-top:-2px}
-.cal-d.sel{border-color:var(--corp-text);box-shadow:inset 0 0 0 1.5px var(--corp-text)}
-.cal-c{font:700 calc(11.5px*var(--fz,1))/1 var(--f-mono);font-style:normal;min-width:18px;height:18px;padding:0 4px;border-radius:99px;display:grid;place-items:center;background:var(--corp-soft,var(--surface-2));color:var(--corp-text)}
-.cal-d.late .cal-c{background:var(--bad);color:#fff}
-.cal-c.ok{background:none;color:var(--ok);padding:0}
-.cal-c.ok svg{width:15px;height:15px}
-.cal-dhead{display:flex;align-items:center;gap:8px;justify-content:space-between}
-.cal-dhead .cal-gh{margin:0}
-.cal-addd{appearance:none;display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:4px 10px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);color:var(--corp-text);font:600 calc(14px*var(--fz,1)) var(--f-body);cursor:pointer}
-.cal-addd svg{width:16px;height:16px}
-/* formulario */
-.cal-ff{display:grid;gap:16px}
-.cal-ff .opc{font-style:normal;font-weight:500;opacity:.8}
-.cal-ff textarea{resize:vertical}
-.cal-tipos,.cal-reps{gap:6px}
-.cal-tipos .chip,.cal-reps .chip{padding:9px 12px;font-size:calc(14px*var(--fz,1))}
-.cal-sug,.cal-masop{border:1px dashed var(--line-strong);border-radius:10px;padding:0 12px}
-.cal-sug summary,.cal-masop summary{cursor:pointer;padding:11px 0;font:600 calc(14.5px*var(--fz,1))/1.2 var(--f-body);color:var(--corp-text)}
-.cal-sug summary small,.cal-masop summary small{font-weight:400;color:var(--muted);margin-left:4px}
-.cal-sug .chips{gap:6px;padding:0 0 12px}
-.cal-sug .chip{padding:8px 11px;font-size:calc(13.5px*var(--fz,1));text-align:left}
-.cal-masop>.cal-ff{padding:2px 0 14px}
-.cal-fbtns{display:grid;gap:8px}
-.cal-fbtns .btn svg{width:18px;height:18px;vertical-align:-3px;margin-right:6px}
-@media (min-width:600px){.cal-d{min-height:62px}}
-/* 1.26.1 · si la rejilla es ancha, cada día enseña sus tareas en pequeño (hasta 3 y «+N más») en vez del número */
-.cal-body{container:calm/inline-size}
-.cal-ts{display:none}
-@container calm (min-width:620px){
-  .cal-d{min-height:92px;grid-template-rows:auto 1fr;align-items:start;justify-items:stretch;padding:6px 5px 6px;text-align:left}
-  .cal-d .n{justify-self:center}
-  .cal-d .cal-c{display:none}
-  .cal-ts{display:grid;gap:3px;align-content:start;min-width:0}
-  .cal-tt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font:500 calc(12px*var(--fz,1))/1.25 var(--f-body);padding:2px 5px;border-radius:5px;background:var(--corp-soft);color:var(--corp-text);overflow:hidden;overflow-wrap:anywhere;min-width:0}
-  .cal-tt.late{background:var(--bad-soft);color:var(--bad);font-weight:600}
-  .cal-tt.ok{background:none;color:var(--muted);text-decoration:line-through;padding-inline:2px}
-  .cal-tm{font:600 calc(11px*var(--fz,1))/1.2 var(--f-body);color:var(--muted);padding:0 3px}
-}
-.ini-t.bad .ini-n{background:var(--bad-soft);color:var(--bad)}
-/*CAL-CSS-END*/
 /*TAR-CSS-START*/
 /* Tareas del técnico de PRL (1.24.0) */
 .tar-res .bb{display:grid;gap:10px}
@@ -2051,7 +2051,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.26.1 · 10/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.27.0 · 11/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -4395,8 +4395,13 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.26.1';
+const APP_VER = '1.27.0';
 const NOVEDADES = [
+  {v:'1.27.0', fecha:'11/11/2026', items:[
+    '<b>Sincronizar: solo visitas, del móvil al ordenador</b>. El móvil deja en la carpeta compartida (Dropbox, OneDrive o Enlace Móvil) solo sus visitas; el ordenador las recoge y no envía nada al móvil. Informes, planificaciones, calendario, revisiones y evaluaciones se quedan en el ordenador.',
+    'Lo que borres en el móvil ya no se borra en el ordenador: el ordenador guarda todas las visitas.',
+    'La app abierta con el acceso directo del móvil ahora se presenta como «móvil» (antes decía «ordenador»).'
+  ]},
   {v:'1.26.1', fecha:'10/11/2026', items:[
     '<b>Calendario › Mes</b>: en el ordenador (y en pantallas anchas) cada día enseña en pequeño lo que toca, hasta 3 tareas y «+N más». Lo vencido en rojo y lo hecho tachado. En el móvil sigue el número de tareas del día.'
   ]},
@@ -4695,6 +4700,7 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
 
 
 
@@ -6486,6 +6492,388 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 /*PLAN-JS-END*/
+/*CAL-JS-START*/
+/* ================= Calendario PRL del técnico: empieza en blanco, cada uno añade sus tareas ================= */
+(() => {
+const TIPOS = [
+  {k:'vis', t:'Visitas y planificación'},
+  {k:'inst', t:'Instalaciones'},
+  {k:'veh', t:'Vehículos y maquinaria'},
+  {k:'reg', t:'Índices y registros'},
+  {k:'ma', t:'Medio ambiente'},
+  {k:'hito', t:'Comités, informes y simulacros'},
+  {k:'otr', t:'Otros'}
+];
+const TIPO = Object.fromEntries(TIPOS.map(x => [x.k, x]));
+const REP = [['', 'No se repite'], ['sem', 'Cada semana'], ['mes', 'Cada mes'], ['tri', 'Cada 3 meses'], ['cua', 'Cada 4 meses'], ['semes', 'Cada 6 meses'], ['anu', 'Cada año']];
+const REPT = Object.fromEntries(REP);
+const REPM = {mes:1, tri:3, cua:4, semes:6, anu:12};
+/* ideas rápidas: solo rellenan el formulario, el técnico decide */
+const SUG = [
+  ['Visita a tajo de día', 'vis', 'mes'], ['Visita a tajo de noche', 'vis', 'mes'], ['Revisión de la planificación preventiva', 'vis', 'mes'],
+  ['Índices PRL del mes anterior', 'reg', 'mes'], ['Horas WINSIE', 'reg', 'mes'], ['Gastos PRL del mes', 'reg', 'mes'], ['Hoja trimestral de accidentes', 'reg', 'tri'],
+  ['Revisión de vehículos y maquinaria', 'veh', 'mes'], ['Revisión de pequeña maquinaria', 'veh', 'mes'],
+  ['Revisión trimestral de botiquín, extintores, anticaídas y escaleras', 'inst', 'tri'], ['Control de legionela', 'inst', 'tri'],
+  ['Registro de consumos y residuos', 'ma', 'mes'], ['Indicadores de seguridad vial', 'otr', 'mes'], ['Cartel de sensibilización y tablón', 'otr', 'mes'],
+  ['Comité de Seguridad y Salud', 'hito', 'tri'], ['Informe de seguimiento cuatrimestral', 'hito', 'cua'], ['Simulacro de emergencia', 'hito', 'anu']
+];
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const REPIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 14-4.5M20 13a8 8 0 0 1-14 4.5"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>';
+
+/* ---------- almacén ---------- */
+const cdb = (() => {
+  let p;
+  const open = () => p || (p = new Promise((res, rej) => {
+    try { const r = indexedDB.open('registro-rp-cal', 1); r.onupgradeneeded = () => r.result.createObjectStore('tareas', {keyPath:'id'}); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }
+    catch (e) { rej(e); }
+  }));
+  const tx = (m, f) => open().then(d => new Promise((res, rej) => { const t = d.transaction('tareas', m); const out = f(t.objectStore('tareas')); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }));
+  return { all: () => tx('readonly', s => s.getAll()), put: x => tx('readwrite', s => s.put(x)), del: id => tx('readwrite', s => s.delete(id)) };
+})();
+let TAREAS = [], ED = null, modo = ['mes', 'lista'].includes(lsGet('cal-modo')) ? lsGet('cal-modo') : 'agenda', fctr = '', mesV = null, diaSel = null;
+async function cargar() { try { TAREAS = await cdb.all() || []; } catch (e) { TAREAS = []; } if (!ED) renderMain(); refrescaIni(); }
+async function guardar(t) {
+  t.guardado = Date.now();
+  const i = TAREAS.findIndex(x => x.id === t.id); if (i >= 0) TAREAS[i] = t; else TAREAS.push(t);
+  try { await cdb.put(JSON.parse(JSON.stringify(t))); } catch (e) { toast('No se pudo guardar la tarea.'); }
+  refrescaIni();
+}
+const nid = () => 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+const refrescaIni = () => { if (window.INI_API && INI_API.refrescar) INI_API.refrescar(); };
+
+/* ---------- fechas y repeticiones ---------- */
+const hoy = () => isoDate(new Date());
+const pISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const masDias = (s, n) => { const d = pISO(s); d.setDate(d.getDate() + n); return isoDate(d); };
+const dim = (y, m) => new Date(y, m + 1, 0).getDate();
+const corta = s => { const d = pISO(s); return `${d.getDate()} ${MESES[d.getMonth()].slice(0, 3)}`; };
+const larga = s => { const d = pISO(s); return `${DIAS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`; };
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+/* fechas en que toca la tarea entre a y b (ambas incluidas) */
+function fechas(t, a, b) {
+  if (!t.f) return [];
+  const fin = t.hasta && t.hasta < b ? t.hasta : b;
+  /* las repeticiones anteriores al día en que se creó la tarea no cuentan */
+  const ini = t.rep && t.desde && t.desde > a ? t.desde : a;
+  if (!t.rep) return t.f >= a && t.f <= b ? [t.f] : [];
+  const out = [];
+  if (t.rep === 'sem') {
+    let s = t.f;
+    if (s < ini) { const n = Math.ceil((pISO(ini) - pISO(s)) / 864e5 / 7); s = masDias(s, 7 * n); }
+    for (; s <= fin; s = masDias(s, 7)) out.push(s);
+    return out;
+  }
+  const paso = REPM[t.rep]; if (!paso) return [];
+  const f0 = pISO(t.f), d0 = f0.getDate();
+  const ia = pISO(ini);
+  let k = Math.max(0, Math.floor(((ia.getFullYear() - f0.getFullYear()) * 12 + ia.getMonth() - f0.getMonth()) / paso) - 1);
+  for (let guard = 0; guard < 400; guard++, k++) {
+    const y = f0.getFullYear(), m = f0.getMonth() + k * paso;
+    const d = new Date(y, m, 1); const s = isoDate(new Date(d.getFullYear(), d.getMonth(), Math.min(d0, dim(d.getFullYear(), d.getMonth()))));
+    if (s > fin) break;
+    if (s >= ini) out.push(s);
+  }
+  return out;
+}
+const hecha = (t, d) => !!(t.hechas && t.hechas[d]);
+const delFiltro = t => !fctr || (fctr === '-' ? !(t.ctr && t.ctr.id) : !!(t.ctr && t.ctr.id === fctr));
+/* todas las apariciones (tarea + fecha) en un rango */
+function ocurr(a, b, todas) {
+  const out = [];
+  TAREAS.filter(t => todas || delFiltro(t)).forEach(t => fechas(t, a, b).forEach(d => out.push({t, d, ok:hecha(t, d)})));
+  return out.sort((x, y) => x.d < y.d ? -1 : x.d > y.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
+}
+const vencidas = todas => ocurr(masDias(hoy(), -400), masDias(hoy(), -1), todas).filter(o => !o.ok);
+function resumen(todas) {
+  const h = hoy(), sem = ocurr(h, masDias(h, 7), todas), ym = h.slice(0, 7);
+  const mes = ocurr(ym + '-01', ym + '-31', todas);
+  return {n:TAREAS.length, hoy:sem.filter(o => o.d === h && !o.ok).length, semana:sem.filter(o => !o.ok).length, venc:vencidas(todas).length, hechasMes:mes.filter(o => o.ok).length, mes:mes.length};
+}
+
+/* ---------- pantalla principal (1.26.0: más sencilla, tres pestañas: Pendientes, Mes y Mis tareas) ---------- */
+const ctrCorto = c => c ? (c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : '';
+const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+function filaHtml(o, conFecha = true) {
+  const {t, d, ok} = o, late = !ok && d < hoy();
+  const meta = [conFecha ? `<span>${esc(corta(d))}</span>` : '', t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : '', t.rep ? `<span class="cal-rp">${REPIC}${esc(REPT[t.rep])}</span>` : '', late ? '<span class="cal-late">Vencida</span>' : ''].filter(Boolean).join('');
+  return `<div class="cal-row${ok ? ' st-ok' : ''}${late ? ' st-bad' : ''}">
+    <button type="button" class="cal-ck" data-hecha="${esc(t.id)}" data-d="${d}" aria-pressed="${ok}" aria-label="${ok ? 'Desmarcar' : 'Marcar como hecha'}: ${esc(t.t)}">${CHECK}</button>
+    <button type="button" class="cal-open" data-edit="${esc(t.id)}" data-d="${d}"><b>${esc(t.t)}</b>${meta ? `<span class="cal-meta">${meta}</span>` : ''}</button>
+  </div>`;
+}
+function grupo(tit, list, cls = '', conFecha = true) {
+  if (!list.length) return '';
+  return `<h3 class="cal-gh ${cls}">${esc(tit)}<i>${list.length}</i></h3><div class="cal-list">${list.map(o => filaHtml(o, conFecha)).join('')}</div>`;
+}
+function agendaHtml() {
+  const h = hoy(), v = vencidas(), hoyL = ocurr(h, h), sem = ocurr(masDias(h, 1), masDias(h, 7));
+  /* más adelante: de las que se repiten, solo la siguiente vez; plegado para que la pantalla quede corta */
+  const vistas = new Set([...hoyL, ...sem].map(o => o.t.id)), mas = ocurr(masDias(h, 8), masDias(h, 30)).filter(o => !vistas.has(o.t.id) && (vistas.add(o.t.id), true));
+  const alDia = !v.length && !hoyL.filter(o => !o.ok).length && !sem.length;
+  const masH = mas.length ? `<details class="cal-mas"><summary>Más adelante <small>hasta 30 días</small><i>${mas.length}</i></summary><div class="cal-list">${mas.map(o => filaHtml(o)).join('')}</div></details>` : '';
+  if (alDia && !hoyL.length) return `<div class="cal-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg><b>Nada pendiente esta semana</b></div>${masH || '<p class="help cal-vacio">Tampoco hay nada en los próximos 30 días. Mira el mes entero en «Mes».</p>'}`;
+  return grupo('Vencidas', v, 'g-bad') + grupo('Hoy', hoyL, 'g-hoy', false) + grupo('Esta semana', sem) + masH;
+}
+function mesHtml() {
+  const [y, m] = mesV, a = `${y}-${pad2(m + 1)}-01`, b = `${y}-${pad2(m + 1)}-${pad2(dim(y, m))}`, h = hoy();
+  const os = ocurr(a, b), by = {};
+  os.forEach(o => (by[o.d] = by[o.d] || []).push(o));
+  if (!diaSel || !diaSel.startsWith(a.slice(0, 7))) diaSel = h.startsWith(a.slice(0, 7)) ? h : (Object.keys(by).sort()[0] || a);
+  let g = ['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(x => `<span class="cal-dow">${x}</span>`).join('');
+  const lead = (new Date(y, m, 1).getDay() + 6) % 7;
+  for (let i = 0; i < lead; i++) g += '<span class="cal-d out" aria-hidden="true"></span>';
+  for (let d = 1; d <= dim(y, m); d++) {
+    const s = `${y}-${pad2(m + 1)}-${pad2(d)}`, l = by[s] || [], wd = new Date(y, m, d).getDay();
+    const pend = l.filter(o => !o.ok).length, late = pend && s < h, todo = l.length && !pend;
+    /* un número por día (las que quedan) en vez de puntos de colores: no hace falta leyenda */
+    const marca = todo ? `<i class="cal-c ok" aria-hidden="true">${CHECK}</i>` : pend ? `<i class="cal-c" aria-hidden="true">${pend}</i>` : '';
+    /* 1.26.1 · con sitio (ordenador, tableta) el día enseña en pequeño lo que toca: primero lo pendiente; en el móvil, el número */
+    const orden = [...l.filter(o => !o.ok), ...l.filter(o => o.ok)], MAXT = 3;
+    const tits = orden.length ? `<span class="cal-ts" aria-hidden="true">${orden.slice(0, MAXT).map(o => `<span class="cal-tt${o.ok ? ' ok' : !o.ok && s < h ? ' late' : ''}">${esc(o.t.t)}</span>`).join('')}${orden.length > MAXT ? `<span class="cal-tm">+${orden.length - MAXT} más</span>` : ''}</span>` : '';
+    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}${l.length ? ' con' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') + ': ' + esc(orden.map(o => o.t.t).join('; ')) : 'sin tareas'}" aria-pressed="${s === diaSel}"${l.length ? ` title="${esc(orden.map(o => (o.ok ? '✓ ' : '') + o.t.t).join('\n'))}"` : ''}><span class="n">${d}</span>${marca}${tits}</button>`;
+  }
+  const lm = by[diaSel] || [];
+  const pend = os.filter(o => !o.ok).length;
+  return `<div class="cal-mbar"><button type="button" class="nav-b" data-mes="-1" aria-label="Mes anterior">‹</button><h3>${cap(MESES[m])} ${y}</h3><button type="button" class="nav-b" data-mes="1" aria-label="Mes siguiente">›</button></div>
+    <p class="cal-msum">${plural(os.length, 'tarea', 'tareas')} · ${os.length - pend} ${os.length - pend === 1 ? 'hecha' : 'hechas'}${h.startsWith(a.slice(0, 7)) ? '' : ` · <button type="button" class="linkbtn cal-hoyb" data-mes="0">Volver a hoy</button>`}</p>
+    <div class="cal-grid" role="group" aria-label="${cap(MESES[m])} ${y}">${g}</div>
+    <div class="cal-dhead"><h3 class="cal-gh">${esc(cap(larga(diaSel)))}<i>${lm.length}</i></h3><button type="button" class="cal-addd" data-nueva="${diaSel}">${PLUS}Añadir</button></div>
+    ${lm.length ? `<div class="cal-list">${lm.map(o => filaHtml(o, false)).join('')}</div>` : '<p class="help cal-vacio">Sin tareas este día.</p>'}`;
+}
+/* «Mis tareas»: una línea por tarea (no por fecha) para añadir, cambiar o quitar */
+function proxima(t) {
+  const h = hoy(), v = fechas(t, masDias(h, -400), masDias(h, -1)).filter(d => !hecha(t, d));
+  if (v.length) return {d:v[0], txt:`vencida el ${corta(v[0])}`, late:true};
+  const l = fechas(t, h, masDias(h, 800)).filter(d => !hecha(t, d));
+  if (l.length) return {d:l[0], txt:(l[0] === h ? 'hoy' : corta(l[0]))};
+  if (!t.rep && t.f < h) return {d:t.f, txt:`${corta(t.f)}, ${hecha(t, t.f) ? 'hecha' : 'pasada'}`};
+  return {d:'9999', txt:'sin próximas fechas'};
+}
+function listaHtml() {
+  const l = TAREAS.filter(delFiltro).map(t => ({t, p:proxima(t)})).sort((x, y) => x.p.d < y.p.d ? -1 : x.p.d > y.p.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
+  const filas = l.map(({t, p}) => {
+    const meta = [`<span>${t.rep ? `${REPIC}${esc(REPT[t.rep])}` : 'Una vez'}</span>`, (p.late ? `<span class="cal-late">${cap(esc(p.txt))}</span>` : `<span>${t.rep ? 'Próxima: ' : ''}${esc(p.txt)}</span>`), t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : ''].filter(Boolean).join('');
+    return `<div class="cal-row cal-def">
+      <button type="button" class="cal-open" data-edit="${esc(t.id)}"><b>${esc(t.t)}</b><span class="cal-meta">${meta}</span></button>
+      <button type="button" class="cal-quitar" data-quitar="${esc(t.id)}" aria-label="Quitar: ${esc(t.t)}">${TRASH}<span>Quitar</span></button>
+    </div>`;
+  }).join('');
+  return `<button type="button" class="btn primary cal-add" data-nueva="">${PLUS}Añadir tarea</button>
+    ${l.length ? `<p class="help cal-lh">Toca una tarea para cambiarla. «Quitar» la borra con todas sus repeticiones.</p><div class="cal-list">${filas}</div>` : '<p class="help cal-vacio">No hay tareas con este filtro.</p>'}`;
+}
+function ctrsHtml() {
+  const cs = perfilGet().contratos, sin = TAREAS.some(t => !(t.ctr && t.ctr.id));
+  if (cs.length < 2 && !sin) return '';
+  const o = (id, txt) => `<option value="${esc(id)}"${fctr === id ? ' selected' : ''}>${esc(txt)}</option>`;
+  return `<label class="cal-fcw"><span>Contrato</span><select id="cal-fc">${o('', 'Todos')}${cs.map(c => o(c.id, ctrCorto(c))).join('')}${sin ? o('-', 'Sin contrato') : ''}</select></label>`;
+}
+function resumenHtml(r) {
+  const p = [];
+  if (r.venc) p.push(`<span class="cal-pill bad">${plural(r.venc, 'vencida', 'vencidas')}</span>`);
+  if (r.hoy) p.push(`<span class="cal-pill hoy">${r.hoy} hoy</span>`);
+  if (r.semana - r.hoy > 0) p.push(`<span class="cal-pill">${r.semana - r.hoy} esta semana</span>`);
+  if (!p.length) p.push(`<span class="cal-pill ok">${CHECK}Al día</span>`);
+  return `<p class="cal-res" aria-label="Resumen">${p.join('')}</p>`;
+}
+function renderMain() {
+  const M = $('#cal-main'); if (!M) return;
+  if (fctr && fctr !== '-' && !contratoPorId(fctr)) fctr = '';
+  if (!mesV) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; }
+  const r = resumen(), vacio = !TAREAS.length;
+  const pendN = r.venc + r.semana;
+  const tab = (k, txt, n) => `<button type="button" role="tab" data-cmodo="${k}" aria-selected="${modo === k}" aria-pressed="${modo === k}">${txt}${n ? `<i>${n}</i>` : ''}</button>`;
+  M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
+    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}</header>
+    ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…).</span><button type="button" class="btn primary" data-nueva="">${PLUS}Añadir la primera tarea</button></div>` : `
+    <div class="cal-tabs" role="tablist" aria-label="Cómo ver las tareas">${tab('agenda', 'Pendientes', pendN)}${tab('mes', 'Mes')}${tab('lista', 'Mis tareas', TAREAS.length)}</div>
+    ${ctrsHtml()}
+    <div class="cal-body" role="tabpanel">${modo === 'mes' ? mesHtml() : modo === 'lista' ? listaHtml() : agendaHtml()}</div>`}`;
+  vista('main');
+}
+function vista(q) {
+  const m = $('#cal-main'), f = $('#cal-form'); if (m) m.hidden = q !== 'main'; if (f) f.hidden = q !== 'form';
+  const b = $('#cal-bar'); if (b) b.hidden = q !== 'main' || $('#view-cal').hidden || !TAREAS.length || modo === 'lista';
+}
+
+/* ---------- formulario de tarea (1.26.0: lo justo arriba; tipo, «hasta» y notas en «Más opciones») ---------- */
+function abrirForm(id, fecha) {
+  const t = id ? TAREAS.find(x => x.id === id) : null;
+  const a = snapContrato();
+  ED = t ? JSON.parse(JSON.stringify(t)) : {id:nid(), t:'', k:'', ctr:fctr === '-' ? null : (fctr ? snapContrato(contratoPorId(fctr)) : a), f:fecha || hoy(), rep:'', hasta:'', notas:'', hechas:{}, nueva:true};
+  renderForm(); vista('form'); window.scrollTo({top:0});
+  if (!t) setTimeout(() => { const i = $('#cf-t'); if (i) i.focus(); }, 60);
+}
+function renderForm() {
+  const F = $('#cal-form'); if (!F || !ED) return;
+  const cs = perfilGet().contratos, cid = ED.ctr && ED.ctr.id;
+  const opts = cs.map(c => `<option value="${esc(c.id)}"${c.id === cid ? ' selected' : ''}>${esc(nombreContrato(c) || 'Contrato')}</option>`).join('') + (cid && !cs.some(c => c.id === cid) ? `<option value="${esc(cid)}" selected>${esc(nombreContrato(ED.ctr))}</option>` : '');
+  const masAbierto = !!(ED.notas || ED.hasta);
+  F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="volver">‹ Calendario</button></div>
+    <section class="block cal-fb">
+      <header class="bh"><h2>${ED.nueva ? 'Añadir tarea' : 'Cambiar tarea'}</h2></header>
+      <div class="bb cal-ff">
+        <div class="field"><label for="cf-t">¿Qué hay que hacer?</label><input id="cf-t" type="text" maxlength="200" autocomplete="off" placeholder="Ej.: Visita a tajo de noche" value="${esc(ED.t)}"></div>
+        ${ED.nueva ? `<details class="cal-sug"><summary>Ideas rápidas <small>las tareas habituales de PRL</small></summary><div class="chips">${SUG.map((s, i) => `<button type="button" class="chip" data-sug="${i}">${esc(s[0])}</button>`).join('')}</div></details>` : ''}
+        <div class="field"><label for="cf-f">${ED.rep ? 'Primera fecha' : 'Fecha'}</label><input id="cf-f" type="date" value="${esc(ED.f)}"></div>
+        <div class="field"><span class="lbl" id="cf-rl">¿Se repite?</span><div class="chips cal-reps" role="group" aria-labelledby="cf-rl">${REP.map(([k, t]) => `<button type="button" class="chip" data-rep="${k}" aria-pressed="${ED.rep === k}">${esc(t)}</button>`).join('')}</div>
+          <p class="help" id="cf-rh">${repAyuda()}</p></div>
+        <div class="field"${cs.length || cid ? '' : ' hidden'}><label for="cf-c">Contrato</label><select id="cf-c"><option value="">Sin contrato</option>${opts}</select></div>
+        <details class="cal-masop"${masAbierto ? ' open' : ''}><summary>Más opciones <small>tipo, hasta cuándo y notas</small></summary>
+          <div class="cal-ff">
+            <div class="field"><span class="lbl" id="cf-kl">Tipo</span><div class="chips cal-tipos" role="group" aria-labelledby="cf-kl">${TIPOS.map(x => `<button type="button" class="chip" data-tipo="${x.k}" aria-pressed="${ED.k === x.k}">${esc(x.t)}</button>`).join('')}</div></div>
+            <div class="field" id="cf-hw"${ED.rep ? '' : ' hidden'}><label for="cf-h">Hasta <i class="opc">opcional</i></label><input id="cf-h" type="date" value="${esc(ED.hasta || '')}"></div>
+            <div class="field"><label for="cf-n">Notas <i class="opc">opcional</i></label><textarea id="cf-n" rows="3" maxlength="1500">${esc(ED.notas || '')}</textarea></div>
+          </div>
+        </details>
+      </div>
+    </section>
+    <div class="cal-fbtns">
+      <button type="button" class="btn primary" data-ca="guardar">${ED.nueva ? 'Añadir al calendario' : 'Guardar cambios'}</button>
+      ${ED.nueva ? '' : `<button type="button" class="btn danger-t" data-ca="borrar">${TRASH}Quitar del calendario</button>`}
+      <button type="button" class="btn" data-ca="volver">Cancelar</button>
+    </div>`;
+}
+function repAyuda() {
+  if (!ED.rep || !ED.f) return ED.rep ? '' : 'Una sola vez, el día que pongas.';
+  const d = pISO(ED.f), dia = d.getDate();
+  const txt = ED.rep === 'sem' ? `Todos los ${DIAS[d.getDay()]}` : ED.rep === 'anu' ? `Cada año, el ${dia} de ${MESES[d.getMonth()]}` : `El día ${dia} ${ED.rep === 'mes' ? 'de cada mes' : 'cada ' + REPM[ED.rep] + ' meses'}${dia > 28 ? ' (o el último día si el mes es más corto)' : ''}`;
+  return txt + (ED.nueva ? '. Los cambios valen para todas las repeticiones.' : '. Al editarla cambian todas las repeticiones; las ya marcadas como hechas se mantienen.');
+}
+function leerForm() {
+  const v = id => ((($('#' + id) || {}).value) || '').trim();
+  ED.t = v('cf-t'); ED.f = v('cf-f'); ED.notas = v('cf-n'); ED.hasta = ED.rep ? v('cf-h') : '';
+  const cid = v('cf-c'); ED.ctr = cid ? (contratoPorId(cid) ? snapContrato(contratoPorId(cid)) : ED.ctr) : null;
+}
+async function guardarForm() {
+  leerForm();
+  if (!ED.t) { toast('Escribe qué hay que hacer.'); $('#cf-t').focus(); return; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ED.f)) { toast('Pon la fecha.'); $('#cf-f').focus(); return; }
+  if (ED.hasta && ED.hasta < ED.f) { toast('«Hasta» no puede ser antes de la primera fecha.'); const mo = $('.cal-masop'); if (mo) mo.open = true; $('#cf-h').focus(); return; }
+  const nueva = !!ED.nueva; delete ED.nueva;
+  if (!ED.k) ED.k = 'otr';
+  if (nueva) ED.creado = Date.now();
+  /* una tarea que se repite empieza a contar desde el día en que la das de alta: no llena de vencidas los meses pasados */
+  if (ED.rep && !ED.desde) ED.desde = hoy();
+  const t = ED; ED = null;
+  await guardar(t);
+  if (modo === 'mes') { const d = pISO(t.f); if (!t.rep) { mesV = [d.getFullYear(), d.getMonth()]; diaSel = t.f; } }
+  renderMain(); window.scrollTo({top:0});
+  toast(nueva ? (t.rep ? `Tarea añadida: ${REPT[t.rep].toLowerCase()}.` : `Tarea añadida para el ${fmtDate(t.f)}.`) : 'Cambios guardados.');
+}
+async function borrar(id) {
+  const t = TAREAS.find(x => x.id === (id || (ED && ED.id))); if (!t) return;
+  if (!(await ask({title:'¿Quitar la tarea?', body:`<p>«${esc(t.t)}»${t.rep ? ' y todas sus repeticiones' : ''} se quita del calendario.</p>`, yes:'Quitar', danger:true}))) return;
+  TAREAS = TAREAS.filter(x => x.id !== t.id);
+  try { await cdb.del(t.id); } catch (e) {}
+  const y = window.scrollY; ED = null; renderMain(); refrescaIni(); if (id) window.scrollTo({top:y}); toast('Tarea quitada.');
+}
+
+/* ---------- eventos ---------- */
+async function onClick(e) {
+  const hc = e.target.closest('[data-hecha]');
+  if (hc) {
+    const t = TAREAS.find(x => x.id === hc.dataset.hecha), d = hc.dataset.d; if (!t) return;
+    t.hechas = t.hechas || {};
+    const ya = !!t.hechas[d];
+    if (ya) delete t.hechas[d]; else t.hechas[d] = Date.now();
+    const y = window.scrollY; await guardar(t); renderMain(); window.scrollTo({top:y});
+    toast(ya ? 'Vuelve a estar pendiente.' : 'Hecha. ¡Bien!');
+    return;
+  }
+  const qt = e.target.closest('[data-quitar]'); if (qt) return borrar(qt.dataset.quitar);
+  const ed = e.target.closest('[data-edit]'); if (ed) { abrirForm(ed.dataset.edit); return; }
+  const nv = e.target.closest('[data-nueva]'); if (nv) { abrirForm(null, nv.dataset.nueva || (modo === 'mes' && diaSel && diaSel >= hoy() ? diaSel : hoy())); return; }
+  const md = e.target.closest('[data-cmodo]'); if (md) { modo = md.dataset.cmodo; lsSet('cal-modo', modo); renderMain(); return; }
+  const ms = e.target.closest('[data-mes]');
+  if (ms) { const n = +ms.dataset.mes; if (!n) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; diaSel = hoy(); } else { const d = new Date(mesV[0], mesV[1] + n, 1); mesV = [d.getFullYear(), d.getMonth()]; diaSel = null; } renderMain(); return; }
+  const dia = e.target.closest('[data-dia]'); if (dia) { diaSel = dia.dataset.dia; const y = window.scrollY; renderMain(); window.scrollTo({top:y}); return; }
+  const sg = e.target.closest('[data-sug]');
+  if (sg && ED) { const s = SUG[+sg.dataset.sug]; leerForm(); ED.t = s[0]; ED.k = s[1]; ED.rep = s[2]; renderForm(); toast('Revisa la fecha y guarda.'); const f = $('#cf-f'); if (f) f.focus(); return; }
+  const tp = e.target.closest('[data-tipo]'); if (tp && ED) { ED.k = ED.k === tp.dataset.tipo ? '' : tp.dataset.tipo; tp.parentNode.querySelectorAll('[data-tipo]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tipo === ED.k)); return; }
+  const rp = e.target.closest('[data-rep]');
+  if (rp && ED) { leerForm(); ED.rep = rp.dataset.rep; rp.parentNode.querySelectorAll('[data-rep]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rep === ED.rep)); $('#cf-hw').hidden = !ED.rep; $('#cf-rh').textContent = repAyuda(); const l = $('label[for="cf-f"]'); if (l) l.textContent = ED.rep ? 'Primera fecha' : 'Fecha'; return; }
+  const b = e.target.closest('[data-ca]'); if (!b) return;
+  const a = b.dataset.ca;
+  if (a === 'ini') { showTab('ini'); return; }
+  if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
+  if (a === 'guardar') return guardarForm();
+  if (a === 'borrar') return borrar();
+}
+function onInput(e) {
+  if (e.target.id === 'cal-fc') { fctr = e.target.value; renderMain(); return; }
+  if (ED && e.target.id === 'cf-f') { ED.f = e.target.value; const h = $('#cf-rh'); if (h) h.textContent = repAyuda(); }
+}
+
+/* ---------- arranque ---------- */
+function montar() {
+  const main = document.createElement('main');
+  main.id = 'view-cal'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
+  main.innerHTML = '<div id="cal-main"></div><div id="cal-form" hidden></div>';
+  const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
+  const bar = document.createElement('div'); bar.className = 'ibar'; bar.id = 'cal-bar'; bar.hidden = true;
+  bar.innerHTML = '<button type="button" class="btn primary" data-nueva="">+ Añadir tarea</button>';
+  document.body.appendChild(bar);
+  main.addEventListener('click', onClick); main.addEventListener('input', onInput); main.addEventListener('change', onInput);
+  bar.addEventListener('click', onClick);
+  cargar();
+}
+window.CAL_API = {
+  lista: () => TAREAS,
+  abrir() { ED = null; showTab('cal'); renderMain(); },
+  /* para el Inicio: todos los contratos */
+  resumen: () => resumen(true),
+  /* para «Hoy y vencidas» del Inicio: una línea por tarea, con la fecha más antigua sin marcar */
+  pendientes() {
+    const h = hoy(), m = new Map();
+    ocurr(masDias(h, -400), h, true).filter(o => !o.ok).forEach(o => { const x = m.get(o.t.id); if (x) x.n++; else m.set(o.t.id, {id:o.t.id, t:o.t.t || '', k:o.t.k || 'otr', ctr:o.t.ctr || null, d:o.d, n:1}); });
+    return [...m.values()];
+  },
+  /* visitas a tajo previstas este mes (tareas de «Visitas» con «visita» en el nombre) */
+  visitasMes(ctrId) {
+    const ym = hoy().slice(0, 7);
+    return ocurr(ym + '-01', ym + '-31', true).filter(o => o.t.k === 'vis' && /visita/i.test(o.t.t || '') && (!ctrId || !(o.t.ctr && o.t.ctr.id) || o.t.ctr.id === ctrId)).length;
+  },
+  editar(id, d) { showTab('cal'); if (TAREAS.some(x => x.id === id)) abrirForm(id, d); },
+  /* 1.24.0 · desde «Tareas del técnico»: el formulario de nueva tarea ya relleno (el técnico revisa y guarda) */
+  nueva(pre) {
+    ED = null; showTab('cal'); abrirForm(null, pre.f);
+    Object.assign(ED, {t:pre.t || '', k:pre.k || '', rep:pre.rep || '', notas:pre.notas || '', ctr:'ctr' in pre ? (pre.ctr || null) : null});
+    if (pre.guia) ED.guia = pre.guia;
+    renderForm(); vista('form');
+  },
+  /* y varias de golpe; las que se repiten cuentan desde hoy (no salen vencidas las de antes) */
+  async agregar(arr) {
+    let n = 0;
+    for (const x of arr || []) {
+      if (!x || !x.t || !/^\d{4}-\d{2}-\d{2}$/.test(x.f || '')) continue;
+      const t = {id:nid(), t:x.t, k:x.k || 'otr', ctr:x.ctr || null, f:x.f, rep:x.rep || '', hasta:'', notas:x.notas || '', hechas:x.hechas || {}, creado:Date.now()};
+      if (x.guia) t.guia = x.guia;
+      if (t.rep) t.desde = hoy();
+      await guardar(t); n++;
+    }
+    if (n && !ED) renderMain();
+    return n;
+  },
+  async importar(arr) {
+    const act = new Map(TAREAS.map(x => [x.id, x])); let n = 0;
+    for (const x of arr) { if (x && x.id && x.t && x.f && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await cdb.put(x); n++; } }
+    if (n) await cargar();
+    return n;
+  },
+  atras() {
+    const v = $('#view-cal'); if (!v || v.hidden) return false;
+    if (ED) { ED = null; renderMain(); return true; }
+    showTab('ini'); return true;
+  },
+  onTab(t) { const b = $('#cal-bar'); if (b) b.hidden = !(t === 'cal' && !ED && TAREAS.length && modo !== 'lista'); if (t === 'cal' && !ED) renderMain(); }
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
+})();
+
+/*CAL-JS-END*/
 /*REV-JS-START*/
 /* ================= Revisiones de instalaciones y equipos, con sus certificados ================= */
 (() => {
@@ -9816,12 +10204,21 @@ window.MANOS_API = {nativo, alSalir, alVolver, abrir, cerrar, interpretar, ir:k 
    1.21.2: con Enlace Móvil, lo que ya está en el móvil se ve de solo lectura desde el ordenador. Si no se puede
    sobrescribir, el ordenador deja un archivo nuevo cada vez («VisitasPRL-ordenador-<id>-<fecha>.json») y quita los
    suyos anteriores si le dejan; el móvil usa la carpeta entera, lee de cada dispositivo el archivo más reciente
-   y quita los viejos. */
+   y quita los viejos.
+   1.27.0: SOLO VIAJAN LAS VISITAS, Y SOLO DEL MÓVIL AL ORDENADOR. El móvil (app de Android o la web con acceso directo
+   en el móvil) deja en la carpeta sus visitas guardadas y no lee nada; el ordenador lee las visitas de los móviles y
+   no deja nada (quita su archivo de antes). Los borrados del móvil no viajan: el ordenador guarda el archivo de visitas. */
 (() => {
 const AND = () => !!(window.AndroidApp && typeof AndroidApp.syncLeer === 'function');
 const AND_CARPETA = () => AND() && typeof AndroidApp.syncElegirCarpeta === 'function';
 const WEB = () => !AND() && typeof window.showDirectoryPicker === 'function';
 const PUEDE = () => AND() || WEB();
+/* 1.27.0: la app web abierta en un móvil (acceso directo de Chrome) también es «móvil» */
+const MOVIL_WEB = () => !AND() && (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '') || !!(navigator.userAgentData && navigator.userAgentData.mobile));
+const DISP = () => AND() || MOVIL_WEB() ? 'movil' : 'ordenador';
+const ENVIA = () => DISP() === 'movil';        // deja sus visitas en la carpeta y no lee nada
+const RECIBE = () => DISP() === 'ordenador';   // lee las visitas de los móviles y no deja nada
+const esDeMovil = n => /^movil-/.test(claveDe(n));
 const PREFIJO = 'VisitasPRL-';
 const CK = 'sync-cfg', BK = 'sync-borrados';
 const leeJ = (k, d) => { try { const v = JSON.parse(lsGet(k) || 'null'); return v && typeof v === 'object' ? v : d; } catch (e) { return d; } };
@@ -9837,10 +10234,10 @@ const guardaBorrados = b => {
 };
 const hora = t => { if (!t) return ''; const d = new Date(t), h = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); return isoDate(d) === isoDate(new Date()) ? 'hoy a las ' + h : fmtDate(isoDate(d)) + ' a las ' + h; };
 const idCorto = () => { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = ''; const r = crypto.getRandomValues(new Uint8Array(4)); r.forEach(x => { s += a[x % a.length]; }); return s; };
-const nombrePropio = () => `${PREFIJO}${AND() ? 'movil' : 'ordenador'}-${CFG.id || (CFG.id = idCorto())}.json`;
+const nombrePropio = () => `${PREFIJO}${DISP()}-${CFG.id || (CFG.id = idCorto())}.json`;
 /* de qué dispositivo es un archivo: «VisitasPRL-movil-H9LL (1).json» y «VisitasPRL-ordenador-RVDW-20261109-153000.json» → «movil-H9LL», «ordenador-RVDW» */
 const claveDe = n => { const m = /^VisitasPRL-(movil|ordenador)-([A-Z0-9]+)(?=[-. (]|$)/.exec(n || ''); return m ? m[1] + '-' + m[2] : n; };
-const miClave = () => (AND() ? 'movil' : 'ordenador') + '-' + CFG.id;
+const miClave = () => DISP() + '-' + CFG.id;
 const esSync = n => !!n && n.startsWith(PREFIJO) && /\.json$/i.test(n);
 /* de cada dispositivo, solo su archivo más reciente */
 function masNuevos(l) {
@@ -9863,6 +10260,7 @@ const MOD = {
 const fechaDe = x => (x && (x.guardado || x.creado)) || 0;
 /* firma barata de los datos: cambia cuando se guarda, se añade o se borra algo */
 function firmaLocal() {
+  if (ENVIA()) return 'reg:' + HIST.map(x => x.id + '@' + fechaDe(x)).sort().join(',');
   const p = perfilGet();
   return Object.keys(MOD).map(m => m + ':' + MOD[m].l().map(x => x.id + '@' + fechaDe(x)).sort().join(',')).join('|')
     + '|ctr:' + (p.contratos || []).map(c => c.id + '=' + (c.nombre || '') + (c.sie || '')).join(',')
@@ -9881,6 +10279,8 @@ function detectarBorrados() {
 }
 const anotarVisto = () => { CFG.visto = {}; Object.keys(MOD).forEach(m => { CFG.visto[m] = MOD[m].l().map(x => x.id); }); };
 async function datos() {
+  /* 1.27.0: del móvil solo salen las visitas guardadas */
+  if (ENVIA()) return {app:'registro-rp', tipo:'sincro', version:1, appVer:APP_VER, disp:'movil', id:CFG.id, escrito:Date.now(), solo:'visitas', registros:HIST};
   return {app:'registro-rp', tipo:'sincro', version:1, appVer:APP_VER, disp:AND() ? 'movil' : 'ordenador', id:CFG.id, escrito:Date.now(),
     registros:HIST, informes:MOD.inf.l(), planes:MOD.plan.l(), calendario:MOD.cal.l(),
     revisiones:window.REV_API ? await REV_API.exportar() : null, evrl:MOD.evrl.l(),
@@ -9981,7 +10381,7 @@ async function permiso(pedir) {
 async function webLeer() {
   const h = await carpeta(), l = [], out = [];
   for await (const [nombre, e] of h.entries()) {
-    if (e.kind !== 'file' || !esSync(nombre) || claveDe(nombre) === miClave()) continue;
+    if (e.kind !== 'file' || !esSync(nombre) || claveDe(nombre) === miClave() || (RECIBE() && !esDeMovil(nombre))) continue;
     const f = await e.getFile(); l.push({nombre, f, mod:f.lastModified, tam:f.size});
   }
   for (const x of masNuevos(l)) {
@@ -9998,12 +10398,14 @@ async function escribeEn(h, nombre, t) {
 const soloLectura = e => !!e && (/^(NoModificationAllowedError|InvalidModificationError|InvalidStateError)$/.test(e.name || '') || /read-only|solo lectura|sólo lectura/i.test(e.message || ''));
 async function webEscribir(t) {
   const h = await carpeta();
+  /* 1.27.0: la web del móvil antes se llamaba «ordenador»: pasa a su nombre de móvil y quita el antiguo */
+  if (claveDe(CFG.nombre) !== miClave()) { CFG.nombre = nombrePropio(); CFG.nuevos = false; }
   if (!CFG.nuevos) {
-    try { await escribeEn(h, CFG.nombre, t); return; }
+    try { await escribeEn(h, CFG.nombre, t); await quitarAntiguo(h); return; }
     catch (e) { if (!soloLectura(e)) throw e; }
   }
   /* la carpeta no deja sobrescribir (la del móvil por Enlace Móvil): un archivo nuevo cada vez */
-  const base = `${PREFIJO}ordenador-${CFG.id}`;
+  const base = `${PREFIJO}${DISP()}-${CFG.id}`;
   let nom = `${base}-${sello()}.json`;
   if (nom === CFG.nombre) nom = `${base}-${sello()}-${Date.now() % 1000}.json`;
   await escribeEn(h, nom, t);
@@ -10012,6 +10414,22 @@ async function webEscribir(t) {
   const viejos = [];
   for await (const [n, e] of h.entries()) if (e.kind === 'file' && n !== nom && esSync(n) && claveDe(n) === miClave()) viejos.push(n);
   for (const n of viejos) { try { await h.removeEntry(n); } catch (e) { /* de solo lectura: se queda */ } }
+  await quitarAntiguo(h);
+}
+/* 1.27.0: el archivo de este mismo dispositivo con el otro nombre (la web del móvil se llamaba «ordenador») */
+async function quitarAntiguo(h) {
+  const otra = (DISP() === 'movil' ? 'ordenador-' : 'movil-') + CFG.id, l = [];
+  try { for await (const [n, e] of h.entries()) if (e.kind === 'file' && esSync(n) && claveDe(n) === otra) l.push(n); } catch (e) { return; }
+  for (const n of l) { try { await h.removeEntry(n); } catch (e) {} }
+}
+/* 1.27.0: el ordenador ya no deja nada: quita su archivo de antes (llevaba todos sus datos) */
+async function quitarMios() {
+  if (AND() || CFG.limpio) return;
+  const h = await carpeta(); if (!h) return;
+  const l = []; let quedan = 0;
+  try { for await (const [n, e] of h.entries()) if (e.kind === 'file' && esSync(n) && claveDe(n) === miClave()) l.push(n); } catch (e) { return; }
+  for (const n of l) { try { await h.removeEntry(n); } catch (e) { quedan++; } }
+  if (!quedan) CFG.limpio = true;
 }
 
 /* ---------- archivos del móvil (app de Android) ---------- */
@@ -10062,8 +10480,8 @@ async function sincronizar(o = {}) {
     if (WEB() && !(await carpeta())) { CFG.estado = 'carpeta'; return null; }
     if (WEB() && !(await permiso(!!o.preguntar))) { CFG.estado = 'permiso'; return null; }
     detectarBorrados();
-    /* 1. leer los de los demás */
-    const otros = AND() ? await andLeer() : await webLeer();
+    /* 1. leer los de los demás (1.27.0: solo el ordenador, y solo los archivos de los móviles) */
+    const otros = RECIBE() ? (AND() ? await andLeer() : await webLeer()).filter(x => esDeMovil(x.nombre)) : [];
     /* uno por dispositivo (el nombre del archivo puede cambiar); lo que ya no está, se olvida */
     const antes = CFG.otros || {}; CFG.otros = {};
     for (const x of otros) {
@@ -10076,14 +10494,16 @@ async function sincronizar(o = {}) {
       const d = j && j.cifrado ? await SEG_API.abrirSync(j, x.nombre, !!o.preguntar) : j;
       if (!d) { falta = x.nombre; CFG.otros[k] = {...ant, nombre:x.nombre, h:'', error:'falta la contraseña'}; continue; }
       if (!d.registros && d.tipo !== 'sincro') continue;   // no es de la app
-      const n = await aplicar(d, !!o.preguntar);
+      /* 1.27.0: del móvil solo se toman las visitas (ni borrados, ni contratos, ni lo demás) */
+      const n = await aplicar({tipo:d.tipo, registros:Array.isArray(d.registros) ? d.registros : []}, !!o.preguntar);
       Object.keys(total).forEach(kk => { total[kk] += n[kk] || 0; });
       CFG.otros[k] = {nombre:x.nombre, h, mod:x.mod, tam:x.tam, leido:Date.now(), disp:d.disp || '', escrito:d.escrito || 0, ver:d.appVer || '', pendiente:!!CFG.pendBorrar};
       if (CFG.pendBorrar) CFG.otros[k].h = '';   // se vuelve a mirar en la próxima vuelta
     }
-    /* 2. escribir el mío si ha cambiado algo */
+    /* 2. escribir el mío si ha cambiado algo (1.27.0: solo el móvil; el ordenador quita el suyo de antes) */
     const f = firmaLocal();
-    if (f !== CFG.firma || o.forzar || !CFG.escrito || CFG.verEscrita !== APP_VER) {
+    if (RECIBE()) await quitarMios();
+    else if (f !== CFG.firma || o.forzar || !CFG.escrito || CFG.verEscrita !== APP_VER) {
       const env = await SEG_API.cifrarSync(JSON.stringify(await datos()));
       if (!env) throw new Error('Sin la contraseña de las copias no se puede sincronizar.');
       if (AND()) await andEscribir(env); else await webEscribir(env);
@@ -10094,7 +10514,7 @@ async function sincronizar(o = {}) {
     CFG.ultima = Date.now(); CFG.error = falta ? 'falta-clave' : ''; CFG.estado = 'ok';
     const r = resumen(total);
     if (r || total.del) {
-      toast('Sincronizado: ' + [r && r + ' del otro dispositivo', total.del && plural(total.del, 'borrado', 'borrados')].filter(Boolean).join(' · ') + '.');
+      toast('Sincronizado: ' + [r && r + (RECIBE() ? ' del móvil' : ' del otro dispositivo'), total.del && plural(total.del, 'borrado', 'borrados')].filter(Boolean).join(' · ') + '.');
       refrescarVista();
     }
     avisarVersion();
@@ -10113,11 +10533,11 @@ async function sincronizar(o = {}) {
 async function activar() {
   if (!PUEDE()) { await ask({title:'Sincronizar móvil y ordenador', single:true, yes:'Entendido', body:'<p>Se puede usar en la app de Android y en el ordenador con <b>Edge</b> o <b>Chrome</b>.</p>'}); return; }
   if (WEB()) {
-    const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir carpeta', body:`<p>En la ventana que se abre, elige la carpeta que compartirán los dos:</p>
-      <ul class="sy-pasos"><li><b>Con Enlace Móvil</b> (móvil personal): a la izquierda, tu móvil › <b>storage › Download › Visitas PRL</b>.</li>
-      <li><b>Con OneDrive</b> (si el móvil tiene la misma cuenta): tu OneDrive › <b>Visitas PRL</b>.</li></ul>
-      <p>Pulsa <b>«Seleccionar carpeta»</b> y permite que la app la use (<b>«Editar archivos»</b>; si te lo ofrece, <b>«Permitir en cada visita»</b>).</p>
-      <p class="help">La app deja ahí su archivo cifrado y lee el del móvil. Después, en el móvil: Perfil › Sincronizar móvil y ordenador.</p>`});
+    const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir carpeta', body:`<p>Solo pasan <b>las visitas</b>, y solo <b>del móvil al ordenador</b>. En la ventana que se abre, elige la carpeta que compartirán los dos:</p>
+      <ul class="sy-pasos"><li><b>Con Dropbox</b> u <b>OneDrive</b> (la misma cuenta en el móvil y en el ordenador): <b>Visitas PRL</b>.</li>
+      <li><b>Con Enlace Móvil</b> (desde el ordenador): a la izquierda, tu móvil › <b>storage › Download › Visitas PRL</b>.</li></ul>
+      <p>Pulsa <b>«Seleccionar carpeta»</b> (o <b>«Usar esta carpeta»</b>) y permite que la app la use.</p>
+      <p class="help">${ENVIA() ? 'Este móvil dejará ahí sus visitas, cifradas, para que las recoja el ordenador. Del ordenador no llegará nada a este móvil.' : 'Este ordenador recogerá ahí las visitas del móvil. Lo del ordenador no se envía al móvil. Después, en el móvil: Perfil › Sincronizar móvil y ordenador.'}</p>`});
     if (ok !== true) return;
     let h; try { h = await window.showDirectoryPicker({id:'visitas-prl-sync', mode:'readwrite', startIn:'documents'}); } catch (e) { return; }
     DIR = h; try { await kv.set('dir', h); } catch (e) { /* se recuerda mientras la app esté abierta */ }
@@ -10128,7 +10548,7 @@ async function activar() {
   }
   if (AND_CARPETA()) return elegirCarpetaAnd();
   /* móvil (app anterior a 1.21.2): 1) su archivo en la carpeta compartida; 2) el del ordenador */
-  const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir dónde guardar', body:`<p><b>Antes</b>, actívalo en el ordenador: así ya existe la carpeta con su archivo.</p>
+  const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir dónde guardar', body:`<p>Este móvil dejará sus visitas para el ordenador (del ordenador no llega nada).</p>
     <p>Se abre el selector de archivos. Elige la misma carpeta que en el ordenador:</p>
     <ul class="sy-pasos"><li><b>Con Enlace Móvil</b>: <b>Descargas › Visitas PRL</b> (en este móvil).</li><li><b>Con OneDrive</b>: toca <b>☰ › OneDrive › Visitas PRL</b>.</li></ul>
     <p>Y pulsa <b>«Guardar»</b>.</p>`});
@@ -10138,14 +10558,14 @@ async function activar() {
   const r = await p; if (!r.ok) { toast('No se ha elegido dónde guardar.'); return; }
   let nom = nombrePropio(); try { nom = JSON.parse(r.info || '[]')[0] || nom; } catch (e) {}
   CFG = {...CFG, on:true, nombre:nom, otros:{}}; delete CFG.firma; delete CFG.escrito; guarda();
-  await elegirOtros(true);
+  await sincronizar({preguntar:true, forzar:true});   // 1.27.0: el móvil no lee nada del ordenador
 }
 /* móvil (1.21.2): la carpeta compartida entera */
 async function elegirCarpetaAnd() {
-  const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir carpeta', body:`<p><b>Antes</b>, actívalo en el ordenador: así ya existe la carpeta con su archivo.</p>
+  const ok = await ask({title:'Sincronizar móvil y ordenador', yes:'Elegir carpeta', body:`<p>Solo pasan <b>las visitas</b>, y solo <b>del móvil al ordenador</b>.</p>
     <p>Se abre el selector de carpetas:</p>
-    <ol class="sy-pasos"><li>Ve a <b>Descargas › Visitas PRL</b> (la carpeta que eligió el ordenador).</li><li>Pulsa <b>«Usar esta carpeta»</b> y después <b>«Permitir»</b>.</li></ol>
-    <p class="help">El móvil deja ahí su archivo cifrado y lee siempre el más reciente del ordenador.</p>`});
+    <ol class="sy-pasos"><li>Ve a la carpeta que usa el ordenador (<b>Descargas › Visitas PRL</b>, o la de Dropbox u OneDrive).</li><li>Pulsa <b>«Usar esta carpeta»</b> y después <b>«Permitir»</b>.</li></ol>
+    <p class="help">El móvil deja ahí sus visitas, cifradas. Del ordenador no llega nada a este móvil.</p>`});
   if (ok !== true) return;
   CFG.id = CFG.id || idCorto();
   const p = espera('carpeta'); AndroidApp.syncElegirCarpeta(nombrePropio());
@@ -10193,7 +10613,7 @@ function textoVersion(v, html) {
     ? `El ${otro} tiene una versión más nueva (${b(v.ver)}) que este móvil (${APP_VER}). ` + (html ? `Instala la nueva: <a href="${APK_URL}">descargar el APK</a>.` : 'Instala el APK nuevo.')
     : `El ${otro} tiene una versión más nueva (${b(v.ver)}) que este ordenador (${APP_VER}): recarga la página con ${b('Ctrl+F5')}.`;
   const cual = v.ver ? 'la ' + v.ver : 'una versión anterior a la 1.22.1';
-  return `El ${otro} tiene ${cual} y aquí está la ${b(APP_VER)}: actualiza el ${otro}` + (v.disp === 'movil' ? ' instalando el APK nuevo.' : v.disp === 'ordenador' ? ' abriendo la app y pulsando Ctrl+F5.' : '.');
+  return `El ${otro} tiene ${cual} y aquí está la ${b(APP_VER)}: actualiza el ${otro}` + (v.disp === 'movil' ? ' (con el acceso directo: ciérralo del todo y vuelve a abrirlo; con la app de Android: instala el APK nuevo).' : v.disp === 'ordenador' ? ' abriendo la app y pulsando Ctrl+F5.' : '.');
 }
 function avisarVersion() {
   const v = difVersion(), k = v ? (v.aqui ? 'aqui:' : 'otro:') + v.disp + ':' + (v.ver || '-') + ':' + APP_VER : '';
@@ -10206,14 +10626,15 @@ function lineas() {
   L.push(['', CFG.ultima ? 'Última sincronización: ' + hora(CFG.ultima) : 'Todavía sin sincronizar']);
   const ea = AND() ? estadoAnd() : {}, enCarpeta = !AND() || ea.modo === 'carpeta';
   const dondeAnd = ea.carpeta || CFG.carpeta;
-  L.push(['', `Este ${AND() ? 'móvil' : 'ordenador'} escribe <b>${esc(CFG.nombre || '')}</b>${!AND() && CFG.carpeta ? ' en la carpeta «' + esc(CFG.carpeta) + '»' : AND() && enCarpeta && dondeAnd ? ' en la carpeta «' + esc(dondeAnd) + '»' : ''}`]);
+  const dondeTxt = !AND() && CFG.carpeta ? ' en la carpeta «' + esc(CFG.carpeta) + '»' : AND() && enCarpeta && dondeAnd ? ' en la carpeta «' + esc(dondeAnd) + '»' : '';
+  if (ENVIA()) L.push(['', `Este móvil deja sus visitas en <b>${esc(CFG.nombre || '')}</b>${dondeTxt}. Del ordenador no recibe nada.`]);
+  else L.push(['', `Este ordenador recoge las visitas del móvil${dondeTxt}. No envía nada al móvil.`]);
   const ot = Object.entries(CFG.otros || {});
-  if (AND() && !enCarpeta && AND_CARPETA()) L.push(['warn', 'Nuevo: pulsa «Elegir carpeta» y elige <b>Descargas › Visitas PRL</b>. Así el móvil encuentra siempre el archivo más reciente del ordenador.']);
-  else if (AND() && !enCarpeta && !(ea.otros || []).length) L.push(['warn', 'Falta elegir el archivo del ordenador.']);
+  if (AND() && !enCarpeta && AND_CARPETA()) L.push(['warn', 'Nuevo: pulsa «Elegir carpeta» y elige <b>Descargas › Visitas PRL</b> (o la carpeta de Dropbox u OneDrive).']);
   if (AND() && ea.propio != null && ea.propioOk === false) L.push(['warn', enCarpeta ? 'El móvil no tiene permiso permanente para la carpeta: pulsa «Cambiar carpeta» y elígela otra vez.' : 'El móvil no tiene permiso permanente para escribir su archivo: pulsa «Desactivar» y vuelve a activarlo.']);
-  ot.forEach(([k, x]) => L.push([x.error ? 'warn' : '', `Lee <b>${esc(x.nombre || k)}</b>${x.error ? ' · ' + esc(x.error) : x.escrito ? ` · copia del ${x.disp === 'movil' ? 'móvil' : x.disp === 'ordenador' ? 'ordenador' : 'otro dispositivo'} de ${hora(x.escrito)}${x.ver ? ' · versión ' + esc(x.ver) : ''}` : ''}`]));
+  ot.forEach(([k, x]) => L.push([x.error ? 'warn' : '', `Recoge <b>${esc(x.nombre || k)}</b>${x.error ? ' · ' + esc(x.error) : x.escrito ? ` · copia del ${x.disp === 'movil' ? 'móvil' : x.disp === 'ordenador' ? 'ordenador' : 'otro dispositivo'} de ${hora(x.escrito)}${x.ver ? ' · versión ' + esc(x.ver) : ''}` : ''}`]));
   const dv = difVersion(); if (dv) L.push(['warn', textoVersion(dv, true)]);
-  if (enCarpeta && !ot.length && CFG.ultima) L.push(['', AND() ? 'Aún no hay archivo del ordenador en la carpeta: actívalo también en el ordenador y elige la misma carpeta.' : 'Aún no hay archivo del móvil en la carpeta: actívalo también en el móvil.']);
+  if (RECIBE() && !ot.length && CFG.ultima) L.push(['', 'Aún no hay visitas del móvil en la carpeta: actívalo también en el móvil y elige la misma carpeta. Si ya lo estaba, actualiza la app del móvil a la 1.27.0 o posterior (el acceso directo: ciérralo del todo y vuelve a abrirlo).']);
   if (CFG.estado === 'permiso') L.push(['warn', 'Hace falta volver a dar permiso a la carpeta: pulsa «Sincronizar ahora».']);
   if (CFG.estado === 'carpeta') L.push(['warn', 'Este navegador ha olvidado la carpeta: pulsa «Cambiar carpeta» y elige otra vez la carpeta compartida.']);
   if (CFG.pendBorrar) L.push(['warn', `Hay ${CFG.pendBorrar} borrados del otro dispositivo sin confirmar: pulsa «Sincronizar ahora».`]);
@@ -10223,7 +10644,7 @@ function lineas() {
 }
 function botonAnd() {
   if (!AND()) return '<button type="button" class="btn" data-sy="carpeta">Cambiar carpeta</button>';
-  if (!AND_CARPETA()) return '<button type="button" class="btn" data-sy="otros">Archivo del ordenador</button>';
+  if (!AND_CARPETA()) return '';   // 1.27.0: el móvil ya no lee el archivo del ordenador
   return estadoAnd().modo === 'carpeta' ? '<button type="button" class="btn" data-sy="carpeta">Cambiar carpeta</button>' : '<button type="button" class="btn" data-sy="carpeta">Elegir carpeta</button>';
 }
 function perfilHtml() {
@@ -10231,7 +10652,7 @@ function perfilHtml() {
   return `<section class="block sy-card" id="sy-card">
     <header class="bh"><h2>Sincronizar móvil y ordenador</h2><span class="pill ${on ? 'ok' : ''}">${on ? 'Activada' : 'Desactivada'}</span></header>
     <div class="bb">
-      <p class="help">${on ? 'Lo que guardas aquí aparece en el otro dispositivo, y al revés: visitas guardadas, informes, planificaciones, calendario, revisiones, evaluaciones de riesgos y contratos. Va cifrado con la contraseña de las copias. El PDF del PSS/DGP no viaja.' : 'Junta lo del móvil y lo del ordenador a través de una carpeta compartida: la del propio móvil, que el ordenador ve con Enlace Móvil, o una de OneDrive. Sin servidores: cada dispositivo deja ahí su archivo cifrado y lee el del otro.'}</p>
+      <p class="help">${on ? (ENVIA() ? 'Las <b>visitas</b> que guardas en este móvil pasan al ordenador. Del ordenador no llega nada a este móvil, y lo que borres aquí no se borra allí. Va cifrado con la contraseña de las copias.' : 'Aquí llegan las <b>visitas</b> que guardas en el móvil. Lo del ordenador (informes, planificaciones, calendario, revisiones, evaluaciones…) se queda en el ordenador: no se envía al móvil. Lo que borre el móvil no se borra aquí.') : 'Pasa las <b>visitas</b> del móvil al ordenador a través de una carpeta compartida (Dropbox, OneDrive o la del propio móvil con Enlace Móvil). Solo en ese sentido: del ordenador no se envía nada al móvil. Sin servidores y cifrado.'}</p>
       ${on ? `<ul class="sy-est">${lineas().map(([c, t]) => `<li class="${c}">${t}</li>`).join('')}</ul>` : ''}
       ${!PUEDE() ? '<p class="help">Disponible en la app de Android y en el ordenador con Edge o Chrome.</p>' : ''}
       <div class="sy-acc">${on ? `<button type="button" class="btn primary" data-sy="ya"${CFG.estado === 'sincronizando' ? ' disabled' : ''}>${CFG.estado === 'sincronizando' ? 'Sincronizando…' : 'Sincronizar ahora'}</button>${botonAnd()}<button type="button" class="btn sy-off" data-sy="off">Desactivar</button>` : PUEDE() ? '<button type="button" class="btn primary" data-sy="on">Activar</button>' : ''}</div>
@@ -10298,388 +10719,6 @@ if (activa()) setTimeout(() => sincronizar(), 2500);
 })();
 
 /*SYNC-JS-END*/
-/*CAL-JS-START*/
-/* ================= Calendario PRL del técnico: empieza en blanco, cada uno añade sus tareas ================= */
-(() => {
-const TIPOS = [
-  {k:'vis', t:'Visitas y planificación'},
-  {k:'inst', t:'Instalaciones'},
-  {k:'veh', t:'Vehículos y maquinaria'},
-  {k:'reg', t:'Índices y registros'},
-  {k:'ma', t:'Medio ambiente'},
-  {k:'hito', t:'Comités, informes y simulacros'},
-  {k:'otr', t:'Otros'}
-];
-const TIPO = Object.fromEntries(TIPOS.map(x => [x.k, x]));
-const REP = [['', 'No se repite'], ['sem', 'Cada semana'], ['mes', 'Cada mes'], ['tri', 'Cada 3 meses'], ['cua', 'Cada 4 meses'], ['semes', 'Cada 6 meses'], ['anu', 'Cada año']];
-const REPT = Object.fromEntries(REP);
-const REPM = {mes:1, tri:3, cua:4, semes:6, anu:12};
-/* ideas rápidas: solo rellenan el formulario, el técnico decide */
-const SUG = [
-  ['Visita a tajo de día', 'vis', 'mes'], ['Visita a tajo de noche', 'vis', 'mes'], ['Revisión de la planificación preventiva', 'vis', 'mes'],
-  ['Índices PRL del mes anterior', 'reg', 'mes'], ['Horas WINSIE', 'reg', 'mes'], ['Gastos PRL del mes', 'reg', 'mes'], ['Hoja trimestral de accidentes', 'reg', 'tri'],
-  ['Revisión de vehículos y maquinaria', 'veh', 'mes'], ['Revisión de pequeña maquinaria', 'veh', 'mes'],
-  ['Revisión trimestral de botiquín, extintores, anticaídas y escaleras', 'inst', 'tri'], ['Control de legionela', 'inst', 'tri'],
-  ['Registro de consumos y residuos', 'ma', 'mes'], ['Indicadores de seguridad vial', 'otr', 'mes'], ['Cartel de sensibilización y tablón', 'otr', 'mes'],
-  ['Comité de Seguridad y Salud', 'hito', 'tri'], ['Informe de seguimiento cuatrimestral', 'hito', 'cua'], ['Simulacro de emergencia', 'hito', 'anu']
-];
-const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
-const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-const REPIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 14-4.5M20 13a8 8 0 0 1-14 4.5"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>';
-
-/* ---------- almacén ---------- */
-const cdb = (() => {
-  let p;
-  const open = () => p || (p = new Promise((res, rej) => {
-    try { const r = indexedDB.open('registro-rp-cal', 1); r.onupgradeneeded = () => r.result.createObjectStore('tareas', {keyPath:'id'}); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }
-    catch (e) { rej(e); }
-  }));
-  const tx = (m, f) => open().then(d => new Promise((res, rej) => { const t = d.transaction('tareas', m); const out = f(t.objectStore('tareas')); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }));
-  return { all: () => tx('readonly', s => s.getAll()), put: x => tx('readwrite', s => s.put(x)), del: id => tx('readwrite', s => s.delete(id)) };
-})();
-let TAREAS = [], ED = null, modo = ['mes', 'lista'].includes(lsGet('cal-modo')) ? lsGet('cal-modo') : 'agenda', fctr = '', mesV = null, diaSel = null;
-async function cargar() { try { TAREAS = await cdb.all() || []; } catch (e) { TAREAS = []; } if (!ED) renderMain(); refrescaIni(); }
-async function guardar(t) {
-  t.guardado = Date.now();
-  const i = TAREAS.findIndex(x => x.id === t.id); if (i >= 0) TAREAS[i] = t; else TAREAS.push(t);
-  try { await cdb.put(JSON.parse(JSON.stringify(t))); } catch (e) { toast('No se pudo guardar la tarea.'); }
-  refrescaIni();
-}
-const nid = () => 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
-const refrescaIni = () => { if (window.INI_API && INI_API.refrescar) INI_API.refrescar(); };
-
-/* ---------- fechas y repeticiones ---------- */
-const hoy = () => isoDate(new Date());
-const pISO = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
-const masDias = (s, n) => { const d = pISO(s); d.setDate(d.getDate() + n); return isoDate(d); };
-const dim = (y, m) => new Date(y, m + 1, 0).getDate();
-const corta = s => { const d = pISO(s); return `${d.getDate()} ${MESES[d.getMonth()].slice(0, 3)}`; };
-const larga = s => { const d = pISO(s); return `${DIAS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`; };
-const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-/* fechas en que toca la tarea entre a y b (ambas incluidas) */
-function fechas(t, a, b) {
-  if (!t.f) return [];
-  const fin = t.hasta && t.hasta < b ? t.hasta : b;
-  /* las repeticiones anteriores al día en que se creó la tarea no cuentan */
-  const ini = t.rep && t.desde && t.desde > a ? t.desde : a;
-  if (!t.rep) return t.f >= a && t.f <= b ? [t.f] : [];
-  const out = [];
-  if (t.rep === 'sem') {
-    let s = t.f;
-    if (s < ini) { const n = Math.ceil((pISO(ini) - pISO(s)) / 864e5 / 7); s = masDias(s, 7 * n); }
-    for (; s <= fin; s = masDias(s, 7)) out.push(s);
-    return out;
-  }
-  const paso = REPM[t.rep]; if (!paso) return [];
-  const f0 = pISO(t.f), d0 = f0.getDate();
-  const ia = pISO(ini);
-  let k = Math.max(0, Math.floor(((ia.getFullYear() - f0.getFullYear()) * 12 + ia.getMonth() - f0.getMonth()) / paso) - 1);
-  for (let guard = 0; guard < 400; guard++, k++) {
-    const y = f0.getFullYear(), m = f0.getMonth() + k * paso;
-    const d = new Date(y, m, 1); const s = isoDate(new Date(d.getFullYear(), d.getMonth(), Math.min(d0, dim(d.getFullYear(), d.getMonth()))));
-    if (s > fin) break;
-    if (s >= ini) out.push(s);
-  }
-  return out;
-}
-const hecha = (t, d) => !!(t.hechas && t.hechas[d]);
-const delFiltro = t => !fctr || (fctr === '-' ? !(t.ctr && t.ctr.id) : !!(t.ctr && t.ctr.id === fctr));
-/* todas las apariciones (tarea + fecha) en un rango */
-function ocurr(a, b, todas) {
-  const out = [];
-  TAREAS.filter(t => todas || delFiltro(t)).forEach(t => fechas(t, a, b).forEach(d => out.push({t, d, ok:hecha(t, d)})));
-  return out.sort((x, y) => x.d < y.d ? -1 : x.d > y.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
-}
-const vencidas = todas => ocurr(masDias(hoy(), -400), masDias(hoy(), -1), todas).filter(o => !o.ok);
-function resumen(todas) {
-  const h = hoy(), sem = ocurr(h, masDias(h, 7), todas), ym = h.slice(0, 7);
-  const mes = ocurr(ym + '-01', ym + '-31', todas);
-  return {n:TAREAS.length, hoy:sem.filter(o => o.d === h && !o.ok).length, semana:sem.filter(o => !o.ok).length, venc:vencidas(todas).length, hechasMes:mes.filter(o => o.ok).length, mes:mes.length};
-}
-
-/* ---------- pantalla principal (1.26.0: más sencilla, tres pestañas: Pendientes, Mes y Mis tareas) ---------- */
-const ctrCorto = c => c ? (c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : '';
-const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
-const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
-function filaHtml(o, conFecha = true) {
-  const {t, d, ok} = o, late = !ok && d < hoy();
-  const meta = [conFecha ? `<span>${esc(corta(d))}</span>` : '', t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : '', t.rep ? `<span class="cal-rp">${REPIC}${esc(REPT[t.rep])}</span>` : '', late ? '<span class="cal-late">Vencida</span>' : ''].filter(Boolean).join('');
-  return `<div class="cal-row${ok ? ' st-ok' : ''}${late ? ' st-bad' : ''}">
-    <button type="button" class="cal-ck" data-hecha="${esc(t.id)}" data-d="${d}" aria-pressed="${ok}" aria-label="${ok ? 'Desmarcar' : 'Marcar como hecha'}: ${esc(t.t)}">${CHECK}</button>
-    <button type="button" class="cal-open" data-edit="${esc(t.id)}" data-d="${d}"><b>${esc(t.t)}</b>${meta ? `<span class="cal-meta">${meta}</span>` : ''}</button>
-  </div>`;
-}
-function grupo(tit, list, cls = '', conFecha = true) {
-  if (!list.length) return '';
-  return `<h3 class="cal-gh ${cls}">${esc(tit)}<i>${list.length}</i></h3><div class="cal-list">${list.map(o => filaHtml(o, conFecha)).join('')}</div>`;
-}
-function agendaHtml() {
-  const h = hoy(), v = vencidas(), hoyL = ocurr(h, h), sem = ocurr(masDias(h, 1), masDias(h, 7));
-  /* más adelante: de las que se repiten, solo la siguiente vez; plegado para que la pantalla quede corta */
-  const vistas = new Set([...hoyL, ...sem].map(o => o.t.id)), mas = ocurr(masDias(h, 8), masDias(h, 30)).filter(o => !vistas.has(o.t.id) && (vistas.add(o.t.id), true));
-  const alDia = !v.length && !hoyL.filter(o => !o.ok).length && !sem.length;
-  const masH = mas.length ? `<details class="cal-mas"><summary>Más adelante <small>hasta 30 días</small><i>${mas.length}</i></summary><div class="cal-list">${mas.map(o => filaHtml(o)).join('')}</div></details>` : '';
-  if (alDia && !hoyL.length) return `<div class="cal-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg><b>Nada pendiente esta semana</b></div>${masH || '<p class="help cal-vacio">Tampoco hay nada en los próximos 30 días. Mira el mes entero en «Mes».</p>'}`;
-  return grupo('Vencidas', v, 'g-bad') + grupo('Hoy', hoyL, 'g-hoy', false) + grupo('Esta semana', sem) + masH;
-}
-function mesHtml() {
-  const [y, m] = mesV, a = `${y}-${pad2(m + 1)}-01`, b = `${y}-${pad2(m + 1)}-${pad2(dim(y, m))}`, h = hoy();
-  const os = ocurr(a, b), by = {};
-  os.forEach(o => (by[o.d] = by[o.d] || []).push(o));
-  if (!diaSel || !diaSel.startsWith(a.slice(0, 7))) diaSel = h.startsWith(a.slice(0, 7)) ? h : (Object.keys(by).sort()[0] || a);
-  let g = ['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(x => `<span class="cal-dow">${x}</span>`).join('');
-  const lead = (new Date(y, m, 1).getDay() + 6) % 7;
-  for (let i = 0; i < lead; i++) g += '<span class="cal-d out" aria-hidden="true"></span>';
-  for (let d = 1; d <= dim(y, m); d++) {
-    const s = `${y}-${pad2(m + 1)}-${pad2(d)}`, l = by[s] || [], wd = new Date(y, m, d).getDay();
-    const pend = l.filter(o => !o.ok).length, late = pend && s < h, todo = l.length && !pend;
-    /* un número por día (las que quedan) en vez de puntos de colores: no hace falta leyenda */
-    const marca = todo ? `<i class="cal-c ok" aria-hidden="true">${CHECK}</i>` : pend ? `<i class="cal-c" aria-hidden="true">${pend}</i>` : '';
-    /* 1.26.1 · con sitio (ordenador, tableta) el día enseña en pequeño lo que toca: primero lo pendiente; en el móvil, el número */
-    const orden = [...l.filter(o => !o.ok), ...l.filter(o => o.ok)], MAXT = 3;
-    const tits = orden.length ? `<span class="cal-ts" aria-hidden="true">${orden.slice(0, MAXT).map(o => `<span class="cal-tt${o.ok ? ' ok' : !o.ok && s < h ? ' late' : ''}">${esc(o.t.t)}</span>`).join('')}${orden.length > MAXT ? `<span class="cal-tm">+${orden.length - MAXT} más</span>` : ''}</span>` : '';
-    g += `<button type="button" class="cal-d${wd === 0 || wd === 6 ? ' we' : ''}${s === h ? ' hoy' : ''}${s === diaSel ? ' sel' : ''}${late ? ' late' : ''}${todo ? ' todo' : ''}${l.length ? ' con' : ''}" data-dia="${s}" aria-label="${esc(larga(s))}: ${l.length ? plural(l.length, 'tarea', 'tareas') + (pend ? `, ${pend} sin hacer` : ', todas hechas') + ': ' + esc(orden.map(o => o.t.t).join('; ')) : 'sin tareas'}" aria-pressed="${s === diaSel}"${l.length ? ` title="${esc(orden.map(o => (o.ok ? '✓ ' : '') + o.t.t).join('\n'))}"` : ''}><span class="n">${d}</span>${marca}${tits}</button>`;
-  }
-  const lm = by[diaSel] || [];
-  const pend = os.filter(o => !o.ok).length;
-  return `<div class="cal-mbar"><button type="button" class="nav-b" data-mes="-1" aria-label="Mes anterior">‹</button><h3>${cap(MESES[m])} ${y}</h3><button type="button" class="nav-b" data-mes="1" aria-label="Mes siguiente">›</button></div>
-    <p class="cal-msum">${plural(os.length, 'tarea', 'tareas')} · ${os.length - pend} ${os.length - pend === 1 ? 'hecha' : 'hechas'}${h.startsWith(a.slice(0, 7)) ? '' : ` · <button type="button" class="linkbtn cal-hoyb" data-mes="0">Volver a hoy</button>`}</p>
-    <div class="cal-grid" role="group" aria-label="${cap(MESES[m])} ${y}">${g}</div>
-    <div class="cal-dhead"><h3 class="cal-gh">${esc(cap(larga(diaSel)))}<i>${lm.length}</i></h3><button type="button" class="cal-addd" data-nueva="${diaSel}">${PLUS}Añadir</button></div>
-    ${lm.length ? `<div class="cal-list">${lm.map(o => filaHtml(o, false)).join('')}</div>` : '<p class="help cal-vacio">Sin tareas este día.</p>'}`;
-}
-/* «Mis tareas»: una línea por tarea (no por fecha) para añadir, cambiar o quitar */
-function proxima(t) {
-  const h = hoy(), v = fechas(t, masDias(h, -400), masDias(h, -1)).filter(d => !hecha(t, d));
-  if (v.length) return {d:v[0], txt:`vencida el ${corta(v[0])}`, late:true};
-  const l = fechas(t, h, masDias(h, 800)).filter(d => !hecha(t, d));
-  if (l.length) return {d:l[0], txt:(l[0] === h ? 'hoy' : corta(l[0]))};
-  if (!t.rep && t.f < h) return {d:t.f, txt:`${corta(t.f)}, ${hecha(t, t.f) ? 'hecha' : 'pasada'}`};
-  return {d:'9999', txt:'sin próximas fechas'};
-}
-function listaHtml() {
-  const l = TAREAS.filter(delFiltro).map(t => ({t, p:proxima(t)})).sort((x, y) => x.p.d < y.p.d ? -1 : x.p.d > y.p.d ? 1 : (x.t.t || '').localeCompare(y.t.t || ''));
-  const filas = l.map(({t, p}) => {
-    const meta = [`<span>${t.rep ? `${REPIC}${esc(REPT[t.rep])}` : 'Una vez'}</span>`, (p.late ? `<span class="cal-late">${cap(esc(p.txt))}</span>` : `<span>${t.rep ? 'Próxima: ' : ''}${esc(p.txt)}</span>`), t.ctr && t.ctr.id && !fctr ? `<span class="cal-tc">${esc(ctrCorto(t.ctr))}</span>` : ''].filter(Boolean).join('');
-    return `<div class="cal-row cal-def">
-      <button type="button" class="cal-open" data-edit="${esc(t.id)}"><b>${esc(t.t)}</b><span class="cal-meta">${meta}</span></button>
-      <button type="button" class="cal-quitar" data-quitar="${esc(t.id)}" aria-label="Quitar: ${esc(t.t)}">${TRASH}<span>Quitar</span></button>
-    </div>`;
-  }).join('');
-  return `<button type="button" class="btn primary cal-add" data-nueva="">${PLUS}Añadir tarea</button>
-    ${l.length ? `<p class="help cal-lh">Toca una tarea para cambiarla. «Quitar» la borra con todas sus repeticiones.</p><div class="cal-list">${filas}</div>` : '<p class="help cal-vacio">No hay tareas con este filtro.</p>'}`;
-}
-function ctrsHtml() {
-  const cs = perfilGet().contratos, sin = TAREAS.some(t => !(t.ctr && t.ctr.id));
-  if (cs.length < 2 && !sin) return '';
-  const o = (id, txt) => `<option value="${esc(id)}"${fctr === id ? ' selected' : ''}>${esc(txt)}</option>`;
-  return `<label class="cal-fcw"><span>Contrato</span><select id="cal-fc">${o('', 'Todos')}${cs.map(c => o(c.id, ctrCorto(c))).join('')}${sin ? o('-', 'Sin contrato') : ''}</select></label>`;
-}
-function resumenHtml(r) {
-  const p = [];
-  if (r.venc) p.push(`<span class="cal-pill bad">${plural(r.venc, 'vencida', 'vencidas')}</span>`);
-  if (r.hoy) p.push(`<span class="cal-pill hoy">${r.hoy} hoy</span>`);
-  if (r.semana - r.hoy > 0) p.push(`<span class="cal-pill">${r.semana - r.hoy} esta semana</span>`);
-  if (!p.length) p.push(`<span class="cal-pill ok">${CHECK}Al día</span>`);
-  return `<p class="cal-res" aria-label="Resumen">${p.join('')}</p>`;
-}
-function renderMain() {
-  const M = $('#cal-main'); if (!M) return;
-  if (fctr && fctr !== '-' && !contratoPorId(fctr)) fctr = '';
-  if (!mesV) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; }
-  const r = resumen(), vacio = !TAREAS.length;
-  const pendN = r.venc + r.semana;
-  const tab = (k, txt, n) => `<button type="button" role="tab" data-cmodo="${k}" aria-selected="${modo === k}" aria-pressed="${modo === k}">${txt}${n ? `<i>${n}</i>` : ''}</button>`;
-  M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
-    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}</header>
-    ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…).</span><button type="button" class="btn primary" data-nueva="">${PLUS}Añadir la primera tarea</button></div>` : `
-    <div class="cal-tabs" role="tablist" aria-label="Cómo ver las tareas">${tab('agenda', 'Pendientes', pendN)}${tab('mes', 'Mes')}${tab('lista', 'Mis tareas', TAREAS.length)}</div>
-    ${ctrsHtml()}
-    <div class="cal-body" role="tabpanel">${modo === 'mes' ? mesHtml() : modo === 'lista' ? listaHtml() : agendaHtml()}</div>`}`;
-  vista('main');
-}
-function vista(q) {
-  const m = $('#cal-main'), f = $('#cal-form'); if (m) m.hidden = q !== 'main'; if (f) f.hidden = q !== 'form';
-  const b = $('#cal-bar'); if (b) b.hidden = q !== 'main' || $('#view-cal').hidden || !TAREAS.length || modo === 'lista';
-}
-
-/* ---------- formulario de tarea (1.26.0: lo justo arriba; tipo, «hasta» y notas en «Más opciones») ---------- */
-function abrirForm(id, fecha) {
-  const t = id ? TAREAS.find(x => x.id === id) : null;
-  const a = snapContrato();
-  ED = t ? JSON.parse(JSON.stringify(t)) : {id:nid(), t:'', k:'', ctr:fctr === '-' ? null : (fctr ? snapContrato(contratoPorId(fctr)) : a), f:fecha || hoy(), rep:'', hasta:'', notas:'', hechas:{}, nueva:true};
-  renderForm(); vista('form'); window.scrollTo({top:0});
-  if (!t) setTimeout(() => { const i = $('#cf-t'); if (i) i.focus(); }, 60);
-}
-function renderForm() {
-  const F = $('#cal-form'); if (!F || !ED) return;
-  const cs = perfilGet().contratos, cid = ED.ctr && ED.ctr.id;
-  const opts = cs.map(c => `<option value="${esc(c.id)}"${c.id === cid ? ' selected' : ''}>${esc(nombreContrato(c) || 'Contrato')}</option>`).join('') + (cid && !cs.some(c => c.id === cid) ? `<option value="${esc(cid)}" selected>${esc(nombreContrato(ED.ctr))}</option>` : '');
-  const masAbierto = !!(ED.notas || ED.hasta);
-  F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="volver">‹ Calendario</button></div>
-    <section class="block cal-fb">
-      <header class="bh"><h2>${ED.nueva ? 'Añadir tarea' : 'Cambiar tarea'}</h2></header>
-      <div class="bb cal-ff">
-        <div class="field"><label for="cf-t">¿Qué hay que hacer?</label><input id="cf-t" type="text" maxlength="200" autocomplete="off" placeholder="Ej.: Visita a tajo de noche" value="${esc(ED.t)}"></div>
-        ${ED.nueva ? `<details class="cal-sug"><summary>Ideas rápidas <small>las tareas habituales de PRL</small></summary><div class="chips">${SUG.map((s, i) => `<button type="button" class="chip" data-sug="${i}">${esc(s[0])}</button>`).join('')}</div></details>` : ''}
-        <div class="field"><label for="cf-f">${ED.rep ? 'Primera fecha' : 'Fecha'}</label><input id="cf-f" type="date" value="${esc(ED.f)}"></div>
-        <div class="field"><span class="lbl" id="cf-rl">¿Se repite?</span><div class="chips cal-reps" role="group" aria-labelledby="cf-rl">${REP.map(([k, t]) => `<button type="button" class="chip" data-rep="${k}" aria-pressed="${ED.rep === k}">${esc(t)}</button>`).join('')}</div>
-          <p class="help" id="cf-rh">${repAyuda()}</p></div>
-        <div class="field"${cs.length || cid ? '' : ' hidden'}><label for="cf-c">Contrato</label><select id="cf-c"><option value="">Sin contrato</option>${opts}</select></div>
-        <details class="cal-masop"${masAbierto ? ' open' : ''}><summary>Más opciones <small>tipo, hasta cuándo y notas</small></summary>
-          <div class="cal-ff">
-            <div class="field"><span class="lbl" id="cf-kl">Tipo</span><div class="chips cal-tipos" role="group" aria-labelledby="cf-kl">${TIPOS.map(x => `<button type="button" class="chip" data-tipo="${x.k}" aria-pressed="${ED.k === x.k}">${esc(x.t)}</button>`).join('')}</div></div>
-            <div class="field" id="cf-hw"${ED.rep ? '' : ' hidden'}><label for="cf-h">Hasta <i class="opc">opcional</i></label><input id="cf-h" type="date" value="${esc(ED.hasta || '')}"></div>
-            <div class="field"><label for="cf-n">Notas <i class="opc">opcional</i></label><textarea id="cf-n" rows="3" maxlength="1500">${esc(ED.notas || '')}</textarea></div>
-          </div>
-        </details>
-      </div>
-    </section>
-    <div class="cal-fbtns">
-      <button type="button" class="btn primary" data-ca="guardar">${ED.nueva ? 'Añadir al calendario' : 'Guardar cambios'}</button>
-      ${ED.nueva ? '' : `<button type="button" class="btn danger-t" data-ca="borrar">${TRASH}Quitar del calendario</button>`}
-      <button type="button" class="btn" data-ca="volver">Cancelar</button>
-    </div>`;
-}
-function repAyuda() {
-  if (!ED.rep || !ED.f) return ED.rep ? '' : 'Una sola vez, el día que pongas.';
-  const d = pISO(ED.f), dia = d.getDate();
-  const txt = ED.rep === 'sem' ? `Todos los ${DIAS[d.getDay()]}` : ED.rep === 'anu' ? `Cada año, el ${dia} de ${MESES[d.getMonth()]}` : `El día ${dia} ${ED.rep === 'mes' ? 'de cada mes' : 'cada ' + REPM[ED.rep] + ' meses'}${dia > 28 ? ' (o el último día si el mes es más corto)' : ''}`;
-  return txt + (ED.nueva ? '. Los cambios valen para todas las repeticiones.' : '. Al editarla cambian todas las repeticiones; las ya marcadas como hechas se mantienen.');
-}
-function leerForm() {
-  const v = id => ((($('#' + id) || {}).value) || '').trim();
-  ED.t = v('cf-t'); ED.f = v('cf-f'); ED.notas = v('cf-n'); ED.hasta = ED.rep ? v('cf-h') : '';
-  const cid = v('cf-c'); ED.ctr = cid ? (contratoPorId(cid) ? snapContrato(contratoPorId(cid)) : ED.ctr) : null;
-}
-async function guardarForm() {
-  leerForm();
-  if (!ED.t) { toast('Escribe qué hay que hacer.'); $('#cf-t').focus(); return; }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(ED.f)) { toast('Pon la fecha.'); $('#cf-f').focus(); return; }
-  if (ED.hasta && ED.hasta < ED.f) { toast('«Hasta» no puede ser antes de la primera fecha.'); const mo = $('.cal-masop'); if (mo) mo.open = true; $('#cf-h').focus(); return; }
-  const nueva = !!ED.nueva; delete ED.nueva;
-  if (!ED.k) ED.k = 'otr';
-  if (nueva) ED.creado = Date.now();
-  /* una tarea que se repite empieza a contar desde el día en que la das de alta: no llena de vencidas los meses pasados */
-  if (ED.rep && !ED.desde) ED.desde = hoy();
-  const t = ED; ED = null;
-  await guardar(t);
-  if (modo === 'mes') { const d = pISO(t.f); if (!t.rep) { mesV = [d.getFullYear(), d.getMonth()]; diaSel = t.f; } }
-  renderMain(); window.scrollTo({top:0});
-  toast(nueva ? (t.rep ? `Tarea añadida: ${REPT[t.rep].toLowerCase()}.` : `Tarea añadida para el ${fmtDate(t.f)}.`) : 'Cambios guardados.');
-}
-async function borrar(id) {
-  const t = TAREAS.find(x => x.id === (id || (ED && ED.id))); if (!t) return;
-  if (!(await ask({title:'¿Quitar la tarea?', body:`<p>«${esc(t.t)}»${t.rep ? ' y todas sus repeticiones' : ''} se quita del calendario.</p>`, yes:'Quitar', danger:true}))) return;
-  TAREAS = TAREAS.filter(x => x.id !== t.id);
-  try { await cdb.del(t.id); } catch (e) {}
-  const y = window.scrollY; ED = null; renderMain(); refrescaIni(); if (id) window.scrollTo({top:y}); toast('Tarea quitada.');
-}
-
-/* ---------- eventos ---------- */
-async function onClick(e) {
-  const hc = e.target.closest('[data-hecha]');
-  if (hc) {
-    const t = TAREAS.find(x => x.id === hc.dataset.hecha), d = hc.dataset.d; if (!t) return;
-    t.hechas = t.hechas || {};
-    const ya = !!t.hechas[d];
-    if (ya) delete t.hechas[d]; else t.hechas[d] = Date.now();
-    const y = window.scrollY; await guardar(t); renderMain(); window.scrollTo({top:y});
-    toast(ya ? 'Vuelve a estar pendiente.' : 'Hecha. ¡Bien!');
-    return;
-  }
-  const qt = e.target.closest('[data-quitar]'); if (qt) return borrar(qt.dataset.quitar);
-  const ed = e.target.closest('[data-edit]'); if (ed) { abrirForm(ed.dataset.edit); return; }
-  const nv = e.target.closest('[data-nueva]'); if (nv) { abrirForm(null, nv.dataset.nueva || (modo === 'mes' && diaSel && diaSel >= hoy() ? diaSel : hoy())); return; }
-  const md = e.target.closest('[data-cmodo]'); if (md) { modo = md.dataset.cmodo; lsSet('cal-modo', modo); renderMain(); return; }
-  const ms = e.target.closest('[data-mes]');
-  if (ms) { const n = +ms.dataset.mes; if (!n) { const d = new Date(); mesV = [d.getFullYear(), d.getMonth()]; diaSel = hoy(); } else { const d = new Date(mesV[0], mesV[1] + n, 1); mesV = [d.getFullYear(), d.getMonth()]; diaSel = null; } renderMain(); return; }
-  const dia = e.target.closest('[data-dia]'); if (dia) { diaSel = dia.dataset.dia; const y = window.scrollY; renderMain(); window.scrollTo({top:y}); return; }
-  const sg = e.target.closest('[data-sug]');
-  if (sg && ED) { const s = SUG[+sg.dataset.sug]; leerForm(); ED.t = s[0]; ED.k = s[1]; ED.rep = s[2]; renderForm(); toast('Revisa la fecha y guarda.'); const f = $('#cf-f'); if (f) f.focus(); return; }
-  const tp = e.target.closest('[data-tipo]'); if (tp && ED) { ED.k = ED.k === tp.dataset.tipo ? '' : tp.dataset.tipo; tp.parentNode.querySelectorAll('[data-tipo]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tipo === ED.k)); return; }
-  const rp = e.target.closest('[data-rep]');
-  if (rp && ED) { leerForm(); ED.rep = rp.dataset.rep; rp.parentNode.querySelectorAll('[data-rep]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rep === ED.rep)); $('#cf-hw').hidden = !ED.rep; $('#cf-rh').textContent = repAyuda(); const l = $('label[for="cf-f"]'); if (l) l.textContent = ED.rep ? 'Primera fecha' : 'Fecha'; return; }
-  const b = e.target.closest('[data-ca]'); if (!b) return;
-  const a = b.dataset.ca;
-  if (a === 'ini') { showTab('ini'); return; }
-  if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
-  if (a === 'guardar') return guardarForm();
-  if (a === 'borrar') return borrar();
-}
-function onInput(e) {
-  if (e.target.id === 'cal-fc') { fctr = e.target.value; renderMain(); return; }
-  if (ED && e.target.id === 'cf-f') { ED.f = e.target.value; const h = $('#cf-rh'); if (h) h.textContent = repAyuda(); }
-}
-
-/* ---------- arranque ---------- */
-function montar() {
-  const main = document.createElement('main');
-  main.id = 'view-cal'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
-  main.innerHTML = '<div id="cal-main"></div><div id="cal-form" hidden></div>';
-  const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
-  const bar = document.createElement('div'); bar.className = 'ibar'; bar.id = 'cal-bar'; bar.hidden = true;
-  bar.innerHTML = '<button type="button" class="btn primary" data-nueva="">+ Añadir tarea</button>';
-  document.body.appendChild(bar);
-  main.addEventListener('click', onClick); main.addEventListener('input', onInput); main.addEventListener('change', onInput);
-  bar.addEventListener('click', onClick);
-  cargar();
-}
-window.CAL_API = {
-  lista: () => TAREAS,
-  abrir() { ED = null; showTab('cal'); renderMain(); },
-  /* para el Inicio: todos los contratos */
-  resumen: () => resumen(true),
-  /* para «Hoy y vencidas» del Inicio: una línea por tarea, con la fecha más antigua sin marcar */
-  pendientes() {
-    const h = hoy(), m = new Map();
-    ocurr(masDias(h, -400), h, true).filter(o => !o.ok).forEach(o => { const x = m.get(o.t.id); if (x) x.n++; else m.set(o.t.id, {id:o.t.id, t:o.t.t || '', k:o.t.k || 'otr', ctr:o.t.ctr || null, d:o.d, n:1}); });
-    return [...m.values()];
-  },
-  /* visitas a tajo previstas este mes (tareas de «Visitas» con «visita» en el nombre) */
-  visitasMes(ctrId) {
-    const ym = hoy().slice(0, 7);
-    return ocurr(ym + '-01', ym + '-31', true).filter(o => o.t.k === 'vis' && /visita/i.test(o.t.t || '') && (!ctrId || !(o.t.ctr && o.t.ctr.id) || o.t.ctr.id === ctrId)).length;
-  },
-  editar(id, d) { showTab('cal'); if (TAREAS.some(x => x.id === id)) abrirForm(id, d); },
-  /* 1.24.0 · desde «Tareas del técnico»: el formulario de nueva tarea ya relleno (el técnico revisa y guarda) */
-  nueva(pre) {
-    ED = null; showTab('cal'); abrirForm(null, pre.f);
-    Object.assign(ED, {t:pre.t || '', k:pre.k || '', rep:pre.rep || '', notas:pre.notas || '', ctr:'ctr' in pre ? (pre.ctr || null) : null});
-    if (pre.guia) ED.guia = pre.guia;
-    renderForm(); vista('form');
-  },
-  /* y varias de golpe; las que se repiten cuentan desde hoy (no salen vencidas las de antes) */
-  async agregar(arr) {
-    let n = 0;
-    for (const x of arr || []) {
-      if (!x || !x.t || !/^\d{4}-\d{2}-\d{2}$/.test(x.f || '')) continue;
-      const t = {id:nid(), t:x.t, k:x.k || 'otr', ctr:x.ctr || null, f:x.f, rep:x.rep || '', hasta:'', notas:x.notas || '', hechas:x.hechas || {}, creado:Date.now()};
-      if (x.guia) t.guia = x.guia;
-      if (t.rep) t.desde = hoy();
-      await guardar(t); n++;
-    }
-    if (n && !ED) renderMain();
-    return n;
-  },
-  async importar(arr) {
-    const act = new Map(TAREAS.map(x => [x.id, x])); let n = 0;
-    for (const x of arr) { if (x && x.id && x.t && x.f && (!act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0))) { await cdb.put(x); n++; } }
-    if (n) await cargar();
-    return n;
-  },
-  atras() {
-    const v = $('#view-cal'); if (!v || v.hidden) return false;
-    if (ED) { ED = null; renderMain(); return true; }
-    showTab('ini'); return true;
-  },
-  onTab(t) { const b = $('#cal-bar'); if (b) b.hidden = !(t === 'cal' && !ED && TAREAS.length && modo !== 'lista'); if (t === 'cal' && !ED) renderMain(); }
-};
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
-})();
-
-/*CAL-JS-END*/
 /*TAR-JS-START*/
 /* ================= Tareas básicas del técnico de PRL (1.24.0) =================
    La lista de lo que hay que hacer cada mes, cada trimestre, cada año, en cada contrato y cuando pasa algo
@@ -11786,6 +11825,8 @@ window.SEG_API = {
     if (c.alg !== 'AES-256-GCM' || !j.datos || !SUB()) { const e = new Error('formato'); e.seg = true; throw e; }
     await listo;
     if (CLAVE && CLAVE.sal === c.sal) { const t = await abrirCon(CLAVE.key, j); if (t != null) return JSON.parse(t); }
+    /* 1.27.0: el ordenador recuerda la clave de cada móvil (los móviles ya no leen la del ordenador, así que no se igualan solas) */
+    try { const o = await sdb.get('sync:' + c.sal); if (o && o.key) { const t = await abrirCon(o.key, j); if (t != null) return JSON.parse(t); } } catch (e) {}
     if (!preguntar) return null;
     for (let i = 0; i < 3; i++) {
       const r = await ask({title:'Contraseña del otro dispositivo', yes:'Usar', no:'Ahora no', body:`<p class="m-file">${esc(nombre || 'Archivo de OneDrive')}</p>
@@ -11796,6 +11837,7 @@ window.SEG_API = {
       const key = await claveDe(pass, unb64(c.sal), c.it || ITER);
       const t = await abrirCon(key, j);
       if (t != null) {
+        try { await sdb.put({id:'sync:' + c.sal, key, sal:c.sal, it:c.it || ITER, creado:Date.now()}); } catch (e) {}
         await nuevaClave(null, c.sal, key, c.it || ITER);
         toast('Listo: los dos dispositivos usan la misma contraseña de copias.');
         try { pinta(); } catch (e) {}

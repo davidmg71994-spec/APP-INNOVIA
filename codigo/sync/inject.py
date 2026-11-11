@@ -54,5 +54,15 @@ if "{v:'1.22.1'" not in h:
   ]},
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.22.1 · 10/11/2026", h, count=1)
+if "{v:'1.27.0'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.27.0';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.27.0', fecha:'11/11/2026', items:[
+    '<b>Sincronizar: solo visitas, del móvil al ordenador</b>. El móvil deja en la carpeta compartida (Dropbox, OneDrive o Enlace Móvil) solo sus visitas; el ordenador las recoge y no envía nada al móvil. Informes, planificaciones, calendario, revisiones y evaluaciones se quedan en el ordenador.',
+    'Lo que borres en el móvil ya no se borra en el ordenador: el ordenador guarda todas las visitas.',
+    'La app abierta con el acceso directo del móvil ahora se presenta como «móvil» (antes decía «ordenador»).'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.27.0 · 11/11/2026", h, count=1)
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ok', len(h))

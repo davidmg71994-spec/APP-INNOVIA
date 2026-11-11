@@ -680,6 +680,8 @@ window.SEG_API = {
     if (c.alg !== 'AES-256-GCM' || !j.datos || !SUB()) { const e = new Error('formato'); e.seg = true; throw e; }
     await listo;
     if (CLAVE && CLAVE.sal === c.sal) { const t = await abrirCon(CLAVE.key, j); if (t != null) return JSON.parse(t); }
+    /* 1.27.0: el ordenador recuerda la clave de cada móvil (los móviles ya no leen la del ordenador, así que no se igualan solas) */
+    try { const o = await sdb.get('sync:' + c.sal); if (o && o.key) { const t = await abrirCon(o.key, j); if (t != null) return JSON.parse(t); } } catch (e) {}
     if (!preguntar) return null;
     for (let i = 0; i < 3; i++) {
       const r = await ask({title:'Contraseña del otro dispositivo', yes:'Usar', no:'Ahora no', body:`<p class="m-file">${esc(nombre || 'Archivo de OneDrive')}</p>
@@ -690,6 +692,7 @@ window.SEG_API = {
       const key = await claveDe(pass, unb64(c.sal), c.it || ITER);
       const t = await abrirCon(key, j);
       if (t != null) {
+        try { await sdb.put({id:'sync:' + c.sal, key, sal:c.sal, it:c.it || ITER, creado:Date.now()}); } catch (e) {}
         await nuevaClave(null, c.sal, key, c.it || ITER);
         toast('Listo: los dos dispositivos usan la misma contraseña de copias.');
         try { pinta(); } catch (e) {}
