@@ -1,0 +1,5 @@
+/* Pasar visitas al ordenador (1.28.0) */
+.xv-sec .xv-pasos{margin:4px 0 0;padding-left:20px;font-size:14px;color:var(--muted);display:grid;gap:3px}
+.xv-sec .xv-pasos b{display:inline;font:inherit;font-weight:700;text-transform:none;letter-spacing:0;color:var(--ink)}
+.xv-chk{display:flex;align-items:center;gap:8px;margin-top:8px;font-weight:600;cursor:pointer}
+.xv-chk input{width:20px;height:20px;accent-color:var(--accent)}

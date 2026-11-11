@@ -118,6 +118,8 @@ async function descifrarCopia(j, nombre) {
   const parse = t => JSON.parse(t);
   if (CLAVE && CLAVE.sal === c.sal) { const t = await abrirCon(CLAVE.key, j); if (t != null) return parse(t); }
   if (CACHE.has(c.sal)) { const t = await abrirCon(CACHE.get(c.sal), j); if (t != null) return parse(t); }
+  /* 1.28.0: la contraseña de otro dispositivo (el móvil que exporta sus visitas) se recuerda: no hay que escribirla en cada importación */
+  try { const o = await sdb.get('sync:' + c.sal); if (o && o.key) { const t = await abrirCon(o.key, j); if (t != null) return parse(t); } } catch (e) {}
   for (let i = 0; i < 3; i++) {
     const r = await ask({title:'Copia cifrada', yes:'Abrir', no:'Saltar', body:`<p class="m-file">${esc(nombre || 'Copia de seguridad')}</p>
       <p>${i ? '<b>Contraseña incorrecta.</b> ' : ''}Escribe la contraseña con la que se hizo la copia.</p>
@@ -128,6 +130,7 @@ async function descifrarCopia(j, nombre) {
     const t = await abrirCon(key, j);
     if (t != null) {
       CACHE.set(c.sal, key);
+      try { await sdb.put({id:'sync:' + c.sal, key, sal:c.sal, it:c.it || ITER, creado:Date.now()}); } catch (e) {}
       if (!CLAVE) { try { await nuevaClave(null, c.sal, key, c.it || ITER); toast('Las copias de este dispositivo usarán la misma contraseña.'); } catch (x) {} }
       return parse(t);
     }
@@ -405,10 +408,14 @@ function pendiente() {
   return {t:'Guardar una copia fuera del ' + (AND() ? 'móvil' : 'ordenador'), d:isoDate(new Date(desde)), k:'bad',
     extra:u ? `La última, hace ${plural(diasDesde(u), 'día', 'días')}` : 'Aún no has guardado ninguna'};
 }
-async function entregarCopia(blob, nombre, msg) {
-  const A = AND();
+/* 1.28.0: también entrega «Exportar visitas» (o.tipo === 'visitas'): otros textos, su propia carpeta y no cuenta como copia de seguridad */
+async function entregarCopia(blob, nombre, msg, o = {}) {
+  const A = AND(), vis = o.tipo === 'visitas', tit = o.titulo || 'Copia de seguridad';
+  const marcarFuera_ = vis ? () => {} : marcarFuera;
   if (A) {
-    const r = await ask({title:'Copia de seguridad', yes:'Compartir', no:'Guardar en el móvil', body:`<p class="m-file">${esc(nombre)}</p>
+    const r = await ask({title:tit, yes:'Compartir', no:'Guardar en el móvil', body:vis ? `<p class="m-file">${esc(nombre)}</p>
+      <p>Solo lleva tus visitas, cifradas con tu contraseña. Pulsa <b>Compartir</b> y elige <b>Dropbox</b> (u OneDrive) y tu carpeta «Visitas PRL».</p>
+      <p class="help">En el ordenador: Visitas › Historial › <b>Importar visitas</b> y elige este archivo.</p>` : `<p class="m-file">${esc(nombre)}</p>
       <p>Va cifrada con tu contraseña. Para no perderla si pierdes el móvil, pulsa <b>Compartir</b> y elige <b>OneDrive</b> (o Teams o SharePoint) y una carpeta de la empresa, por ejemplo «Visitas PRL». También puedes enviártela al correo de la empresa.</p>
       <p class="help">«Guardar en el móvil» la deja en Descargas › Visitas PRL, que no te salva si pierdes el móvil.</p>`});
     if (r === null) return;
@@ -416,22 +423,25 @@ async function entregarCopia(blob, nombre, msg) {
       const b = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1] || ''); fr.onerror = () => rej(fr.error); fr.readAsDataURL(blob); });
       if (r === true) {
         if (msg && typeof A.compartirTexto === 'function') A.compartirTexto(b, nombre, 'application/json', msg); else A.compartir(b, nombre, 'application/json');
-        marcarFuera();
-      } else if (A.guardar(b, nombre, 'application/json')) toast('Guardada en Descargas › Visitas PRL. Para tenerla fuera del móvil, compártela a OneDrive.');
-      else { toast('Este móvil no deja guardar directamente: elige dónde guardarla.'); A.compartir(b, nombre, 'application/json'); marcarFuera(); }
+        marcarFuera_();
+      } else if (A.guardar(b, nombre, 'application/json')) toast(vis ? 'Guardado en Descargas › Visitas PRL. Pásalo a Dropbox para abrirlo en el ordenador.' : 'Guardada en Descargas › Visitas PRL. Para tenerla fuera del móvil, compártela a OneDrive.');
+      else { toast('Este móvil no deja guardar directamente: elige dónde guardarla.'); A.compartir(b, nombre, 'application/json'); marcarFuera_(); }
     } catch (e) { toast('No se pudo preparar la copia.'); }
     return;
   }
   const picker = typeof window.showSaveFilePicker === 'function';
-  const r = await ask({title:'Copia de seguridad', yes:picker ? 'Guardar en…' : 'Descargar', no:'Cerrar', body:`<p class="m-file">${esc(nombre)}</p>
+  if (vis && !picker) return entregar(blob, nombre, tit, msg);   // móvil sin «Guardar en…»: Compartir (Dropbox) o Descargar
+  const r = await ask({title:tit, yes:picker ? 'Guardar en…' : 'Descargar', no:'Cerrar', body:vis ? `<p class="m-file">${esc(nombre)}</p>
+    <p>Solo lleva tus visitas, cifradas con tu contraseña. Elige tu carpeta de <b>Dropbox</b> (u OneDrive) «Visitas PRL»; la próxima vez se abrirá directamente ahí.</p>
+    <p class="help">En el ordenador: Visitas › Historial › <b>Importar visitas</b> y elige este archivo.</p>` : `<p class="m-file">${esc(nombre)}</p>
     <p>Va cifrada con tu contraseña. ${picker ? 'Elige tu carpeta de <b>OneDrive</b> o de <b>SharePoint</b> de la empresa; la próxima vez se abrirá directamente ahí.' : 'Después, muévela a tu carpeta de <b>OneDrive</b> o de <b>SharePoint</b> de la empresa.'}</p>`});
   if (r !== true) return;
   if (picker) {
     try {
-      const h = await window.showSaveFilePicker({id:'copias-visitas-prl', suggestedName:nombre, types:[{description:'Copia de Visitas PRL', accept:{'application/json':['.json']}}]});
+      const h = await window.showSaveFilePicker({id:vis ? 'visitas-prl-exportar' : 'copias-visitas-prl', suggestedName:nombre, types:[{description:vis ? 'Visitas de Visitas PRL' : 'Copia de Visitas PRL', accept:{'application/json':['.json']}}]});
       const w = await h.createWritable(); await w.write(blob); await w.close();
-      marcarFuera(); toast('Copia guardada en ' + (h.name || 'la carpeta elegida') + '.');
-    } catch (e) { if (e && e.name !== 'AbortError') { descargar(blob, nombre); marcarFuera(); } }
+      marcarFuera_(); toast((vis ? 'Visitas guardadas en ' : 'Copia guardada en ') + (h.name || 'la carpeta elegida') + '.');
+    } catch (e) { if (e && e.name !== 'AbortError') { descargar(blob, nombre); marcarFuera_(); } }
     return;
   }
   descargar(blob, nombre); marcarFuera();

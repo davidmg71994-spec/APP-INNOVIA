@@ -1,5 +1,5 @@
 # Inyecta «Panel con gráficos en Inicio» (1.25.0) en index.html. Se puede repetir.
-# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, sync, tareas, panel, aspecto y, siempre el último, seg (pone la CSP).
+# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, pasar, tareas, panel, aspecto y, siempre el último, seg (pone la CSP).
 import re
 IDX = '/home/claude/pwa/registro-rp/index.html'
 D = '/home/claude/pwa/panel/'

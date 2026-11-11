@@ -2,7 +2,7 @@
 
 App para los técnicos de PRL de Innovia: registro de comprobación del recurso preventivo en obra, informe de seguimiento cuatrimestral, planificación preventiva y evaluación de riesgos, con salida en PDF, Word y Excel, y el PSS/DGP de cada obra a mano.
 
-**Versión 1.27.0 · 11/11/2026**
+**Versión 1.28.0 · 11/11/2026**
 
 ## Cómo usarla
 
@@ -11,7 +11,7 @@ App para los técnicos de PRL de Innovia: registro de comprobación del recurso 
 | **Android** | Descarga [`VisitasPRL.apk`](VisitasPRL.apk) e instálala (si ya la tienes, se instala encima y no se pierde nada). |
 | **iPhone, tablet u ordenador** | Abre **https://davidmg71994-spec.github.io/APP-INNOVIA/** en el navegador (funciona también sin conexión una vez abierta). |
 
-Los datos (visitas, informes, planificaciones, evaluaciones de riesgos, calendario, revisiones con sus certificados, PSS/DGP y perfil) se guardan **solo en el móvil** de cada técnico. Para cambiar de móvil o pasar datos: *Visitas › Historial › Exportar copia* e *Importar copia* (la copia va cifrada con la contraseña de cada técnico). Para **pasar las visitas del móvil al ordenador**: *Perfil › Sincronizar móvil y ordenador* en los dos, con la misma carpeta (Dropbox, OneDrive o la del móvil con Enlace Móvil). Solo viajan las visitas y solo en ese sentido: el móvil deja su archivo cifrado y el ordenador lo recoge; del ordenador no se envía nada al móvil. Sin ningún servidor.
+Los datos (visitas, informes, planificaciones, evaluaciones de riesgos, calendario, revisiones con sus certificados, PSS/DGP y perfil) se guardan **solo en el móvil** de cada técnico. Para cambiar de móvil o pasar datos: *Visitas › Historial › Exportar copia* e *Importar copia* (la copia va cifrada con la contraseña de cada técnico). Para **pasar las visitas del móvil al ordenador**, a mano: en el móvil, *Visitas › Historial › Exportar visitas* (archivo cifrado solo con las visitas; guárdalo en Dropbox u OneDrive) y en el ordenador *Importar visitas*. Del ordenador no se envía nada al móvil. Sin ningún servidor.
 
 ## Qué hace
 
