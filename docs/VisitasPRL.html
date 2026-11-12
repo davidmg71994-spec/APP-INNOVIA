@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-gCUlN2aeU0ZZA4LNpQU4NNNYW+XfFi3Q7zxAwT/ey+E='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-PwsoSGkszRda+vXfR/pHC7seAN1dLIE6161L4+wHKLc=' 'sha256-D5pcrQeUHwgmWGyU4InYm5GMRuXBfPLVo8b2ZuO8aU8=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-b1WbnO3YNsTPQQoErP8uCzVm/XQvbvQkUFLkcMotqd0='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1676,6 +1676,54 @@ body.ml-on{overflow:hidden}
 .xv-chk{display:flex;align-items:center;gap:8px;margin-top:8px;font-weight:600;cursor:pointer}
 .xv-chk input{width:20px;height:20px;accent-color:var(--accent)}
 /*PASAR-CSS-END*/
+/*HIST-CSS-START*/
+/* Historial ordenado por meses (1.29.0) */
+.hx-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hx-tot{font-size:calc(14px*var(--fz,1));color:var(--muted)}
+#h-list.hlist{gap:10px}
+.hx-anio{margin:8px 2px -2px;font:700 calc(13px*var(--fz,1))/1 var(--f-mono);letter-spacing:.12em;color:var(--muted)}
+.hx-anio:first-child{margin-top:0}
+.hx-mes{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
+.hx-mes>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;min-height:52px}
+.hx-mes>summary::-webkit-details-marker{display:none}
+.hx-mes>summary::before{content:'›';flex:none;width:12px;font:700 calc(22px*var(--fz,1))/1 var(--f-display);color:var(--muted);transition:transform .15s}
+.hx-mes[open]>summary::before{transform:rotate(90deg)}
+.hx-mes>summary:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.hx-mes[open]>summary{border-bottom:1px solid var(--line)}
+.hx-mt{flex:1;min-width:0;font:700 calc(17px*var(--fz,1))/1.2 var(--f-display);color:var(--ink)}
+.hx-mn{display:flex;align-items:center;gap:10px;font-size:calc(14px*var(--fz,1));color:var(--muted);white-space:nowrap}
+.hx-mi{display:inline-flex;align-items:center;gap:4px;color:var(--bad);font-weight:600}
+.hx-mi svg,.hx-st svg{width:16px;height:16px;flex:none}
+.hx-l{display:grid}
+.hcard.hx-f{border:0;border-radius:0;padding:0;gap:0;background:none;border-top:1px solid var(--line);box-shadow:none}
+.hcard.hx-f:first-child{border-top:0}
+.hcard.hx-f.flag{box-shadow:inset 3px 0 0 var(--bad)}
+.hx-main{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px 10px 12px;cursor:pointer;min-height:58px}
+.hx-main:hover{background:var(--surface-2)}
+.hx-main:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+.hx-dia{display:grid;justify-items:center;gap:3px;line-height:1}
+.hx-dia b{font:700 calc(20px*var(--fz,1))/1 var(--f-display);color:var(--ink)}
+.hx-dia small{font:600 calc(11px*var(--fz,1))/1 var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.hx-txt{display:grid;gap:3px;min-width:0}
+.hx-txt .htitle{margin:0;font:600 calc(15.5px*var(--fz,1))/1.25 var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.hx-txt .hsub{font-size:calc(13px*var(--fz,1));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hx-st{display:inline-flex;align-items:center;gap:4px;font:600 calc(13px*var(--fz,1))/1 var(--f-body);white-space:nowrap}
+.hx-st.bad{color:var(--bad);background:var(--bad-soft);padding:5px 8px;border-radius:99px}
+.hx-st.ok{color:var(--ok)}
+.hx-st.ok .hx-stl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:420px){.hx-st.bad .hx-stl,.hx-mi .hx-stl{display:none}}
+.hx-mas{display:none;gap:8px;padding:0 14px 12px 64px}
+.hcard.hx-f.abierta{background:var(--surface-2)}
+.hcard.hx-f.abierta .hx-mas{display:grid}
+.hcard.hx-f.abierta .hx-txt .htitle,.hcard.hx-f.abierta .hx-txt .hsub{white-space:normal}
+.hx-mas .hbtns{margin-top:2px}
+@media (max-width:420px){.hx-mas{padding-left:14px}}
+@media (min-width:1280px){
+  .hx-mas{display:none!important}
+  .hcard.hx-f.esc-sel{background:var(--brand-soft);box-shadow:inset 3px 0 0 var(--brand)}
+  .hcard.hx-f.esc-sel .htitle{color:var(--brand-text)}
+}
+/*HIST-CSS-END*/
 /*TAR-CSS-START*/
 /* Tareas del técnico de PRL (1.24.0) */
 .tar-res .bb{display:grid;gap:10px}
@@ -2024,12 +2072,13 @@ html.seg-lk body{overflow:hidden}
 <main id="view-hist" role="tabpanel" aria-labelledby="tab-hist" hidden>
   <div class="hhead">
     <div class="hhead-t"><h2>Historial</h2><button type="button" class="mini" data-hact="new">+ Nuevo registro</button></div>
-    <input type="search" id="h-q" placeholder="Buscar por nº, obra, fecha o técnico" aria-label="Buscar en el historial">
+    <input type="search" id="h-q" placeholder="Buscar por obra, fecha, mes, nº o técnico" aria-label="Buscar en el historial">
+    <div class="hx-bar"><button type="button" class="chip" id="hx-inc" aria-pressed="false">Con incidencias</button><span class="hx-tot" id="hx-tot" aria-live="polite"></span></div>
     <div class="chips" id="h-filter" hidden><button type="button" class="chip" data-hf="all" aria-pressed="true">Todos</button><button type="button" class="chip" data-hf="mine" aria-pressed="false">Solo los míos</button></div>
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.28.1 · 11/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.29.0 · 12/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -2958,28 +3007,15 @@ function renderHist() {
   if (histState === 'wait') { box.innerHTML = '<div class="empty"><b>Cargando historial…</b></div>'; return; }
   if (histState === 'err') { box.innerHTML = '<div class="empty"><b>No se pudo abrir el historial</b><span>Este navegador no permite guardar datos (¿modo incógnito?). Abre la app en una ventana normal o instálala.</span></div>'; return; }
   const q = ($('#h-q').value || '').trim().toLowerCase();
+  { const t = $('#hx-tot'); if (t) t.textContent = ''; }
   if (window.INI_API) INI_API.chipsHist();
   const cf = window.INI_API ? INI_API.filtroHist() : null;
   const base = !cf ? HIST : HIST.filter(r => cf === '-' ? !(r.contrato && r.contrato.id) : !!(r.contrato && r.contrato.id === cf));
-  const list = base.filter(r => !q || [r.codigo, r.rp?.ubicacion, r.rp?.nombre, fmtDate(r.rp?.fecha), r.rp?.fecha, r.contrato?.nombre].join(' ').toLowerCase().includes(q));
+  const list = base.filter(r => !q || [r.codigo, r.rp?.ubicacion, r.rp?.nombre, fmtDate(r.rp?.fecha), r.rp?.fecha, r.contrato?.nombre, hxMesTxt(r)].join(' ').toLowerCase().includes(q)).filter(r => !HX_INC || ((r.resumen || {}).inc > 0));
   if (HIST.length && !base.length) { box.innerHTML = '<div class="empty"><b>Sin registros en este contrato</b><span>Pulsa «Todos» para ver los registros de los demás contratos.</span></div>'; return; }
   if (!HIST.length) { box.innerHTML = '<div class="empty"><b>Aún no hay registros</b><span>Completa un registro y pulsa «Guardar en historial». Aparecerá aquí con su fecha, obra e incidencias.</span></div>'; return; }
-  if (!list.length) { box.innerHTML = '<div class="empty"><b>Sin resultados</b><span>Ningún registro coincide con la búsqueda.</span></div>'; return; }
-  box.innerHTML = list.map(r => {
-    const s = r.resumen || {}, nInc = s.inc || 0;
-    const nW = (r.trabajadores || []).length, nV = (r.vehiculos || []).length;
-    return `<article class="hcard ${nInc ? 'flag' : ''}">
-      <div class="hmeta"><span>${r.codigo ? '<b class="hcode">' + esc(r.codigo) + '</b> · ' : ''}${esc(fmtDate(r.rp?.fecha))} · ${esc(r.rp?.hora || '')}</span><span class="pill ${nInc ? 'bad' : 'ok'}">${nInc ? nInc + (nInc === 1 ? ' incidencia' : ' incidencias') : 'Sin incidencias'}</span></div>
-      <p class="htitle">${esc(r.rp?.ubicacion || 'Sin ubicación')}</p>
-      ${!cf && r.contrato && r.contrato.id ? `<p class="hsub hctr-t">${esc(nombreContrato(r.contrato))}</p>` : ''}<p class="hsub">${esc(r.rp?.nombre || '')} · ${nW} ${nW === 1 ? 'trabajador' : 'trabajadores'} · ${nV} ${nV === 1 ? 'vehículo' : 'vehículos'}${s.pend ? ' · ' + s.pend + ' sin responder' : ''}${r.firma ? '' : ' · sin firma'}</p>
-      ${window.SEG_API ? SEG_API.histLinea(r) : ''}<div class="hbtns">
-        <button type="button" class="mini" data-hact="open" data-id="${esc(r.id)}">Abrir</button>
-        <button type="button" class="mini" data-hact="pdf" data-id="${esc(r.id)}">PDF</button>
-        <button type="button" class="mini" data-hact="dup" data-id="${esc(r.id)}">Duplicar</button>
-        <button type="button" class="mini del" data-hact="del" data-id="${esc(r.id)}">Eliminar</button>
-      </div>
-    </article>`;
-  }).join('');
+  if (!list.length) { box.innerHTML = `<div class="empty"><b>Sin resultados</b><span>${HX_INC ? 'Ninguna visita con incidencias' + (q ? ' coincide con la búsqueda' : '') + '.' : 'Ningún registro coincide con la búsqueda.'}</span></div>`; return; }
+  box.innerHTML = histAgrupado(list, cf, q);   /* 1.29.0: por años y meses */
 }
 async function confirmLeave() {
   if (!dirty) return true;
@@ -3104,8 +3140,8 @@ async function importBackup(e) {
   const alDia = todos.length - nuevos.length - masNuevos.length;
   const aImportar = [...nuevos, ...masNuevos];
   const partes = [nuevos.length && plural(nuevos.length, 'nuevo', 'nuevos'), masNuevos.length && `${masNuevos.length} más ${masNuevos.length === 1 ? 'reciente' : 'recientes'} que ${masNuevos.length === 1 ? 'el que' : 'los que'} ya tienes`].filter(Boolean);
-  const body = `<p>${plural(todos.length, 'registro', 'registros')} en ${files.length === 1 ? 'el archivo' : `los ${files.length} archivos`}${partes.length ? ': ' + partes.join(' y ') : ''}.</p>`
-    + (alDia ? `<p>${alDia === 1 ? '1 ya está' : alDia + ' ya están'} al día en este móvil y no se ${alDia === 1 ? 'toca' : 'tocan'}.</p>` : '')
+  const body = `<p>${plural(porId.size, 'visita', 'visitas')} en ${files.length === 1 ? 'el archivo' : `los ${files.length} archivos`}${partes.length ? ': ' + partes.join(' y ') : ''}.</p>`
+    + (alDia ? `<p>${alDia === 1 ? '1 ya está' : alDia + ' ya están'} al día en este equipo y no se ${alDia === 1 ? 'toca' : 'tocan'}.</p>` : '')
     + (malos ? `<p>${malos === 1 ? '1 archivo no es una copia válida y se ignora' : malos + ' archivos no son copias válidas y se ignoran'}.</p>` : '');
   /* 1.28.0: lo borrado en este equipo no vuelve, salvo que se marque */
   const bodyB = borradas.length ? `<p>${borradas.length === 1 ? '1 visita la borraste' : borradas.length + ' visitas las borraste'} en este equipo: no ${borradas.length === 1 ? 'se vuelve' : 'se vuelven'} a importar.</p><label class="xv-chk"><input type="checkbox" id="xv-borradas"> Importar${borradas.length === 1 ? 'la' : 'las'} también</label>` : '';
@@ -4389,8 +4425,13 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.28.1';
+const APP_VER = '1.29.0';
 const NOVEDADES = [
+  {v:'1.29.0', fecha:'12/11/2026', items:[
+    '<b>Historial más ordenado</b>: las visitas se agrupan por año y mes. Cada mes es un desplegable con cuántas visitas tiene y cuántas con incidencias; el más reciente sale abierto.',
+    'Cada visita ocupa una línea: el día, la obra y su estado. Tócala para ver sus datos y los botones (Abrir, PDF, Duplicar, Eliminar). En el ordenador, el detalle sale a la derecha.',
+    'Nuevo filtro <b>«Con incidencias»</b>, y el buscador encuentra también por mes (por ejemplo, «octubre»).'
+  ]},
   {v:'1.28.1', fecha:'11/11/2026', items:[
     'Al importar, si el archivo está vacío (0 bytes, una descarga a medias) la app te lo dice y te explica qué hacer, en vez de «no es una copia válida».'
   ]},
@@ -4702,6 +4743,7 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
 
 
 
@@ -9587,6 +9629,8 @@ function verRegistro(id) {
   if (!b) { const t = $('#h-ctr [data-hc=""]'); if (t) t.click(); b = busca(); }
   if (!b) return;
   const card = b.closest('.hcard');
+  /* 1.29.0: el Historial va por meses plegables: abre el mes (y en el móvil, la visita) */
+  if (card) { const dm = card.closest('details'); if (dm && !dm.open) dm.open = true; if (!G2.matches && card.classList.contains('hx-f')) { card.classList.add('abierta'); const mm = card.querySelector('.hx-main'); if (mm) mm.setAttribute('aria-expanded', 'true'); } }
   selId = id; marca(); pintaDet();
   if (card) { card.scrollIntoView({behavior:reduced() ? 'auto' : 'smooth', block:'center'}); card.classList.remove('esc-flash'); void card.offsetWidth; card.classList.add('esc-flash'); }
 }
@@ -10223,6 +10267,85 @@ async function exportarVisitas() {
 document.addEventListener('click', e => { if (e.target.closest('[data-xv="export"]')) exportarVisitas(); });
 
 /*PASAR-JS-END*/
+/*HIST-JS-START*/
+/* ================= Historial ordenado (1.29.0) =================
+   Las visitas se agrupan por año y mes, cada mes en un desplegable (el más reciente abierto) con su número de visitas
+   y cuántas tienen incidencias. Cada visita es una línea corta: día, obra y estado; al tocarla se abren sus datos y
+   botones (en el ordenador ancho, el detalle sale en el panel de la derecha). Filtro «Con incidencias». */
+let HX_INC = false;
+const HX_ABIERTOS = new Set(), HX_CERRADOS = new Set();
+const HX_MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const HX_DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+const hxCap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+const HX_ANCHO = matchMedia('(min-width:1280px)');   // el mismo ancho en el que el Historial tiene panel de detalle
+function hxFecha(r) {
+  const f = (r && r.rp && r.rp.fecha) || '';
+  if (/^\d{4}-\d{2}-\d{2}/.test(f)) return f.slice(0, 10);
+  return isoDate(new Date((r && r.creado) || Date.now()));
+}
+/* para buscar también por el nombre del mes («noviembre») */
+function hxMesTxt(r) { const f = hxFecha(r); return HX_MESES[+f.slice(5, 7) - 1] + ' ' + f.slice(0, 4); }
+const HX_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const HX_BAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.2v.1"/></svg>';
+function hxFila(r, cf) {
+  const s = r.resumen || {}, nInc = s.inc || 0, f = hxFecha(r), d = new Date(f + 'T12:00:00');
+  const nW = (r.trabajadores || []).length, nV = (r.vehiculos || []).length;
+  const ctr = !cf && r.contrato && r.contrato.id ? nombreContrato(r.contrato) : '';
+  const sub = [r.rp && r.rp.hora, ctr, plural(nW, 'trabajador', 'trabajadores')].filter(Boolean).join(' · ');
+  const est = nInc ? `<span class="hx-st bad">${HX_BAD}<span>${nInc}<span class="hx-stl"> ${nInc === 1 ? 'incidencia' : 'incidencias'}</span></span></span>` : `<span class="hx-st ok" title="Sin incidencias">${HX_OK}<span class="hx-stl">Sin incidencias</span></span>`;
+  return `<article class="hcard hx-f${nInc ? ' flag' : ''}">
+    <div class="hx-main" role="button" tabindex="0" aria-expanded="false" aria-label="${esc(fmtDate(f) + ' · ' + ((r.rp && r.rp.ubicacion) || 'Sin ubicación') + ' · ' + (nInc ? plural(nInc, 'incidencia', 'incidencias') : 'sin incidencias'))}">
+      <span class="hx-dia" aria-hidden="true"><b>${d.getDate()}</b><small>${HX_DIAS[d.getDay()]}</small></span>
+      <span class="hx-txt"><b class="htitle">${esc((r.rp && r.rp.ubicacion) || 'Sin ubicación')}</b><span class="hsub">${esc(sub)}</span></span>
+      ${est}
+    </div>
+    <div class="hx-mas">
+      <p class="hsub">${r.codigo ? '<b class="hcode">' + esc(r.codigo) + '</b> · ' : ''}${esc(fmtDate(f))} · ${esc((r.rp && r.rp.nombre) || '')} · ${nV} ${nV === 1 ? 'vehículo' : 'vehículos'}${s.pend ? ' · ' + s.pend + ' sin responder' : ''}${r.firma ? '' : ' · sin firma'}</p>
+      ${window.SEG_API ? SEG_API.histLinea(r) : ''}
+      <div class="hbtns">
+        <button type="button" class="mini" data-hact="open" data-id="${esc(r.id)}">Abrir</button>
+        <button type="button" class="mini" data-hact="pdf" data-id="${esc(r.id)}">PDF</button>
+        <button type="button" class="mini" data-hact="dup" data-id="${esc(r.id)}">Duplicar</button>
+        <button type="button" class="mini del" data-hact="del" data-id="${esc(r.id)}">Eliminar</button>
+      </div>
+    </div>
+  </article>`;
+}
+function histAgrupado(list, cf, q) {
+  const k = r => hxFecha(r) + ' ' + ((r.rp && r.rp.hora) || '');
+  const orden = [...list].sort((a, b) => k(b).localeCompare(k(a)) || (b.creado || 0) - (a.creado || 0));
+  const grupos = new Map();
+  orden.forEach(r => { const m = hxFecha(r).slice(0, 7); if (!grupos.has(m)) grupos.set(m, []); grupos.get(m).push(r); });
+  const todo = !!q || HX_INC;   // buscando o filtrando: todo abierto
+  const incT = orden.filter(r => (r.resumen || {}).inc).length;
+  const tot = $('#hx-tot'); if (tot) tot.textContent = `${plural(orden.length, 'visita', 'visitas')}${incT ? ' · ' + incT + ' con incidencias' : ''}`;
+  let anio = '', i = 0, out = '';
+  for (const [m, l] of grupos) {
+    const y = m.slice(0, 4);
+    if (y !== anio) { anio = y; out += `<h3 class="hx-anio">${y}</h3>`; }
+    const inc = l.filter(r => (r.resumen || {}).inc).length;
+    const abierto = todo || HX_ABIERTOS.has(m) || (i === 0 && !HX_CERRADOS.has(m));
+    out += `<details class="hx-mes" data-mes="${m}"${abierto ? ' open' : ''}><summary><span class="hx-mt">${hxCap(HX_MESES[+m.slice(5, 7) - 1])}</span><span class="hx-mn">${plural(l.length, 'visita', 'visitas')}${inc ? `<b class="hx-mi">${HX_BAD}${inc}<span class="hx-stl"> con incidencias</span></b>` : ''}</span></summary><div class="hx-l">${l.map(r => hxFila(r, cf)).join('')}</div></details>`;
+    i++;
+  }
+  return out;
+}
+/* tocar una visita: en el móvil se abren sus datos y botones; en el ordenador ancho lo lleva el panel de detalle */
+document.addEventListener('click', e => {
+  const sm = e.target.closest('#h-list .hx-mes > summary');
+  if (sm) { const d = sm.parentNode, k = d.dataset.mes; if (d.open) { HX_ABIERTOS.delete(k); HX_CERRADOS.add(k); } else { HX_ABIERTOS.add(k); HX_CERRADOS.delete(k); } return; }
+  const inc = e.target.closest('#hx-inc');
+  if (inc) { HX_INC = !HX_INC; inc.setAttribute('aria-pressed', HX_INC); renderHist(); return; }
+  const m = e.target.closest('#h-list .hx-main'); if (!m || HX_ANCHO.matches) return;
+  const card = m.closest('.hcard'), ab = !card.classList.contains('abierta');
+  card.classList.toggle('abierta', ab); m.setAttribute('aria-expanded', ab);
+});
+document.addEventListener('keydown', e => {
+  const m = e.target.closest && e.target.closest('#h-list .hx-main');
+  if (m && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); m.click(); }
+});
+
+/*HIST-JS-END*/
 /*TAR-JS-START*/
 /* ================= Tareas básicas del técnico de PRL (1.24.0) =================
    La lista de lo que hay que hacer cada mes, cada trimestre, cada año, en cada contrato y cuando pasa algo

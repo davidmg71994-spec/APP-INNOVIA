@@ -271,6 +271,8 @@ function verRegistro(id) {
   if (!b) { const t = $('#h-ctr [data-hc=""]'); if (t) t.click(); b = busca(); }
   if (!b) return;
   const card = b.closest('.hcard');
+  /* 1.29.0: el Historial va por meses plegables: abre el mes (y en el móvil, la visita) */
+  if (card) { const dm = card.closest('details'); if (dm && !dm.open) dm.open = true; if (!G2.matches && card.classList.contains('hx-f')) { card.classList.add('abierta'); const mm = card.querySelector('.hx-main'); if (mm) mm.setAttribute('aria-expanded', 'true'); } }
   selId = id; marca(); pintaDet();
   if (card) { card.scrollIntoView({behavior:reduced() ? 'auto' : 'smooth', block:'center'}); card.classList.remove('esc-flash'); void card.offsetWidth; card.classList.add('esc-flash'); }
 }

@@ -1,5 +1,5 @@
 # Inyecta «Pasar visitas al ordenador, a mano» (1.28.0) en index.html y QUITA la sincronización automática. Se puede repetir.
-# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, pasar, tareas, panel, aspecto y, siempre el último, seg (pone la CSP).
+# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, pasar, hist, tareas, panel, aspecto y, siempre el último, seg (pone la CSP).
 # (sync/inject.py ya no se ejecuta: su código se queda en sync/ como archivo.)
 import re
 IDX = '/home/claude/pwa/registro-rp/index.html'
@@ -71,6 +71,10 @@ if 'let xvVacios = 0;' not in h:
     rep("""  if (!porId.size) { toast(files.length === 1 ? 'El archivo no es una copia válida de Registro RP.' : 'Ninguno de los archivos es una copia válida de Registro RP.'); return; }""",
         """  if (!porId.size && xvVacios === files.length) { await ask({title:files.length === 1 ? 'El archivo está vacío' : 'Los archivos están vacíos', single:true, yes:'Entendido', body:`<p>${files.length === 1 ? esc(files[0].name) + ' tiene 0 bytes' : 'Todos tienen 0 bytes'}: no se terminó de descargar (o de subir a Dropbox desde el móvil).</p><p>Vuelve a descargarlo y elige el que pese algo (en Descargas puede llamarse igual con «(1)» al final).</p>`}); return; }
   if (!porId.size) { toast(files.length === 1 ? 'El archivo no es una copia válida de Visitas PRL.' : 'Ninguno de los archivos es una copia válida de Visitas PRL.'); return; }""")
+
+# 5a2. (1.29.0) el recuento cuenta también las borradas aquí, y habla de visitas y de «este equipo»
+h = h.replace("const body = `<p>${plural(todos.length, 'registro', 'registros')} en ${files.length === 1 ? 'el archivo'", "const body = `<p>${plural(porId.size, 'visita', 'visitas')} en ${files.length === 1 ? 'el archivo'")
+h = h.replace("ya están'} al día en este móvil y no se ${alDia === 1 ? 'toca' : 'tocan'}.</p>`", "ya están'} al día en este equipo y no se ${alDia === 1 ? 'toca' : 'tocan'}.</p>`")
 
 # 5b. textos: la copia de seguridad ya no es la forma de pasar visitas al ordenador
 h = h.replace("Exporta una copia de vez en cuando y antes de cambiar de teléfono. También sirve para pasar registros a otro dispositivo.</span>",
