@@ -250,6 +250,7 @@ function apartados() {
     A('ap', 'Inicio', 'Hoy y vencidas, deficiencias por mes', () => { const b = $('#tab-ini'); if (b) b.click(); }),
     A('ap', 'Visitas a obra', 'Historial de visitas', () => showTab('hist'), 'historial registros'),
     A('ap', 'Calendario', 'Tareas de PRL', () => iniAccion('cal')),
+    A('ap', 'Últimas fechas', 'Charlas, formación, simulacros y comités', () => iniAccion('ult'), 'sensibilizacion simulacro comite comision formacion'),
     A('ap', 'Informe cuatrimestral', 'Documentos', () => iniAccion('inf'), 'informe seguimiento'),
     A('ap', 'Planificación preventiva', 'Documentos · medidas correctoras', () => iniAccion('plan')),
     A('ap', 'Evaluación de riesgos laborales', 'Documentos · EVRL por puesto', () => iniAccion('evrl'), 'evrl'),

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-CGdQ9+lrmOpl12q8jQQI02J/sc3F8M7wdrV2PabJ0HI='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-WKuhKpqSm8uqMQxWG+cW76Rv6uRXp6neNo5cpiYDAR4='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1766,6 +1766,54 @@ body.ml-on{overflow:hidden}
 }
 .ini-mi.m-tar{background:#A3456E;color:#fff}
 /*TAR-CSS-END*/
+/*ULT-CSS-START*/
+/* Últimas fechas (1.30.0) */
+.ini-mi.m-ult{background:#5B4FB3;color:#fff}
+#view-ult{gap:12px}
+#ult-main:not([hidden]),#ult-form:not([hidden]){display:grid;gap:12px;min-width:0}
+#ult-main>*,#ult-form>*{min-width:0}
+#ult-main .ihead{display:flex;justify-content:space-between;gap:10px}
+.ult-top{display:grid;gap:6px}
+.ult-top h2{margin:0;font:700 calc(26px*var(--fz,1))/1.15 var(--f-display);color:var(--ink)}
+.ult-top .help{margin:0}
+.ult-fc{display:flex;align-items:center;gap:8px;font-size:calc(14px*var(--fz,1));color:var(--muted)}
+.ult-fc select{flex:1;min-width:0;min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 calc(15px*var(--fz,1)) var(--f-body)}
+.ult-grid{display:grid;gap:10px}
+@media (min-width:760px){.ult-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ult-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px;align-content:start;min-width:0}
+.ult-card.st-bad{border-color:var(--bad);box-shadow:inset 4px 0 0 var(--bad)}
+.ult-ch{display:flex;align-items:center;gap:10px;min-width:0}
+.ult-ic{flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--corp-soft);color:var(--corp-text)}
+.ult-ic svg{width:22px;height:22px}
+.ult-ch h3{flex:1;min-width:0;margin:0;font:700 calc(16.5px*var(--fz,1))/1.25 var(--f-display);color:var(--ink)}
+.ult-cnt{font:600 calc(12.5px*var(--fz,1))/1 var(--f-mono);color:var(--muted);white-space:nowrap}
+.ult-last{display:grid;gap:2px}
+.ult-last small{font:600 calc(11.5px*var(--fz,1))/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ult-last b{font:700 calc(24px*var(--fz,1))/1.15 var(--f-display);color:var(--ink)}
+.ult-last span{font-size:calc(14px*var(--fz,1));color:var(--muted);overflow-wrap:anywhere}
+.ult-vacio{margin:0;font-size:calc(14.5px*var(--fz,1));color:var(--muted)}
+.ult-est{margin:0;display:flex;align-items:flex-start;gap:7px;font-size:calc(14px*var(--fz,1));font-weight:600;line-height:1.35}
+.ult-est svg{width:18px;height:18px;flex:none;margin-top:1px}
+.ult-est.ok{color:var(--ok)}.ult-est.warn{color:var(--warn,#9A6400)}.ult-est.bad{color:var(--bad)}
+.ult-acc{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ult-add{min-height:42px;padding:8px 16px}
+.ult-cada{display:flex;align-items:center;gap:6px;font-size:calc(13.5px*var(--fz,1));color:var(--muted);margin-left:auto}
+.ult-cada select{min-height:38px;padding:4px 8px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:500 calc(14px*var(--fz,1)) var(--f-body)}
+.ult-his summary{cursor:pointer;padding:6px 0;font:600 calc(14px*var(--fz,1)) var(--f-body);color:var(--corp-text)}
+.ult-his ul{list-style:none;margin:4px 0 0;padding:0;display:grid;border-top:1px solid var(--line)}
+.ult-his li{border-bottom:1px solid var(--line)}
+.ult-fila{appearance:none;width:100%;display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:baseline;padding:9px 2px;border:0;background:none;text-align:left;color:var(--ink);font:inherit;cursor:pointer}
+.ult-fila:hover{background:var(--surface-2)}
+.ult-fila b{font:600 calc(14px*var(--fz,1)) var(--f-mono)}
+.ult-fila span{font-size:calc(14px*var(--fz,1));color:var(--muted);overflow-wrap:anywhere}
+.ult-fila:focus-visible,.ult-his summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.ult-ff{display:grid;gap:16px}
+.ult-ff .opc{font-style:normal;font-weight:500;opacity:.8}
+.ult-ff .chips{gap:6px}
+.ult-fbtns{display:grid;gap:8px}
+.cal-ultb{justify-self:start;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);color:var(--corp-text);font:600 calc(14px*var(--fz,1)) var(--f-body);cursor:pointer}
+.cal-ultb svg{width:16px;height:16px}
+/*ULT-CSS-END*/
 /*PANEL-CSS-START*/
 /* Panel con gráficos en Inicio (1.25.0). Colores comprobados con el validador (dataviz):
    claro #2F6FB3/#E56F0B y estados #1C7A44/#8A8882/#C42B24; oscuro #3F84D6/#D9721F y #2FA661/#5E5C58/#E5534B. */
@@ -2079,7 +2127,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.29.0 · 12/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.30.0 · 12/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -3068,8 +3116,8 @@ async function exportBackup() {
   const infs = window.INF_API ? INF_API.lista() : [];
   const planesC = window.PLAN_API ? PLAN_API.lista() : [];
   const calC = window.CAL_API ? CAL_API.lista() : [];
-  if (!HIST.length && !infs.length && !planesC.length && !calC.length && !(window.REV_API && REV_API.lista().length) && !(window.EVRL_API && EVRL_API.lista().length) && !(window.PSS_API && PSS_API.lista().length)) { toast('No hay registros que exportar.'); return; }
-  const data = JSON.stringify({app:'registro-rp', version:1, exportado:new Date().toISOString(), registros:HIST, informes:infs, planes:window.PLAN_API ? PLAN_API.lista() : [], calendario:window.CAL_API ? CAL_API.lista() : [], revisiones:window.REV_API ? await REV_API.exportar() : null, evrl:window.EVRL_API ? EVRL_API.lista() : [], pss:window.PSS_API ? PSS_API.exportar() : [], perfil:{...perfilGet(), nombre:lsGet('rp-nombre') || ''}});
+  if (!HIST.length && !infs.length && !planesC.length && !calC.length && !(window.REV_API && REV_API.lista().length) && !(window.EVRL_API && EVRL_API.lista().length) && !(window.PSS_API && PSS_API.lista().length) && !(window.ULT_API && ULT_API.lista().length)) { toast('No hay registros que exportar.'); return; }
+  const data = JSON.stringify({app:'registro-rp', version:1, exportado:new Date().toISOString(), registros:HIST, informes:infs, planes:window.PLAN_API ? PLAN_API.lista() : [], calendario:window.CAL_API ? CAL_API.lista() : [], actividades:window.ULT_API ? ULT_API.lista() : [], revisiones:window.REV_API ? await REV_API.exportar() : null, evrl:window.EVRL_API ? EVRL_API.lista() : [], pss:window.PSS_API ? PSS_API.exportar() : [], perfil:{...perfilGet(), nombre:lsGet('rp-nombre') || ''}});
   const msg = `Copia de seguridad de Visitas PRL con ${plural(HIST.length, 'registro', 'registros')}${infs.length ? ' y ' + plural(infs.length, 'informe', 'informes') : ''}, del ${fmtDate(isoDate(new Date()))}.\nPara recuperarla: Historial › Importar copia.`;
   const salida = window.SEG_API ? await SEG_API.prepararCopia(data) : data;
   if (salida == null) return;
@@ -3083,7 +3131,7 @@ async function importBackup(e) {
   e.target.value = '';
   if (!files.length) return;
   const porId = new Map(), infPorId = new Map();
-  let malos = 0, planesImp = 0, calImp = 0, revImp = 0, evrlImp = 0, pssImp = 0, segMal = 0;
+  let malos = 0, planesImp = 0, calImp = 0, revImp = 0, evrlImp = 0, pssImp = 0, segMal = 0, ultImp = 0;
   let xvVacios = 0;
   for (const f of files) {
     if (!f.size) { xvVacios++; malos++; continue; }
@@ -3100,12 +3148,13 @@ async function importBackup(e) {
       if (!Array.isArray(j) && j.revisiones && typeof j.revisiones === 'object' && window.REV_API) revImp += await REV_API.importar(j.revisiones);
       if (!Array.isArray(j) && Array.isArray(j.evrl) && j.evrl.length && window.EVRL_API) evrlImp += await EVRL_API.importar(j.evrl);
       if (!Array.isArray(j) && Array.isArray(j.pss) && j.pss.length && window.PSS_API) pssImp += await PSS_API.importar(j.pss);
-      if (!valid.length && !infs.length && !(j.planes || []).length && !(j.calendario || []).length && !(j.revisiones && (j.revisiones.revs || []).length) && !(j.evrl || []).length && !(j.pss || []).length) throw new Error('vacío');
+      if (!Array.isArray(j) && Array.isArray(j.actividades) && j.actividades.length && window.ULT_API) ultImp += await ULT_API.importar(j.actividades);
+      if (!valid.length && !infs.length && !(j.planes || []).length && !(j.calendario || []).length && !(j.revisiones && (j.revisiones.revs || []).length) && !(j.evrl || []).length && !(j.pss || []).length && !(j.actividades || []).length) throw new Error('vacío');
       infs.forEach(x => { const o = infPorId.get(x.id); if (!o || (x.guardado || 0) > (o.guardado || 0)) infPorId.set(x.id, x); });
       valid.forEach(r => { const o = porId.get(r.id); if (!o || (r.guardado || 0) > (o.guardado || 0)) porId.set(r.id, r); });
     } catch(err) { malos++; if (err && err.seg) segMal++; }
   }
-  if (!porId.size && !infPorId.size && !malos) { const tx = [planesImp && plural(planesImp, 'planificación', 'planificaciones'), calImp && plural(calImp, 'tarea del calendario', 'tareas del calendario'), revImp && plural(revImp, 'revisión', 'revisiones'), evrlImp && plural(evrlImp, 'evaluación de riesgos', 'evaluaciones de riesgos'), pssImp && plural(pssImp, 'índice del PSS/DGP', 'índices del PSS/DGP')].filter(Boolean); toast(tx.length ? `Importadas: ${tx.join(' y ')}.` : 'La copia ya está al día en este móvil.'); return; }
+  if (!porId.size && !infPorId.size && !malos) { const tx = [planesImp && plural(planesImp, 'planificación', 'planificaciones'), calImp && plural(calImp, 'tarea del calendario', 'tareas del calendario'), ultImp && plural(ultImp, 'fecha anotada', 'fechas anotadas'), revImp && plural(revImp, 'revisión', 'revisiones'), evrlImp && plural(evrlImp, 'evaluación de riesgos', 'evaluaciones de riesgos'), pssImp && plural(pssImp, 'índice del PSS/DGP', 'índices del PSS/DGP')].filter(Boolean); toast(tx.length ? `Importadas: ${tx.join(' y ')}.` : 'La copia ya está al día en este móvil.'); return; }
   if (!porId.size && infPorId.size) {
     const act = new Map((window.INF_API ? INF_API.lista() : []).map(x => [x.id, x]));
     const nuevosI = [...infPorId.values()].filter(x => !act.has(x.id) || (x.guardado || 0) > (act.get(x.id).guardado || 0));
@@ -4068,7 +4117,7 @@ function copiar() {
 
 /* ================= navigation ================= */
 function showTab(t) {
-  [['ini', '#view-ini', '#tab-ini'], ['form', '#view-form', '#tab-form'], ['hist', '#view-hist', '#tab-hist'], ['sen', '#view-sen', '#tab-sen'], ['inf', '#view-inf', '#tab-inf'], ['plan', '#view-plan', '#tab-plan'], ['cal', '#view-cal', '#tab-cal'], ['rev', '#view-rev', '#tab-rev'], ['norma', '#view-norma', '#tab-norma'], ['tar', '#view-tar', '#tab-tar'], ['evrl', '#view-evrl', '#tab-evrl'], ['pss', '#view-pss', '#tab-pss'], ['seg', '#view-seg', '#tab-seg']].forEach(([k, v, b]) => { const ev = $(v), eb = $(b); if (ev) ev.hidden = t !== k; if (eb) eb.setAttribute('aria-selected', t === k); });
+  [['ini', '#view-ini', '#tab-ini'], ['form', '#view-form', '#tab-form'], ['hist', '#view-hist', '#tab-hist'], ['sen', '#view-sen', '#tab-sen'], ['inf', '#view-inf', '#tab-inf'], ['plan', '#view-plan', '#tab-plan'], ['cal', '#view-cal', '#tab-cal'], ['rev', '#view-rev', '#tab-rev'], ['norma', '#view-norma', '#tab-norma'], ['tar', '#view-tar', '#tab-tar'], ['ult', '#view-ult', '#tab-ult'], ['evrl', '#view-evrl', '#tab-evrl'], ['pss', '#view-pss', '#tab-pss'], ['seg', '#view-seg', '#tab-seg']].forEach(([k, v, b]) => { const ev = $(v), eb = $(b); if (ev) ev.hidden = t !== k; if (eb) eb.setAttribute('aria-selected', t === k); });
   if (window.INF_API) INF_API.onTab(t);
   if (window.INI_API) INI_API.onTab(t);
   if (window.PLAN_API) PLAN_API.onTab(t);
@@ -4076,6 +4125,7 @@ function showTab(t) {
   if (window.REV_API) REV_API.onTab(t);
   if (window.NORMA_API) NORMA_API.onTab(t);
   if (window.TAREAS_API) TAREAS_API.onTab(t);
+  if (window.ULT_API) ULT_API.onTab(t);
   if (window.EVRL_API) EVRL_API.onTab(t);
   if (window.PSS_API) PSS_API.onTab(t);
   if (window.ESC_API) ESC_API.onTab(t);
@@ -4335,6 +4385,7 @@ window.appBack = () => {
   if (window.INI_API && INI_API.atras()) return true;
   if (window.PLAN_API && PLAN_API.atras()) return true;
   if (window.CAL_API && CAL_API.atras()) return true;
+  if (window.ULT_API && ULT_API.atras()) return true;
   if (window.REV_API && REV_API.atras()) return true;
   if (window.NORMA_API && NORMA_API.atras()) return true;
   if (window.EVRL_API && EVRL_API.atras()) return true;
@@ -4409,8 +4460,13 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.29.0';
+const APP_VER = '1.30.0';
 const NOVEDADES = [
+  {v:'1.30.0', fecha:'12/11/2026', items:[
+    '<b>Últimas fechas</b>, junto al Calendario: anota cada <b>charla de sensibilización</b>, <b>formación periódica</b>, <b>simulacro</b> y <b>comité o comisión</b> (fecha, tema, contrato, asistentes y notas). Cada uno dice la última vez y cuánto hace.',
+    'Con «Avisar» eliges cada cuánto toca (de serie: simulacros cada año y comités cada 3 meses) y te dice cuándo toca el siguiente; si se pasa, sale en rojo y en Inicio.',
+    'Va en la copia de seguridad. Se abre desde Inicio › Apartados y desde el Calendario.'
+  ]},
   {v:'1.29.0', fecha:'12/11/2026', items:[
     '<b>Historial más ordenado</b>: las visitas se agrupan por año y mes. Cada mes es un desplegable con cuántas visitas tiene y cuántas con incidencias; el más reciente sale abierto.',
     'Cada visita ocupa una línea: el día, la obra y su estado. Tócala para ver sus datos y los botones (Abrir, PDF, Duplicar, Eliminar). En el ordenador, el detalle sale a la derecha.',
@@ -4727,6 +4783,7 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
 
 
 
@@ -5408,6 +5465,7 @@ const IC = {
   plan: SVG('<path d="M10.5 6.5h9.5M10.5 12h9.5M10.5 17.5h9.5"/><path d="m4 6.6 1.5 1.5L8 5.4M4 12.1l1.5 1.5L8 10.9M4 17.6l1.5 1.5L8 16.4"/>'),
   evrl: SVG('<path d="M12 3.2 19 6v5.5c0 4.4-3 7.9-7 9.3-4-1.4-7-4.9-7-9.3V6z"/><path d="M12 9v4"/><path d="M12 15.8v.1"/>'),
   hoy: SVG('<path d="M6.5 9a5.5 5.5 0 0 1 11 0c0 5.5 2.5 7 2.5 7H4s2.5-1.5 2.5-7"/><path d="M10 19.5a2 2 0 0 0 4 0"/>'),
+  ult: SVG('<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15.2l2 2 4-4.2"/>'),
   cal: SVG('<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h.01M8 17.2h2M12 17.2h2"/>'),
   rev: SVG('<path d="M14.7 6.3a4 4 0 0 0-5 5L3.5 17.5l3 3 6.2-6.2a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z"/>'),
   tar: SVG('<path d="M10 6.5h10M10 12h10M10 17.5h10"/><path d="M3.8 6.5l1.4 1.4 2.6-2.6M3.8 12l1.4 1.4 2.6-2.6M3.8 17.5l1.4 1.4 2.6-2.6"/>'),
@@ -5635,6 +5693,7 @@ function renderHome() {
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
       ${modulo({act:'cal', c:'cal', ic:IC.cal, t:'Calendario', s:calSub(), n:rc && rc.venc})}
+      ${modulo({act:'ult', c:'ult', ic:IC.ult, t:'Últimas fechas', s:window.ULT_API ? ULT_API.subtitulo() : 'Charlas, formación, simulacros, comités', n:window.ULT_API ? ULT_API.resumen().bad : 0})}
       ${modulo({act:'tar', c:'tar', ic:IC.tar, t:'Tareas del técnico', s:window.TAREAS_API ? TAREAS_API.subtitulo() : 'Mes, trimestre y año'})}
       ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe cuatrimestral', s:plural(ins.length, 'informe', 'informes')})}
       ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación preventiva', s:planSub(), n:rp && rp.bad})}
@@ -5843,6 +5902,7 @@ async function onClick(e) {
   if (a === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
   if (a === 'norma') { if (window.NORMA_API) NORMA_API.abrir(); return; }
   if (a === 'tar') { if (window.TAREAS_API) TAREAS_API.abrir(); return; }
+  if (a === 'ult') { if (window.ULT_API) ULT_API.abrir(); return; }
   if (a === 'pss') { if (window.PSS_API) PSS_API.abrir(); return; }
   if (a === 'pssc') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null}); } return; }
   if (a === 'pssq') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null, buscar:true}); } return; }
@@ -6715,7 +6775,7 @@ function renderMain() {
   const pendN = r.venc + r.semana;
   const tab = (k, txt, n) => `<button type="button" role="tab" data-cmodo="${k}" aria-selected="${modo === k}" aria-pressed="${modo === k}">${txt}${n ? `<i>${n}</i>` : ''}</button>`;
   M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
-    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}</header>
+    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}${window.ULT_API ? `<button type="button" class="cal-ultb" data-ca="ult">Últimas fechas: charlas, formación, simulacros y comités ›</button>` : ''}</header>
     ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…).</span><button type="button" class="btn primary" data-nueva="">${PLUS}Añadir la primera tarea</button></div>` : `
     <div class="cal-tabs" role="tablist" aria-label="Cómo ver las tareas">${tab('agenda', 'Pendientes', pendN)}${tab('mes', 'Mes')}${tab('lista', 'Mis tareas', TAREAS.length)}</div>
     ${ctrsHtml()}
@@ -6827,6 +6887,7 @@ async function onClick(e) {
   const b = e.target.closest('[data-ca]'); if (!b) return;
   const a = b.dataset.ca;
   if (a === 'ini') { showTab('ini'); return; }
+  if (a === 'ult') { if (window.ULT_API) ULT_API.abrir(); return; }
   if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
   if (a === 'guardar') return guardarForm();
   if (a === 'borrar') return borrar();
@@ -9592,6 +9653,7 @@ function apartados() {
     A('ap', 'Inicio', 'Hoy y vencidas, deficiencias por mes', () => { const b = $('#tab-ini'); if (b) b.click(); }),
     A('ap', 'Visitas a obra', 'Historial de visitas', () => showTab('hist'), 'historial registros'),
     A('ap', 'Calendario', 'Tareas de PRL', () => iniAccion('cal')),
+    A('ap', 'Últimas fechas', 'Charlas, formación, simulacros y comités', () => iniAccion('ult'), 'sensibilizacion simulacro comite comision formacion'),
     A('ap', 'Informe cuatrimestral', 'Documentos', () => iniAccion('inf'), 'informe seguimiento'),
     A('ap', 'Planificación preventiva', 'Documentos · medidas correctoras', () => iniAccion('plan')),
     A('ap', 'Evaluación de riesgos laborales', 'Documentos · EVRL por puesto', () => iniAccion('evrl'), 'evrl'),
@@ -10550,6 +10612,214 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 /*TAR-JS-END*/
+/*ULT-JS-START*/
+/* ================= Últimas fechas (1.30.0) =================
+   Junto al calendario: cuándo se hizo por última vez cada charla de sensibilización, formación periódica, simulacro y
+   comité/comisión, por contrato. Cada cosa se anota el día que se hace (fecha, tema, contrato, asistentes, notas) y la
+   tarjeta dice la última fecha, cuánto hace y, si se elige «Avisar cada…», cuándo toca la próxima. */
+(() => {
+const ULT_TIPOS = [
+  {k:'charla', t:'Charlas de sensibilización', u:'charla de sensibilización', ph:'Ej.: Riesgo de atropello en obras de carretera', ic:'<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>'},
+  {k:'form', t:'Formación periódica', u:'formación', ph:'Ej.: Reciclaje de trabajos en altura', ic:'<path d="M3 8.5L12 4l9 4.5-9 4.5z"/><path d="M7 10.6V15c1.4 1.4 3 2 5 2s3.6-.6 5-2v-4.4M21 8.5V14"/>'},
+  {k:'sim', t:'Simulacros', u:'simulacro', ph:'Ej.: Simulacro de accidente en tajo con evacuación', ic:'<path d="M12 3c1.5 3 5 4.5 5 9a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.6 1 2.5 2 3 0-3 .5-5.5 1-7.5z"/>'},
+  {k:'com', t:'Comités y comisiones', u:'comité o comisión', ph:'Ej.: Comité de Seguridad y Salud, 3.er trimestre', ic:'<circle cx="8" cy="8" r="2.6"/><circle cx="16" cy="8" r="2.6"/><path d="M3.5 18c.6-3 2.4-4.6 4.5-4.6S11.9 15 12.5 18M11.5 18c.6-3 2.4-4.6 4.5-4.6s3.9 1.6 4.5 4.6"/>'}
+];
+const ULT_CADA = [[0, 'No avisar'], [1, 'Cada mes'], [2, 'Cada 2 meses'], [3, 'Cada 3 meses'], [6, 'Cada 6 meses'], [12, 'Cada año']];
+const CADA_DEF = {charla:0, form:0, sim:12, com:3};
+const SVGi = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const I_OK = SVGi('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), I_BAD = SVGi('<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.2v.1"/>'), I_RELOJ = SVGi('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>');
+const pad2 = n => String(n).padStart(2, '0');
+const hoy = () => isoDate(new Date());
+const tipo = k => ULT_TIPOS.find(x => x.k === k) || ULT_TIPOS[0];
+let ACTS = [], ED = null, fctr = null, listo = false;
+
+/* ---------- datos ---------- */
+const udb = (() => {
+  let p = null;
+  const open = () => p || (p = new Promise((res, rej) => {
+    try { const r = indexedDB.open('registro-rp-ult', 1); r.onupgradeneeded = () => r.result.createObjectStore('acts', {keyPath:'id'}); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }
+    catch (e) { rej(e); }
+  }));
+  const tx = (m, f) => open().then(d => new Promise((res, rej) => { const t = d.transaction('acts', m); const out = f(t.objectStore('acts')); t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error); }));
+  return {all: () => tx('readonly', s => s.getAll()), put: o => tx('readwrite', s => s.put(o)), del: id => tx('readwrite', s => s.delete(id))};
+})();
+async function cargar() { try { ACTS = (await udb.all()) || []; } catch (e) { ACTS = []; } listo = true; }
+const nid = () => 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+function cadaDe(k) { try { const o = JSON.parse(lsGet('ult-cada') || '{}'); return k in o ? +o[k] || 0 : CADA_DEF[k] || 0; } catch (e) { return CADA_DEF[k] || 0; } }
+function ponCada(k, n) { let o = {}; try { o = JSON.parse(lsGet('ult-cada') || '{}') || {}; } catch (e) {} o[k] = n; lsSet('ult-cada', JSON.stringify(o)); }
+/* mismo día n meses después (si no existe, el último del mes) */
+function masMeses(f, n) {
+  const [y, m, d] = f.split('-').map(Number), t = new Date(y, m - 1 + n, 1), dm = new Date(t.getFullYear(), t.getMonth() + 1, 0).getDate();
+  return `${t.getFullYear()}-${pad2(t.getMonth() + 1)}-${pad2(Math.min(d, dm))}`;
+}
+const diasEntre = (a, b) => Math.round((Date.parse(b + 'T12:00:00') - Date.parse(a + 'T12:00:00')) / 864e5);
+function haceTxt(f) {
+  const d = diasEntre(f, hoy());
+  if (d < 0) return 'dentro de ' + plural(-d, 'día', 'días');
+  if (d === 0) return 'hoy'; if (d === 1) return 'ayer';
+  if (d < 45) return 'hace ' + d + ' días';
+  const m = Math.round(d / 30.44); if (m < 18) return 'hace ' + plural(m, 'mes', 'meses');
+  return 'hace ' + (Math.round(d / 365.25 * 10) / 10).toString().replace('.', ',') + ' años';
+}
+const activoId = () => { const p = perfilGet(); return p.activo && p.contratos.some(c => c.id === p.activo) ? p.activo : ''; };
+const snap = c => c ? {id:c.id, nombre:c.nombre || '', sie:c.sie || ''} : null;
+const ctrNom = c => c ? (c.nombre || (c.sie ? 'SIE ' + c.sie : 'Contrato')) : 'Sin contrato';
+const delFiltro = (a, f) => !f ? true : f === '-' ? !(a.ctr && a.ctr.id) : !!(a.ctr && a.ctr.id === f);
+
+/* estado de un tipo para un filtro de contrato */
+function estadoDe(k, f) {
+  const l = ACTS.filter(a => a.k === k && delFiltro(a, f)).sort((a, b) => b.f.localeCompare(a.f) || (b.creado || 0) - (a.creado || 0));
+  const cada = cadaDe(k), u = l[0] || null, h = hoy();
+  let est = 'neutro', prox = '';
+  if (cada && u) { prox = masMeses(u.f, cada); est = prox < h ? 'bad' : diasEntre(h, prox) <= 30 ? 'warn' : 'ok'; }
+  else if (cada) est = 'nada';
+  return {k, l, u, cada, prox, est, anio:l.filter(a => a.f.startsWith(h.slice(0, 4))).length};
+}
+
+/* ---------- pantalla ---------- */
+function vista(q) { const m = $('#ult-main'), fo = $('#ult-form'); if (m) m.hidden = q !== 'main'; if (fo) fo.hidden = q !== 'form'; }
+function filtroHtml() {
+  const cs = perfilGet().contratos, sin = ACTS.some(a => !(a.ctr && a.ctr.id));
+  if (cs.length < 2 && !sin) return '';
+  const o = (id, t) => `<option value="${esc(id)}"${fctr === id ? ' selected' : ''}>${esc(t)}</option>`;
+  return `<label class="ult-fc"><span>Contrato</span><select id="ult-fc">${o('', 'Todos')}${cs.map(c => o(c.id, ctrNom(c))).join('')}${sin ? o('-', 'Sin contrato') : ''}</select></label>`;
+}
+function tarjeta(T) {
+  const e = estadoDe(T.k, fctr), u = e.u;
+  const cadaTxt = (ULT_CADA.find(x => x[0] === e.cada) || [0, ''])[1].toLowerCase();
+  const est = e.est === 'bad' ? `<p class="ult-est bad">${I_BAD}<span>Toca ya: tocaba el ${esc(fmtDate(e.prox))} (${cadaTxt})</span></p>`
+    : e.est === 'warn' ? `<p class="ult-est warn">${I_RELOJ}<span>Toca antes del ${esc(fmtDate(e.prox))} (${cadaTxt})</span></p>`
+    : e.est === 'ok' ? `<p class="ult-est ok">${I_OK}<span>Al día · la próxima antes del ${esc(fmtDate(e.prox))}</span></p>`
+    : e.est === 'nada' ? `<p class="ult-est warn">${I_RELOJ}<span>Sin anotar todavía (${cadaTxt})</span></p>` : '';
+  const filas = e.l.map(a => `<li><button type="button" class="ult-fila" data-ult-edit="${esc(a.id)}"><b>${esc(fmtDate(a.f))}</b><span>${esc([a.t, !fctr && a.ctr && a.ctr.id ? ctrNom(a.ctr) : '', a.n ? plural(+a.n, 'asistente', 'asistentes') : ''].filter(Boolean).join(' · ') || 'Sin tema')}</span></button></li>`).join('');
+  return `<section class="ult-card ult-k-${T.k} st-${e.est}" id="ultc-${T.k}" aria-labelledby="ult-h-${T.k}">
+    <header class="ult-ch"><span class="ult-ic" aria-hidden="true">${SVGi(T.ic)}</span><h3 id="ult-h-${T.k}">${esc(T.t)}</h3>${e.anio ? `<span class="ult-cnt">${plural(e.anio, 'vez', 'veces')} este año</span>` : ''}</header>
+    ${u ? `<div class="ult-last"><small>Última</small><b>${esc(fmtDate(u.f))}</b><span>${esc(haceTxt(u.f))}${u.t ? ' · ' + esc(u.t) : ''}</span></div>` : '<p class="ult-vacio">Todavía no hay ninguna anotada.</p>'}
+    ${est}
+    <div class="ult-acc"><button type="button" class="btn primary ult-add" data-ult-nueva="${T.k}">+ Anotar</button>
+      <label class="ult-cada"><span>Avisar</span><select data-ult-cada="${T.k}" aria-label="Cada cuánto toca: ${esc(T.t)}">${ULT_CADA.map(([n, t]) => `<option value="${n}"${n === e.cada ? ' selected' : ''}>${t}</option>`).join('')}</select></label></div>
+    ${e.l.length ? `<details class="ult-his"><summary>Ver las anotadas (${e.l.length})</summary><ul>${filas}</ul></details>` : ''}
+  </section>`;
+}
+function renderMain() {
+  const M = $('#ult-main'); if (!M) return;
+  if (fctr === null) fctr = activoId();
+  if (fctr && fctr !== '-' && !perfilGet().contratos.some(c => c.id === fctr)) fctr = '';
+  M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ult="ini">‹ Inicio</button><button type="button" class="linkbtn" data-ult="cal">Calendario ›</button></div>
+    <header class="ult-top"><h2>Últimas fechas</h2><p class="help">Cuándo se hizo por última vez cada cosa. Anota cada charla, formación, simulacro o comité el día que se haga; con «Avisar» te dice cuándo toca la siguiente.</p></header>
+    ${filtroHtml()}
+    <div class="ult-grid">${ULT_TIPOS.map(tarjeta).join('')}</div>`;
+  vista('main');
+}
+function abrirForm(id, k) {
+  const a = id ? ACTS.find(x => x.id === id) : null;
+  const c = fctr && fctr !== '-' ? perfilGet().contratos.find(x => x.id === fctr) : (fctr === '-' ? null : perfilGet().contratos.find(x => x.id === activoId()));
+  ED = a ? JSON.parse(JSON.stringify(a)) : {id:nid(), k:k || 'charla', f:hoy(), t:'', ctr:snap(c), n:'', notas:'', nueva:true};
+  renderForm(); vista('form'); window.scrollTo({top:0});
+  if (!a) setTimeout(() => { const i = $('#uf-t'); if (i) i.focus(); }, 60);
+}
+function renderForm() {
+  const F = $('#ult-form'); if (!F || !ED) return;
+  const T = tipo(ED.k), cs = perfilGet().contratos, cid = ED.ctr && ED.ctr.id;
+  const opts = cs.map(c => `<option value="${esc(c.id)}"${c.id === cid ? ' selected' : ''}>${esc(ctrNom(c))}</option>`).join('') + (cid && !cs.some(c => c.id === cid) ? `<option value="${esc(cid)}" selected>${esc(ctrNom(ED.ctr))}</option>` : '');
+  F.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ult="volver">‹ Últimas fechas</button></div>
+    <section class="block"><header class="bh"><h2>${ED.nueva ? 'Anotar' : 'Cambiar'} ${esc(T.u)}</h2></header>
+      <div class="bb ult-ff">
+        <div class="field"><span class="lbl" id="uf-kl">¿Qué se ha hecho?</span><div class="chips" role="group" aria-labelledby="uf-kl">${ULT_TIPOS.map(x => `<button type="button" class="chip" data-ult-tipo="${x.k}" aria-pressed="${x.k === ED.k}">${esc(x.t)}</button>`).join('')}</div></div>
+        <div class="field"><label for="uf-f">Fecha</label><input id="uf-f" type="date" value="${esc(ED.f)}"></div>
+        <div class="field"><label for="uf-t">Tema</label><input id="uf-t" type="text" maxlength="200" autocomplete="off" placeholder="${esc(T.ph)}" value="${esc(ED.t || '')}"></div>
+        <div class="field"${cs.length || cid ? '' : ' hidden'}><label for="uf-c">Contrato</label><select id="uf-c"><option value="">Sin contrato</option>${opts}</select></div>
+        <div class="field"><label for="uf-n">Asistentes <i class="opc">opcional</i></label><input id="uf-n" type="number" inputmode="numeric" min="0" max="999" value="${esc(ED.n === undefined ? '' : String(ED.n))}"></div>
+        <div class="field"><label for="uf-o">Notas <i class="opc">opcional</i></label><textarea id="uf-o" rows="3" maxlength="1500" placeholder="Quién la dio, dónde, observaciones…">${esc(ED.notas || '')}</textarea></div>
+      </div></section>
+    <div class="ult-fbtns"><button type="button" class="btn primary" data-ult="guardar">${ED.nueva ? 'Anotar' : 'Guardar cambios'}</button>${ED.nueva ? '' : '<button type="button" class="btn danger-t" data-ult="borrar">Quitar</button>'}<button type="button" class="btn" data-ult="volver">Cancelar</button></div>`;
+}
+function leerForm() {
+  if (!ED) return;
+  const v = id => { const el = $('#' + id); return el ? el.value : ''; };
+  ED.f = v('uf-f') || ED.f; ED.t = v('uf-t').trim(); ED.notas = v('uf-o').trim();
+  const n = v('uf-n'); ED.n = n === '' ? '' : Math.max(0, Math.min(999, parseInt(n, 10) || 0));
+  const cid = v('uf-c'); ED.ctr = cid ? snap(perfilGet().contratos.find(c => c.id === cid) || (ED.ctr && ED.ctr.id === cid ? ED.ctr : null)) : null;
+}
+async function guardarForm() {
+  leerForm();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ED.f || '')) { toast('Pon la fecha.'); $('#uf-f').focus(); return; }
+  const o = {...ED}; delete o.nueva; o.guardado = Date.now(); if (!o.creado) o.creado = o.guardado;
+  try { await udb.put(o); } catch (e) { toast('No se pudo guardar.'); return; }
+  const i = ACTS.findIndex(x => x.id === o.id); if (i >= 0) ACTS[i] = o; else ACTS.push(o);
+  const T = tipo(o.k), nueva = ED.nueva; ED = null; renderMain(); refrescaIni();
+  const el = $('#ultc-' + o.k); if (el) el.scrollIntoView({block:'center'});
+  toast(nueva ? `Anotada: ${T.u}, ${fmtDate(o.f)}.` : 'Cambios guardados.');
+}
+async function borrar() {
+  const a = ED && ACTS.find(x => x.id === ED.id); if (!a) return;
+  if (!(await ask({title:'¿Quitar esta anotación?', body:`<p>${esc(tipo(a.k).u)} del ${esc(fmtDate(a.f))}${a.t ? ' («' + esc(a.t) + '»)' : ''}.</p>`, yes:'Quitar', danger:true}))) return;
+  ACTS = ACTS.filter(x => x.id !== a.id); try { await udb.del(a.id); } catch (e) {}
+  ED = null; renderMain(); refrescaIni(); toast('Anotación quitada.');
+}
+function refrescaIni() { if (window.INI_API && INI_API.refrescar) try { INI_API.refrescar(); } catch (e) {} }
+async function onClick(e) {
+  const nv = e.target.closest('[data-ult-nueva]'); if (nv) return abrirForm(null, nv.dataset.ultNueva);
+  const ed = e.target.closest('[data-ult-edit]'); if (ed) return abrirForm(ed.dataset.ultEdit);
+  const tp = e.target.closest('[data-ult-tipo]');
+  if (tp && ED) { leerForm(); ED.k = tp.dataset.ultTipo; renderForm(); return; }
+  const b = e.target.closest('[data-ult]'); if (!b) return;
+  const a = b.dataset.ult;
+  if (a === 'ini') { showTab('ini'); return; }
+  if (a === 'cal') { if (window.CAL_API) CAL_API.abrir(); return; }
+  if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
+  if (a === 'guardar') return guardarForm();
+  if (a === 'borrar') return borrar();
+}
+function onChange(e) {
+  if (e.target.id === 'ult-fc') { fctr = e.target.value; renderMain(); return; }
+  const cd = e.target.closest('[data-ult-cada]');
+  if (cd) { const k = cd.dataset.ultCada, y = window.scrollY; ponCada(k, +cd.value); renderMain(); window.scrollTo({top:y}); refrescaIni(); toast(+cd.value ? 'Aviso guardado.' : 'Sin aviso.'); }
+}
+function montar() {
+  if ($('#view-ult')) return;
+  const main = document.createElement('main');
+  main.id = 'view-ult'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
+  main.innerHTML = '<div id="ult-main"></div><div id="ult-form" hidden></div>';
+  const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
+  main.addEventListener('click', onClick); main.addEventListener('change', onChange);
+  cargar().then(refrescaIni);
+}
+window.ULT_API = {
+  abrir(k) { ED = null; fctr = activoId(); showTab('ult'); renderMain(); window.scrollTo({top:0}); if (k) { const el = $('#ultc-' + k); if (el) el.scrollIntoView({block:'center'}); } },
+  onTab(t) { if (t === 'ult' && !ED) renderMain(); },
+  atras() { const v = $('#view-ult'); if (!v || v.hidden) return false; if (ED) { ED = null; renderMain(); return true; } showTab('ini'); return true; },
+  lista: () => ACTS,
+  async importar(arr) {
+    if (!Array.isArray(arr)) return 0;
+    if (!listo) await cargar();
+    let n = 0;
+    for (const a of arr) {
+      if (!a || !a.id || !ULT_TIPOS.some(x => x.k === a.k) || !/^\d{4}-\d{2}-\d{2}$/.test(a.f || '')) continue;
+      const i = ACTS.findIndex(x => x.id === a.id);
+      if (i >= 0 && (ACTS[i].guardado || 0) >= (a.guardado || 0)) continue;
+      try { await udb.put(a); } catch (e) { continue; }
+      if (i >= 0) ACTS[i] = a; else ACTS.push(a); n++;
+    }
+    if (n) refrescaIni();
+    return n;
+  },
+  /* para el Inicio: lo del contrato activo */
+  resumen() {
+    const f = activoId(), es = ULT_TIPOS.map(T => estadoDe(T.k, f));
+    return {bad:es.filter(e => e.est === 'bad').length, warn:es.filter(e => e.est === 'warn' || e.est === 'nada').length, n:ACTS.filter(a => delFiltro(a, f)).length, es};
+  },
+  subtitulo() {
+    const R = this.resumen();
+    if (R.bad) return plural(R.bad, 'toca ya', 'tocan ya');
+    const sim = R.es.find(e => e.k === 'sim');
+    return R.n ? (sim && sim.u ? 'Último simulacro: ' + haceTxt(sim.u.f) : plural(R.n, 'anotada', 'anotadas')) : 'Charlas, formación, simulacros, comités';
+  }
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
+})();
+
+/*ULT-JS-END*/
 /*PANEL-JS-START*/
 /* ================= Panel con gráficos en Inicio (1.25.0) =================
    Cinco piezas, del contrato activo (o de todos si no hay): visitas de cada mes del año, en qué bloque aparecen
@@ -11098,7 +11368,7 @@ document.addEventListener('visibilitychange', () => {
 setInterval(() => { if (!AND() && !bloq && activo() && Date.now() - ultAct >= cfg().min * 60000) bloquear(); }, 20000);
 
 /* ---------- borrar datos ---------- */
-const BDS = ['registro-rp', 'registro-rp-historial', 'registro-rp-informes', 'registro-rp-plan', 'registro-rp-cal', 'registro-rp-rev', 'registro-rp-evrl', 'registro-rp-pss', 'registro-rp-seg'];
+const BDS = ['registro-rp', 'registro-rp-historial', 'registro-rp-informes', 'registro-rp-plan', 'registro-rp-cal', 'registro-rp-ult', 'registro-rp-rev', 'registro-rp-evrl', 'registro-rp-pss', 'registro-rp-seg'];
 async function vaciarBD(nombre) {
   await new Promise(res => {
     let r; try { r = indexedDB.open(nombre); } catch (e) { res(); return; }

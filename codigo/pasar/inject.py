@@ -1,5 +1,5 @@
 # Inyecta «Pasar visitas al ordenador, a mano» (1.28.0) en index.html y QUITA la sincronización automática. Se puede repetir.
-# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, pasar, hist, tareas, panel, aspecto y, siempre el último, seg (pone la CSP).
+# Orden: informe, inicio, plan, cal, rev, norma, evrl, pss, esc, manos, pasar, hist, tareas, ult, panel, aspecto y, siempre el último, seg (pone la CSP).
 # (sync/inject.py ya no se ejecuta: su código se queda en sync/ como archivo.)
 import re
 IDX = '/home/claude/pwa/registro-rp/index.html'

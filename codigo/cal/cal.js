@@ -191,7 +191,7 @@ function renderMain() {
   const pendN = r.venc + r.semana;
   const tab = (k, txt, n) => `<button type="button" role="tab" data-cmodo="${k}" aria-selected="${modo === k}" aria-pressed="${modo === k}">${txt}${n ? `<i>${n}</i>` : ''}</button>`;
   M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
-    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}</header>
+    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}${window.ULT_API ? `<button type="button" class="cal-ultb" data-ca="ult">Últimas fechas: charlas, formación, simulacros y comités ›</button>` : ''}</header>
     ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…).</span><button type="button" class="btn primary" data-nueva="">${PLUS}Añadir la primera tarea</button></div>` : `
     <div class="cal-tabs" role="tablist" aria-label="Cómo ver las tareas">${tab('agenda', 'Pendientes', pendN)}${tab('mes', 'Mes')}${tab('lista', 'Mis tareas', TAREAS.length)}</div>
     ${ctrsHtml()}
@@ -303,6 +303,7 @@ async function onClick(e) {
   const b = e.target.closest('[data-ca]'); if (!b) return;
   const a = b.dataset.ca;
   if (a === 'ini') { showTab('ini'); return; }
+  if (a === 'ult') { if (window.ULT_API) ULT_API.abrir(); return; }
   if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
   if (a === 'guardar') return guardarForm();
   if (a === 'borrar') return borrar();

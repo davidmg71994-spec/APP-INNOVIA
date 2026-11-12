@@ -342,7 +342,7 @@ document.addEventListener('visibilitychange', () => {
 setInterval(() => { if (!AND() && !bloq && activo() && Date.now() - ultAct >= cfg().min * 60000) bloquear(); }, 20000);
 
 /* ---------- borrar datos ---------- */
-const BDS = ['registro-rp', 'registro-rp-historial', 'registro-rp-informes', 'registro-rp-plan', 'registro-rp-cal', 'registro-rp-rev', 'registro-rp-evrl', 'registro-rp-pss', 'registro-rp-seg'];
+const BDS = ['registro-rp', 'registro-rp-historial', 'registro-rp-informes', 'registro-rp-plan', 'registro-rp-cal', 'registro-rp-ult', 'registro-rp-rev', 'registro-rp-evrl', 'registro-rp-pss', 'registro-rp-seg'];
 async function vaciarBD(nombre) {
   await new Promise(res => {
     let r; try { r = indexedDB.open(nombre); } catch (e) { res(); return; }

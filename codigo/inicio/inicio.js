@@ -9,6 +9,7 @@ const IC = {
   plan: SVG('<path d="M10.5 6.5h9.5M10.5 12h9.5M10.5 17.5h9.5"/><path d="m4 6.6 1.5 1.5L8 5.4M4 12.1l1.5 1.5L8 10.9M4 17.6l1.5 1.5L8 16.4"/>'),
   evrl: SVG('<path d="M12 3.2 19 6v5.5c0 4.4-3 7.9-7 9.3-4-1.4-7-4.9-7-9.3V6z"/><path d="M12 9v4"/><path d="M12 15.8v.1"/>'),
   hoy: SVG('<path d="M6.5 9a5.5 5.5 0 0 1 11 0c0 5.5 2.5 7 2.5 7H4s2.5-1.5 2.5-7"/><path d="M10 19.5a2 2 0 0 0 4 0"/>'),
+  ult: SVG('<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M9 15.2l2 2 4-4.2"/>'),
   cal: SVG('<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h.01M8 17.2h2M12 17.2h2"/>'),
   rev: SVG('<path d="M14.7 6.3a4 4 0 0 0-5 5L3.5 17.5l3 3 6.2-6.2a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z"/>'),
   tar: SVG('<path d="M10 6.5h10M10 12h10M10 17.5h10"/><path d="M3.8 6.5l1.4 1.4 2.6-2.6M3.8 12l1.4 1.4 2.6-2.6M3.8 17.5l1.4 1.4 2.6-2.6"/>'),
@@ -236,6 +237,7 @@ function renderHome() {
     <div class="ini-mods">
       ${modulo({act:'hist', c:'vis', ic:IC.hist, t:'Visitas a obra', s:plural(regs.length, 'visita', 'visitas')})}
       ${modulo({act:'cal', c:'cal', ic:IC.cal, t:'Calendario', s:calSub(), n:rc && rc.venc})}
+      ${modulo({act:'ult', c:'ult', ic:IC.ult, t:'Últimas fechas', s:window.ULT_API ? ULT_API.subtitulo() : 'Charlas, formación, simulacros, comités', n:window.ULT_API ? ULT_API.resumen().bad : 0})}
       ${modulo({act:'tar', c:'tar', ic:IC.tar, t:'Tareas del técnico', s:window.TAREAS_API ? TAREAS_API.subtitulo() : 'Mes, trimestre y año'})}
       ${modulo({act:'inf', c:'doc', ic:IC.inf, t:'Informe cuatrimestral', s:plural(ins.length, 'informe', 'informes')})}
       ${modulo({act:'plan', c:'doc', ic:IC.plan, t:'Planificación preventiva', s:planSub(), n:rp && rp.bad})}
@@ -444,6 +446,7 @@ async function onClick(e) {
   if (a === 'rev') { if (window.REV_API) REV_API.abrir(); return; }
   if (a === 'norma') { if (window.NORMA_API) NORMA_API.abrir(); return; }
   if (a === 'tar') { if (window.TAREAS_API) TAREAS_API.abrir(); return; }
+  if (a === 'ult') { if (window.ULT_API) ULT_API.abrir(); return; }
   if (a === 'pss') { if (window.PSS_API) PSS_API.abrir(); return; }
   if (a === 'pssc') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null}); } return; }
   if (a === 'pssq') { if (window.PSS_API) { const c = activo(); PSS_API.abrir({ctr:c ? c.id : null, buscar:true}); } return; }
