@@ -217,6 +217,7 @@ En el PDF, el registro mantiene el orden del formulario original; la tabla de tr
 - Cada anotación: fecha, tema, contrato, asistentes y notas (IndexedDB `registro-rp-ult`, almacén `acts`). Se cambia o se quita desde «Ver las anotadas». Filtro por contrato (de serie, el activo).
 - **Avisar** cada mes, 2, 3, 6 meses o año (`localStorage['ult-cada']`; de serie simulacros cada año y comités cada 3 meses, charlas y formación sin aviso): «Al día · la próxima antes del…», «Toca antes del…» (30 días antes) o «Toca ya» en rojo.
 - Va en la copia de seguridad (`actividades`), en «Borrar todos los datos» y en el buscador (Ctrl + K).
+- 1.30.1: quinto apartado, **Consulta y participación** (entrega de información y documentación), clave `cyp`, sin aviso de serie.
 - Prueba: `test-ult.js`.
 
 ## Historial ordenado por meses (1.29.0)

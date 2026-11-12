@@ -60,5 +60,14 @@ if "{v:'1.30.0'" not in h:
 """)
     h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.30.0 · 12/11/2026", h, count=1)
 
+if "{v:'1.30.1'" not in h:
+    h = re.sub(r"const APP_VER = '[^']+';", "const APP_VER = '1.30.1';", h, count=1)
+    rep("const NOVEDADES = [\n", """const NOVEDADES = [
+  {v:'1.30.1', fecha:'12/11/2026', items:[
+    'Últimas fechas: nuevo apartado <b>Consulta y participación</b> (entrega de información y documentación), junto a charlas, formación, simulacros y comités.'
+  ]},
+""")
+    h = re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+", "Versión de la app: 1.30.1 · 12/11/2026", h, count=1)
+
 open(IDX, 'w', encoding='utf-8').write(h)
 print('ult ok', len(h))

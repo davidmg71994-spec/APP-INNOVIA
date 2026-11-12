@@ -1,16 +1,18 @@
 /* ================= Últimas fechas (1.30.0) =================
-   Junto al calendario: cuándo se hizo por última vez cada charla de sensibilización, formación periódica, simulacro y
-   comité/comisión, por contrato. Cada cosa se anota el día que se hace (fecha, tema, contrato, asistentes, notas) y la
+   Junto al calendario: cuándo se hizo por última vez cada charla de sensibilización, formación periódica, simulacro,
+   comité/comisión y consulta y participación (entrega de información y documentación, 1.30.1), por contrato. Cada cosa se anota el día que se hace (fecha, tema, contrato, asistentes, notas) y la
    tarjeta dice la última fecha, cuánto hace y, si se elige «Avisar cada…», cuándo toca la próxima. */
 (() => {
 const ULT_TIPOS = [
   {k:'charla', t:'Charlas de sensibilización', u:'charla de sensibilización', ph:'Ej.: Riesgo de atropello en obras de carretera', ic:'<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>'},
   {k:'form', t:'Formación periódica', u:'formación', ph:'Ej.: Reciclaje de trabajos en altura', ic:'<path d="M3 8.5L12 4l9 4.5-9 4.5z"/><path d="M7 10.6V15c1.4 1.4 3 2 5 2s3.6-.6 5-2v-4.4M21 8.5V14"/>'},
   {k:'sim', t:'Simulacros', u:'simulacro', ph:'Ej.: Simulacro de accidente en tajo con evacuación', ic:'<path d="M12 3c1.5 3 5 4.5 5 9a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.6 1 2.5 2 3 0-3 .5-5.5 1-7.5z"/>'},
-  {k:'com', t:'Comités y comisiones', u:'comité o comisión', ph:'Ej.: Comité de Seguridad y Salud, 3.er trimestre', ic:'<circle cx="8" cy="8" r="2.6"/><circle cx="16" cy="8" r="2.6"/><path d="M3.5 18c.6-3 2.4-4.6 4.5-4.6S11.9 15 12.5 18M11.5 18c.6-3 2.4-4.6 4.5-4.6s3.9 1.6 4.5 4.6"/>'}
+  {k:'com', t:'Comités y comisiones', u:'comité o comisión', ph:'Ej.: Comité de Seguridad y Salud, 3.er trimestre', ic:'<circle cx="8" cy="8" r="2.6"/><circle cx="16" cy="8" r="2.6"/><path d="M3.5 18c.6-3 2.4-4.6 4.5-4.6S11.9 15 12.5 18M11.5 18c.6-3 2.4-4.6 4.5-4.6s3.9 1.6 4.5 4.6"/>'},
+  /* 1.30.1 */
+  {k:'cyp', t:'Consulta y participación', s:'Entrega de información y documentación', u:'consulta o entrega de información', ph:'Ej.: Entrega de la evaluación de riesgos a los delegados de prevención', ic:'<path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5h-10A.5.5 0 0 1 7 20z"/><path d="M14 3.5V8h4"/><path d="M3 13h8M8.5 10.5L11 13l-2.5 2.5"/>'}
 ];
 const ULT_CADA = [[0, 'No avisar'], [1, 'Cada mes'], [2, 'Cada 2 meses'], [3, 'Cada 3 meses'], [6, 'Cada 6 meses'], [12, 'Cada año']];
-const CADA_DEF = {charla:0, form:0, sim:12, com:3};
+const CADA_DEF = {charla:0, form:0, sim:12, com:3, cyp:0};
 const SVGi = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const I_OK = SVGi('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), I_BAD = SVGi('<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.2v.1"/>'), I_RELOJ = SVGi('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>');
 const pad2 = n => String(n).padStart(2, '0');
@@ -78,7 +80,7 @@ function tarjeta(T) {
     : e.est === 'nada' ? `<p class="ult-est warn">${I_RELOJ}<span>Sin anotar todavía (${cadaTxt})</span></p>` : '';
   const filas = e.l.map(a => `<li><button type="button" class="ult-fila" data-ult-edit="${esc(a.id)}"><b>${esc(fmtDate(a.f))}</b><span>${esc([a.t, !fctr && a.ctr && a.ctr.id ? ctrNom(a.ctr) : '', a.n ? plural(+a.n, 'asistente', 'asistentes') : ''].filter(Boolean).join(' · ') || 'Sin tema')}</span></button></li>`).join('');
   return `<section class="ult-card ult-k-${T.k} st-${e.est}" id="ultc-${T.k}" aria-labelledby="ult-h-${T.k}">
-    <header class="ult-ch"><span class="ult-ic" aria-hidden="true">${SVGi(T.ic)}</span><h3 id="ult-h-${T.k}">${esc(T.t)}</h3>${e.anio ? `<span class="ult-cnt">${plural(e.anio, 'vez', 'veces')} este año</span>` : ''}</header>
+    <header class="ult-ch"><span class="ult-ic" aria-hidden="true">${SVGi(T.ic)}</span><h3 id="ult-h-${T.k}">${esc(T.t)}${T.s ? `<small>${esc(T.s)}</small>` : ''}</h3>${e.anio ? `<span class="ult-cnt">${plural(e.anio, 'vez', 'veces')} este año</span>` : ''}</header>
     ${u ? `<div class="ult-last"><small>Última</small><b>${esc(fmtDate(u.f))}</b><span>${esc(haceTxt(u.f))}${u.t ? ' · ' + esc(u.t) : ''}</span></div>` : '<p class="ult-vacio">Todavía no hay ninguna anotada.</p>'}
     ${est}
     <div class="ult-acc"><button type="button" class="btn primary ult-add" data-ult-nueva="${T.k}">+ Anotar</button>
@@ -91,7 +93,7 @@ function renderMain() {
   if (fctr === null) fctr = activoId();
   if (fctr && fctr !== '-' && !perfilGet().contratos.some(c => c.id === fctr)) fctr = '';
   M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ult="ini">‹ Inicio</button><button type="button" class="linkbtn" data-ult="cal">Calendario ›</button></div>
-    <header class="ult-top"><h2>Últimas fechas</h2><p class="help">Cuándo se hizo por última vez cada cosa. Anota cada charla, formación, simulacro o comité el día que se haga; con «Avisar» te dice cuándo toca la siguiente.</p></header>
+    <header class="ult-top"><h2>Últimas fechas</h2><p class="help">Cuándo se hizo por última vez cada cosa. Anota cada charla, formación, simulacro, comité o entrega de información el día que se haga; con «Avisar» te dice cuándo toca la siguiente.</p></header>
     ${filtroHtml()}
     <div class="ult-grid">${ULT_TIPOS.map(tarjeta).join('')}</div>`;
   vista('main');
@@ -198,7 +200,7 @@ window.ULT_API = {
     const R = this.resumen();
     if (R.bad) return plural(R.bad, 'toca ya', 'tocan ya');
     const sim = R.es.find(e => e.k === 'sim');
-    return R.n ? (sim && sim.u ? 'Último simulacro: ' + haceTxt(sim.u.f) : plural(R.n, 'anotada', 'anotadas')) : 'Charlas, formación, simulacros, comités';
+    return R.n ? (sim && sim.u ? 'Último simulacro: ' + haceTxt(sim.u.f) : plural(R.n, 'anotada', 'anotadas')) : 'Charlas, formación, simulacros, comités…';
   }
 };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();

@@ -73,6 +73,7 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 | 1.28.1 | 41 | 11/11/2026 | Importar: aviso claro si el archivo está vacío (0 bytes). |
 | 1.29.0 | 42 | 12/11/2026 | Historial ordenado: por años y meses plegables, una línea por visita, filtro «Con incidencias». |
 | 1.30.0 | 43 | 12/11/2026 | Últimas fechas: charlas, formación, simulacros y comités, con aviso de cuándo toca el siguiente. |
+| 1.30.1 | 44 | 12/11/2026 | Últimas fechas: apartado de consulta y participación (entrega de información y documentación). |
 
 ## Cómo funciona en el móvil
 - **PDF y copias de seguridad**: «Compartir» los envía por WhatsApp, correo, Drive…; «Guardar» los deja en **Descargas › Visitas PRL**. Con el PDF el botón es **«Guardar y abrir»**: lo guarda y lo abre con el visor del móvil para revisarlo.
@@ -190,6 +191,7 @@ La app de registro de visitas va entera dentro del archivo **VisitasPRL.apk**. N
 - Cada anotación: fecha, tema, contrato, asistentes y notas (IndexedDB `registro-rp-ult`, almacén `acts`). Se cambia o se quita desde «Ver las anotadas». Filtro por contrato (de serie, el activo).
 - **Avisar** cada mes, 2, 3, 6 meses o año (`localStorage['ult-cada']`; de serie simulacros cada año y comités cada 3 meses, charlas y formación sin aviso): «Al día · la próxima antes del…», «Toca antes del…» (30 días antes) o «Toca ya» en rojo.
 - Va en la copia de seguridad (`actividades`), en «Borrar todos los datos» y en el buscador (Ctrl + K).
+- 1.30.1: quinto apartado, **Consulta y participación** (entrega de información y documentación), clave `cyp`, sin aviso de serie.
 - Prueba: `test-ult.js`.
 
 ## Historial ordenado por meses (1.29.0)
