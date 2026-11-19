@@ -110,3 +110,26 @@
 .pl-mh em{white-space:nowrap;font-style:normal;font:600 10.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;background:var(--corp-2);color:#fff;border-radius:99px;padding:3px 7px;margin-left:6px;vertical-align:2px}
 .pl-mes.vacio .pl-mh{font-size:14.5px;color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:8px}
 .pl-mes.hoy .pl-mh{color:var(--corp-text)}
+
+/* importar planificaciones ya hechas */
+.pl-imp{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--surface);border:1.5px dashed var(--line-strong);border-radius:12px;padding:14px}
+.pl-imp-tx{display:grid;gap:3px;flex:1 1 240px;min-width:0}
+.pl-imp-tx b{font-size:15px}
+.pl-imp-tx span{font-size:13.5px;color:var(--muted);line-height:1.4}
+.pl-imp .btn{flex:none}
+.pl-imp-h{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--surface)}
+.pl-imp-sel{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.pl-imp-sel input{width:20px;height:20px;margin:2px 0 0;flex:none}
+.pl-imp-sel span{display:grid;gap:2px;min-width:0}
+.pl-imp-sel b{overflow-wrap:anywhere}
+.pl-imp-sel small{color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}
+.pl-imp-n{margin:0;font-weight:600;font-size:14px}
+.pl-imp-cs{display:flex;flex-wrap:wrap;gap:6px 12px}
+.pl-imp-c{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink)}
+.pl-imp-c .pl-sw{width:12px;height:12px;border-radius:4px}
+.pl-imp-h .bb-in.g2{gap:10px;grid-template-columns:minmax(92px,.55fr) minmax(0,1.45fr)}
+.pl-imp-h .field{margin:0}
+.pl-imp-nota{margin:0;font-weight:500;color:var(--ink)}
+.pl-imp-av{margin:0;padding-left:10px;border-left:3px solid var(--accent)}
+.pl-imp-mal{margin:10px 0 0;font-size:14px;line-height:1.45}
+.pl-imp-mal b{overflow-wrap:anywhere}

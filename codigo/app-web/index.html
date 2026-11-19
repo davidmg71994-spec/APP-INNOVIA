@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-JMK8V65zuFYf/8vkv7IiJgrG+W5uRcGnZP8jbFtpHeQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval' 'sha256-k+kwHCAUNrw24nnM9bUsEuMVqOh03foLLXcVQzLuSno=' 'sha256-lvrDzIEwpVQFufy/htHC+GjnPJvjnDtbR3L0TV5TLe4=' 'sha256-rMfkFFWoB2W1/Zx+4bgHim0WC7vKRVrq6FTeZclH1Z4=' 'sha256-IA5+omL1GWfoRpYVqVyqQSx333+4xuLQby+fyuKH/dQ=' 'sha256-IhQnLz7Hqit3Ufy+0QujaYG5HMWa4Lifcly+ex7u3z0=' 'sha256-onptyUWzAziEQSH6L1toh3RrktMTgre8sCxgSS3EoC0='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; media-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <script>/*ASP-HEAD*/try{var t=localStorage.getItem('tema'),l=localStorage.getItem('letra'),r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);if(l==='0.9'||l==='1.15'||l==='1.3')r.setAttribute('data-letra',l)}catch(e){}</script>
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -874,6 +874,29 @@ body.onb-on{overflow:hidden}
 .pl-mh em{white-space:nowrap;font-style:normal;font:600 calc(10.5px*var(--fz,1))/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;background:var(--corp-2);color:#fff;border-radius:99px;padding:3px 7px;margin-left:6px;vertical-align:2px}
 .pl-mes.vacio .pl-mh{font-size:calc(14.5px*var(--fz,1));color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:8px}
 .pl-mes.hoy .pl-mh{color:var(--corp-text)}
+
+/* importar planificaciones ya hechas */
+.pl-imp{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--surface);border:1.5px dashed var(--line-strong);border-radius:12px;padding:14px}
+.pl-imp-tx{display:grid;gap:3px;flex:1 1 240px;min-width:0}
+.pl-imp-tx b{font-size:calc(15px*var(--fz,1))}
+.pl-imp-tx span{font-size:calc(13.5px*var(--fz,1));color:var(--muted);line-height:1.4}
+.pl-imp .btn{flex:none}
+.pl-imp-h{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--surface)}
+.pl-imp-sel{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.pl-imp-sel input{width:20px;height:20px;margin:2px 0 0;flex:none}
+.pl-imp-sel span{display:grid;gap:2px;min-width:0}
+.pl-imp-sel b{overflow-wrap:anywhere}
+.pl-imp-sel small{color:var(--muted);font-size:calc(12.5px*var(--fz,1));overflow-wrap:anywhere}
+.pl-imp-n{margin:0;font-weight:600;font-size:calc(14px*var(--fz,1))}
+.pl-imp-cs{display:flex;flex-wrap:wrap;gap:6px 12px}
+.pl-imp-c{display:inline-flex;align-items:center;gap:6px;font-size:calc(13px*var(--fz,1));color:var(--ink)}
+.pl-imp-c .pl-sw{width:12px;height:12px;border-radius:4px}
+.pl-imp-h .bb-in.g2{gap:10px;grid-template-columns:minmax(92px,.55fr) minmax(0,1.45fr)}
+.pl-imp-h .field{margin:0}
+.pl-imp-nota{margin:0;font-weight:500;color:var(--ink)}
+.pl-imp-av{margin:0;padding-left:10px;border-left:3px solid var(--accent)}
+.pl-imp-mal{margin:10px 0 0;font-size:calc(14px*var(--fz,1));line-height:1.45}
+.pl-imp-mal b{overflow-wrap:anywhere}
 /*PLAN-CSS-END*/
 /*CAL-CSS-START*/
 /* Calendario PRL (1.26.0: más sencillo). Sin bandas de color ni leyenda: una lista limpia, tres pestañas y un número por día en el mes. */
@@ -2128,7 +2151,7 @@ html.seg-lk body{overflow:hidden}
     <div class="chips" id="h-ctr" hidden aria-label="Contrato"></div>
   </div>
   <div class="hlist" id="h-list"></div>
-  <p class="ver"><span id="ver-t">Versión de la app: 1.30.1 · 12/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
+  <p class="ver"><span id="ver-t">Versión de la app: 1.31.0 · 19/11/2026</span> <button type="button" class="linkbtn nov-btn" data-hact="nov">Ver novedades</button> <button type="button" class="linkbtn nov-btn" data-hact="guia">Ver guía</button></p>
   <section class="backup">
     <div><b>Copia de seguridad</b><span id="copia-txt">Los registros se guardan solo en este móvil. Exporta una copia de vez en cuando y antes de cambiar de teléfono.</span></div>
     <p class="copia-est" id="copia-est" hidden></p>
@@ -4461,8 +4484,13 @@ $('#view-hist').addEventListener('click', async e => {
 });
 
 /* ================= novedades de cada versión (la más reciente primero) ================= */
-const APP_VER = '1.30.1';
+const APP_VER = '1.31.0';
 const NOVEDADES = [
+  {v:'1.31.0', fecha:'19/11/2026', items:[
+    '<b>Importar planificaciones ya hechas</b>: en Planificación preventiva, «Importar Excel» lee el Excel de la planificación (.xlsx) y pasa sus medidas a la app.',
+    '<b>Cada medida con su origen</b>: el color de la fila decide si es periódica PRL o CA-MA, visita del Responsable SPP/MA, auditoría o deficiencia, como en la leyenda. También entran la prioridad, las fechas, el plazo y el responsable.',
+    '<b>Sin duplicados</b>: antes de importar eliges el año y el contrato. Si ya tienes esa planificación, solo se añaden las medidas que falten.'
+  ]},
   {v:'1.30.1', fecha:'12/11/2026', items:[
     'Últimas fechas: nuevo apartado <b>Consulta y participación</b> (entrega de información y documentación), junto a charlas, formación, simulacros y comités.'
   ]},
@@ -4787,6 +4815,7 @@ Promise.all([borradorListo, histListo]).then(([hayBorrador]) => setTimeout(() =>
   if (!vista && !lsGet('guia-vista') && !hayBorrador && !HIST.length) { lsSet('nov-vista', APP_VER); mostrarGuia(); }
   else mostrarNovedades(vista);
 }, 500));
+
 
 
 
@@ -6241,7 +6270,11 @@ function renderLista() {
     </article>`; }).join('');
   L.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-pa="ini">‹ Inicio</button></div>
     <div class="hhead"><div class="hhead-t"><h2>Planificación preventiva</h2><button type="button" class="mini" data-pa="new">+ Nueva</button></div></div>
-    ${cards ? `<div class="hlist">${cards}</div>` : `<div class="empty"><b>Aún no hay planificaciones</b><span>Crea la del año para el contrato activo. Empieza en blanco y vas añadiendo medidas; al final sale el Excel con el formato de Innovia.</span></div>`}`;
+    ${cards ? `<div class="hlist">${cards}</div>` : `<div class="empty"><b>Aún no hay planificaciones</b><span>Crea la del año para el contrato activo. Empieza en blanco y vas añadiendo medidas; al final sale el Excel con el formato de Innovia.</span></div>`}
+    <section class="pl-imp" aria-labelledby="pl-imp-t">
+      <div class="pl-imp-tx"><b id="pl-imp-t">¿Ya tienes planificaciones hechas?</b><span>Impórtalas desde su Excel (.xlsx). Cada medida entra con su origen según el color de la fila, con sus fechas, plazos y responsables.</span></div>
+      <button type="button" class="btn" data-pa="imp">Importar Excel</button>
+    </section>`;
 }
 function leyendaHtml(fs) {
   const n = k => fs.filter(f => f.cat === k).length;
@@ -6414,6 +6447,7 @@ async function onClick(e) {
   const a = b.dataset.pa, id = b.dataset.id;
   if (a === 'ini') { showTab('ini'); return; }
   if (a === 'new') return nuevaPlan();
+  if (a === 'imp') { const fi = $('#pl-file'); if (fi) fi.click(); return; }
   if (a === 'open') return abrir(id);
   if (a === 'back') return volverLista();
   if (a === 'defs') return traerDefs();
@@ -6441,6 +6475,7 @@ function onInput(e) {
 }
 function onChange(e) {
   const t = e.target;
+  if (t.id === 'pl-file') { const fs = [...(t.files || [])]; t.value = ''; if (fs.length) importarExcel(fs); return; }
   if (t.name === 'pl-cat') { const f = PL.filas.find(x => x.id === FILA); if (!f) return; f.cat = t.value; if (f.cat !== 'spp' && f.cat !== 'aud') f.tipo = ''; guardarPronto(); renderFila(); }
 }
 
@@ -6526,11 +6561,241 @@ async function exportar(pl) {
   } catch (e) { console.error(e); toast('No se pudo generar el Excel.'); }
 }
 
+/* ---------- importar planificaciones ya hechas (Excel de Innovia u otro con las mismas columnas) ---------- */
+const XNS = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+const nrm = s => String(s == null ? '' : s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim();
+const COLS = [['fdet', /deteccion/], ['fapl', /aplicacion|ejecucion/], ['plazo', /tiempo|plazo/], ['prio', /prioridad/], ['coste', /presupuesto|coste|costo/],
+  ['resp', /responsable/], ['reg', /registro|evidencia/], ['obs', /observacion/], ['riesgo', /riesgo|aspecto/], ['medida', /medida|solucion/]];
+/* paleta antigua de Excel (colores «indexed») */
+const PAL = '000000FFFFFFFF000000FF000000FFFFFF00FF00FF00FFFF000000FFFFFFFF000000FF000000FFFFFF00FF00FF00FFFF800000008000000080808000800080008080C0C0C08080809999FF993366FFFFCCCCFFFF660066FF80800066CCCCCCFF000080FF00FFFFFF0000FFFF8000808000000080800000FF00CCFFCCFFFFCCFFCCFFFF9999CCFFFF99CCCC99FFFFCC993366FF33CCCC99CC00FFCC00FF9900FF6600666699969696003366339966003300333300993300993366333399333333';
+function tintar(hex, t) {
+  if (!t) return hex;
+  const [r, g, b] = [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b); let h = 0, s = 0, l = (mx + mn) / 2;
+  if (mx !== mn) { const d = mx - mn; s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn); h = (mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4) / 6; }
+  l = t < 0 ? l * (1 + t) : l * (1 - t) + t;
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+  const f = x => { if (x < 0) x += 1; if (x > 1) x -= 1; return x < 1 / 6 ? p + (q - p) * 6 * x : x < 1 / 2 ? q : x < 2 / 3 ? p + (q - p) * (2 / 3 - x) * 6 : p; };
+  return (s ? [f(h + 1 / 3), f(h), f(h - 1 / 3)] : [l, l, l]).map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+const rgbDe = hex => [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16));
+const dist = (a, b) => { const x = rgbDe(a), y = rgbDe(b); return (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2 + (x[2] - y[2]) ** 2; };
+const MESN = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const pad2 = n => String(n).padStart(2, '0');
+const anio4 = y => { y = +y; return y < 100 ? 2000 + y : y; };
+function serialISO(n, d1904) { if (!(n > 59 && n < 2958465)) return ''; return new Date(Math.round((n + (d1904 ? 1462 : 0) - 25569) * 864e5)).toISOString().slice(0, 10); }
+/* fecha de detección → AAAA-MM */
+function aMes(v, d1904) {
+  if (typeof v === 'number') return v < 3000 ? '' : serialISO(v, d1904).slice(0, 7);
+  const t = nrm(v); if (!t) return '';
+  let m = /^(20\d\d)[-\/.](\d{1,2})/.exec(t); if (m && +m[2] >= 1 && +m[2] <= 12) return `${m[1]}-${pad2(m[2])}`;
+  m = /^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})$/.exec(t); if (m && +m[2] >= 1 && +m[2] <= 12) return `${anio4(m[3])}-${pad2(m[2])}`;
+  m = /^(\d{1,2})[-\/.](\d{4}|\d{2})$/.exec(t); if (m && +m[1] >= 1 && +m[1] <= 12) return `${anio4(m[2])}-${pad2(m[1])}`;
+  m = /([a-z]{3,})[a-z]*\.?[\s\-\/.de]*('?\d{2,4})/.exec(t);
+  if (m) { const i = MESN.indexOf(m[1].slice(0, 3) === 'set' ? 'sep' : m[1].slice(0, 3)); if (i >= 0) return `${anio4(m[2].replace("'", ''))}-${pad2(i + 1)}`; }
+  return '';
+}
+/* fecha de aplicación → AAAA-MM-DD */
+function aDia(v, d1904) {
+  if (typeof v === 'number') return v < 3000 ? '' : serialISO(v, d1904);
+  const t = nrm(v); if (!t) return '';
+  let m = /^(20\d\d)-(\d{1,2})-(\d{1,2})/.exec(t); if (m) return `${m[1]}-${pad2(m[2])}-${pad2(m[3])}`;
+  m = /^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})$/.exec(t); if (m && +m[2] >= 1 && +m[2] <= 12 && +m[1] >= 1 && +m[1] <= 31) return `${anio4(m[3])}-${pad2(m[2])}-${pad2(m[1])}`;
+  const ym = aMes(t); return ym ? ym + '-01' : '';
+}
+function aPrio(v) {
+  const t = nrm(v); if (!t) return '';
+  if (/^1\b|alta/.test(t)) return '1'; if (/^2\b|media/.test(t)) return '2'; if (/^3\b|baja/.test(t)) return '3';
+  return '';
+}
+function catLeyenda(t) {
+  if (/auditor/.test(t)) return 'aud';
+  if (/spp/.test(t)) return 'spp';
+  if (/periodic/.test(t)) return /seguridad|prl/.test(t) ? 'prl' : 'ma';
+  if (/deficiencia|visita/.test(t)) return 'def';
+  return '';
+}
+function tipoDe(riesgo) {
+  const pats = [['obs', /\s*\((observaci[oó]n|obs\.?)\)\s*/i], ['nc', /\s*\((n\.?\s?c\.?|no conformidad)\)\s*/i], ['om', /\s*\((o\.?\s?m\.?|oportunidad de mejora)\)\s*/i]];
+  for (const [k, re] of pats) if (re.test(riesgo)) return {tipo:k, riesgo:riesgo.replace(re, ' ').replace(/\s+/g, ' ').trim()};
+  return {tipo:'', riesgo};
+}
+const strX = v => typeof v === 'number' ? String(Math.round(v * 100) / 100) : String(v == null ? '' : v).trim();
+async function leerExcel(file) {
+  const cab = new Uint8Array(await file.slice(0, 4).arrayBuffer());
+  if (cab[0] === 0xD0 && cab[1] === 0xCF) return {error:'xls'};
+  if (!(cab[0] === 0x50 && cab[1] === 0x4B)) return {error:'formato'};
+  let zip; try { zip = await JSZip.loadAsync(file); } catch (e) { return {error:'formato'}; }
+  const P = new DOMParser(), xml = async p => { const f = zip.file(p); return f ? P.parseFromString(await f.async('string'), 'application/xml') : null; };
+  const by = (n, tag) => n ? [...n.getElementsByTagNameNS(XNS, tag)] : [];
+  const wb = await xml('xl/workbook.xml'); if (!wb) return {error:'formato'};
+  const pr = by(wb, 'workbookPr')[0], d1904 = !!pr && /^(1|true)$/.test(pr.getAttribute('date1904') || '');
+  const txtDe = n => { let s = ''; if (n) for (const ch of n.childNodes) { if (ch.localName === 't') s += ch.textContent; else if (ch.localName === 'r') { const t = by(ch, 't')[0]; if (t) s += t.textContent; } } return s; };
+  const sst = by(await xml('xl/sharedStrings.xml'), 'si').map(txtDe);
+  /* colores del tema */
+  const th = await xml('xl/theme/theme1.xml'), tema = [];
+  if (th) { const cs = th.getElementsByTagNameNS('*', 'clrScheme')[0]; if (cs) { const v = [...cs.children].map(c => { const x = c.firstElementChild; return x ? (x.getAttribute('lastClr') || x.getAttribute('val') || '') : ''; }); tema.push(v[1], v[0], v[3], v[2], ...v.slice(4)); } }
+  const st = await xml('xl/styles.xml');
+  const idxCol = by(by(st, 'indexedColors')[0], 'rgbColor').map(c => (c.getAttribute('rgb') || '').slice(-6));
+  const color = c => {
+    if (!c) return null;
+    if (c.getAttribute('rgb')) return c.getAttribute('rgb').slice(-6).toUpperCase();
+    if (c.getAttribute('theme') != null) { const b = tema[+c.getAttribute('theme')]; return b ? tintar(b.toUpperCase(), +(c.getAttribute('tint') || 0)) : null; }
+    if (c.getAttribute('indexed') != null) { const i = +c.getAttribute('indexed'); return idxCol[i] ? idxCol[i].toUpperCase() : i < 64 ? PAL.slice((i % 64) * 6, (i % 64) * 6 + 6) : null; }
+    return null;
+  };
+  const rellenos = by(by(st, 'fills')[0], 'fill').map(f => { const p = by(f, 'patternFill')[0]; if (!p || !p.getAttribute('patternType') || p.getAttribute('patternType') === 'none') return null; return color(by(p, 'fgColor')[0]) || color(by(p, 'bgColor')[0]); });
+  const xfs = by(by(st, 'cellXfs')[0], 'xf').map(x => rellenos[+(x.getAttribute('fillId') || 0)] || null);
+  /* hojas */
+  const rels = await xml('xl/_rels/workbook.xml.rels'), dest = {};
+  if (rels) [...rels.getElementsByTagNameNS('*', 'Relationship')].forEach(r => { dest[r.getAttribute('Id')] = r.getAttribute('Target'); });
+  const hojas = [];
+  for (const sh of by(wb, 'sheet')) {
+    if (sh.getAttribute('state') === 'hidden' || sh.getAttribute('state') === 'veryHidden') continue;
+    const rid = sh.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id') || sh.getAttribute('r:id');
+    let tg = dest[rid] || ''; if (!tg) continue;
+    tg = tg.startsWith('/') ? tg.slice(1) : 'xl/' + tg.replace(/^\.\//, '');
+    const doc = await xml(tg); if (!doc) continue;
+    const filas = new Map();
+    by(doc, 'c').forEach(c => {
+      const m = /^([A-Z]+)(\d+)$/.exec(c.getAttribute('r') || ''); if (!m) return;
+      const col = [...m[1]].reduce((s, ch) => s * 26 + ch.charCodeAt(0) - 64, 0) - 1, r = +m[2], t = c.getAttribute('t'), vn = by(c, 'v')[0];
+      let v = '';
+      if (t === 's') v = vn ? (sst[+vn.textContent] || '') : '';
+      else if (t === 'inlineStr') v = txtDe(by(c, 'is')[0]);
+      else if (t === 'str' || t === 'e') v = vn ? vn.textContent : '';
+      else if (t === 'b') v = vn ? (vn.textContent === '1' ? 'SÍ' : 'NO') : '';
+      else if (vn && vn.textContent !== '') v = Number(vn.textContent);
+      if (!filas.has(r)) filas.set(r, new Map());
+      filas.get(r).set(col, {v, f:xfs[+(c.getAttribute('s') || 0)] || null});
+    });
+    const nums = [...filas.keys()].sort((a, b) => a - b);
+    /* cabecera: la fila con más columnas reconocidas (al menos 4, y la de medidas) */
+    let hr = 0, map = null;
+    for (const r of nums.filter(n => n <= 40)) {
+      const mm = {};
+      filas.get(r).forEach((cel, col) => { const t = nrm(cel.v); if (!t || typeof cel.v === 'number') return; const k = COLS.find(([key, re]) => re.test(t) && mm[key] == null); if (k) mm[k[0]] = col; });
+      if (mm.medida != null && Object.keys(mm).length >= 4 && (!map || Object.keys(mm).length > Object.keys(map).length)) { hr = r; map = mm; }
+    }
+    if (!map) continue;
+    const titulo = nums.filter(n => n < hr).map(n => [...filas.get(n).values()].map(x => strX(x.v)).join(' ')).join(' ');
+    /* leyenda: color → origen */
+    const ley = {};
+    let rl = 0, cl = 0;
+    nums.some(n => n !== hr && [...filas.get(n).entries()].some(([col, x]) => /^leyenda/.test(nrm(x.v)) && ((rl = n), (cl = col), true)));
+    /* la leyenda: el color y el texto de las celdas de su columna y las siguientes, no los de la tabla de al lado */
+    if (rl) nums.filter(n => n > rl && n <= rl + 8).forEach(n => {
+      const cs = [...filas.get(n).entries()].filter(([col]) => col >= cl && col <= cl + 5).map(e => e[1]);
+      const k = catLeyenda(nrm(cs.map(x => strX(x.v)).join(' '))), f = (cs.find(x => x.f) || {}).f;
+      if (k && f && !Object.values(ley).includes(k)) ley[f] = k;
+    });
+    const corta = rl > hr && cl <= Math.max(...Object.values(map)); /* leyenda debajo de la tabla: ahí acaban las medidas */
+    const refs = [...Object.entries(ley), ...CATS.map(c => [c.c.slice(1).toUpperCase(), c.k])];
+    const catDe = f => { if (!f) return {k:'def', ok:true}; if (ley[f]) return {k:ley[f], ok:true}; let mej = null, dm = Infinity; refs.forEach(([h, k]) => { const d = dist(f, h); if (d < dm) { dm = d; mej = k; } }); return {k:mej, ok:dm < 3000}; };
+    const val = (fila, k) => map[k] != null && fila.get(map[k]) ? fila.get(map[k]).v : '';
+    const out = []; let sinColor = 0, aplTexto = 0;
+    for (const r of nums.filter(n => n > hr && !(corta && n >= rl))) {
+      const fila = filas.get(r);
+      let riesgo = strX(val(fila, 'riesgo')), medida = strX(val(fila, 'medida'));
+      if (!riesgo && !medida) continue;
+      if (/riesgo|aspecto/.test(nrm(riesgo)) && /medida/.test(nrm(medida))) continue; /* cabecera repetida */
+      /* el color de la fila: el de la primera celda con relleno que no sea blanco */
+      const orden = [map.riesgo, ...Object.values(map)].filter(c => c != null);
+      const fcel = (orden.map(c => fila.get(c)).find(x => x && x.f && x.f !== 'FFFFFF') || {}).f || null;
+      const cat = catDe(fcel); if (!cat.ok) sinColor++;
+      const tp = tipoDe(riesgo); riesgo = tp.riesgo;
+      const va = val(fila, 'fapl'); let fapl = aDia(va, d1904), obs = strX(val(fila, 'obs'));
+      if (!fapl && strX(va)) { aplTexto++; obs = [obs, 'Fecha de aplicación en el Excel: ' + strX(va)].filter(Boolean).join(' · '); }
+      out.push({id:nid('f'), cat:cat.k, tipo:(cat.k === 'spp' || cat.k === 'aud' || tp.tipo === 'om') ? tp.tipo : '', riesgo, prio:aPrio(val(fila, 'prio')), medida,
+        fdet:aMes(val(fila, 'fdet'), d1904), plazo:strX(val(fila, 'plazo')), fapl, coste:strX(val(fila, 'coste')), resp:strX(val(fila, 'resp')), reg:strX(val(fila, 'reg')), obs, origen:null, imp:true, creado:Date.now()});
+    }
+    if (!out.length) continue;
+    /* año: hoja, título, nombre del archivo o el más repetido en las fechas de detección */
+    const y4 = s => { const m = /(?:^|\D)(20\d\d)(?!\d)/.exec(s || ''); return m ? +m[1] : null; };
+    const cuenta = {}; out.forEach(f => { if (f.fdet) cuenta[f.fdet.slice(0, 4)] = (cuenta[f.fdet.slice(0, 4)] || 0) + 1; });
+    const moda = Object.entries(cuenta).sort((a, b) => b[1] - a[1])[0];
+    const anio = y4(sh.getAttribute('name')) || y4(titulo) || y4(file.name) || (moda ? +moda[0] : new Date().getFullYear());
+    hojas.push({archivo:file.name, hoja:sh.getAttribute('name') || '', texto:nrm([file.name, sh.getAttribute('name'), titulo].join(' ')), anio, filas:out, sinColor, aplTexto});
+  }
+  return {hojas};
+}
+const claveFila = f => `${nrm(f.riesgo)}|${nrm(f.medida)}|${f.fdet || ''}`;
+const mismoCtr = (a, b) => ((a && a.id) || null) === ((b && b.id) || null);
+function ctrDe(texto, ctrs) {
+  for (const c of ctrs) {
+    const sie = nrm(c.sie), nom = nrm(c.nombre);
+    if ((sie.length >= 3 && texto.includes(sie)) || (nom.length >= 3 && texto.includes(nom))) return c;
+  }
+  return null;
+}
+async function importarExcel(files) {
+  if (typeof JSZip === 'undefined') { toast('No se puede leer Excel en este dispositivo.'); return; }
+  toast('Leyendo el Excel…');
+  const hojas = [], malos = [];
+  for (const f of files) {
+    let r; try { r = await leerExcel(f); } catch (e) { console.error(e); r = {error:'formato'}; }
+    if (r.error) malos.push([f.name, r.error]); else if (!r.hojas.length) malos.push([f.name, 'vacio']); else hojas.push(...r.hojas);
+  }
+  const porque = {xls:'es del formato antiguo de Excel (.xls). Ábrelo en Excel y guárdalo como «Libro de Excel (.xlsx)».', formato:'no es un archivo de Excel (.xlsx).', vacio:'no tiene una tabla de planificación reconocible: hacen falta las columnas de siempre (riesgos, medidas correctoras, fechas…).'};
+  const malosHtml = malos.map(([n, e]) => `<p class="pl-imp-mal"><b>${esc(n)}</b> ${esc(porque[e])}</p>`).join('');
+  if (!hojas.length) { await ask({title:'No se ha podido importar', single:true, yes:'Entendido', body:malosHtml}); return; }
+  const p = perfilGet(), ctrs = p.contratos.map(c => ({id:c.id, nombre:c.nombre || '', sie:c.sie || ''})), act = snapContrato();
+  hojas.forEach(h => { h.ctr = ctrDe(h.texto, ctrs) || act; });
+  const yNow = new Date().getFullYear();
+  const anios = h => { const ys = new Set([h.anio]); for (let y = yNow + 1; y >= yNow - 8; y--) ys.add(y); return [...ys].sort((a, b) => b - a); };
+  const nota = (h, i) => { const ya = PLANES.find(x => +x.anio === +h.anio && mismoCtr(x.contrato, h.ctr)); if (!ya) return 'Se creará una planificación nueva.'; const claves = new Set(ya.filas.map(claveFila)), n = h.filas.filter(f => !claves.has(claveFila(f))).length; return n ? `Ya tienes esta planificación: se añadirán ${plural(n, 'medida que no está', 'medidas que no están')}.` : 'Ya tienes esta planificación con todas estas medidas: no se añadirá nada.'; };
+  const cuenta = h => CATS.map(c => { const n = h.filas.filter(f => f.cat === c.k).length; return n ? `<span class="pl-imp-c"><i class="pl-sw" style="background:${c.c}"></i>${n} ${esc(c.t)}</span>` : ''; }).join('');
+  const body = `<p class="help">Revisa a qué año y contrato va cada planificación. El color de cada fila decide su origen, como en la leyenda.</p>
+    ${hojas.map((h, i) => { const apl = h.filas.filter(f => f.fapl).length; return `<div class="pl-imp-h">
+      <label class="pl-imp-sel"><input type="checkbox" data-ih="${i}" checked><span><b>${esc(h.hoja || h.archivo)}</b><small>${esc(h.archivo)}</small></span></label>
+      <p class="pl-imp-n">${plural(h.filas.length, 'medida', 'medidas')} · ${apl} ${apl === 1 ? 'aplicada' : 'aplicadas'}</p>
+      <div class="pl-imp-cs">${cuenta(h)}</div>
+      <div class="bb-in g2">
+        <div class="field"><label for="ih-y${i}">Año</label><select id="ih-y${i}" data-iy="${i}">${anios(h).map(y => `<option value="${y}"${y === h.anio ? ' selected' : ''}>${y}</option>`).join('')}</select></div>
+        <div class="field"><label for="ih-c${i}">Contrato</label><select id="ih-c${i}" data-ic="${i}">${ctrs.map(c => `<option value="${esc(c.id)}"${h.ctr && h.ctr.id === c.id ? ' selected' : ''}>${esc(nombreContrato(c))}</option>`).join('')}<option value=""${h.ctr ? '' : ' selected'}>Sin contrato</option></select></div>
+      </div>
+      <p class="help pl-imp-nota" id="ih-n${i}">${esc(nota(h, i))}</p>
+      ${h.sinColor ? `<p class="help pl-imp-av">${plural(h.sinColor, 'fila tiene', 'filas tienen')} un color que no está en la leyenda: revisa su origen después de importar.</p>` : ''}
+      ${h.aplTexto ? `<p class="help pl-imp-av">${plural(h.aplTexto, 'medida tiene', 'medidas tienen')} texto en vez de fecha de aplicación: queda en Observaciones y la medida, pendiente.</p>` : ''}
+    </div>`; }).join('')}
+    ${malosHtml}`;
+  const pr = ask({title:hojas.length === 1 ? 'Importar planificación' : `Importar ${hojas.length} planificaciones`, yes:'Importar', body});
+  const mb = $('#m-body');
+  mb.onchange = e => {
+    const t = e.target, i = +(t.dataset.iy || t.dataset.ic); if (Number.isNaN(i) || !hojas[i]) return;
+    if (t.dataset.iy != null) hojas[i].anio = +t.value;
+    if (t.dataset.ic != null) hojas[i].ctr = ctrs.find(c => c.id === t.value) || null;
+    const n = document.getElementById('ih-n' + i); if (n) n.textContent = nota(hojas[i], i);
+  };
+  const r = await pr;
+  const marc = [...mb.querySelectorAll('[data-ih]')].filter(c => c.checked).map(c => hojas[+c.dataset.ih]);
+  mb.onchange = null;
+  if (r !== true || !marc.length) return;
+  const res = [];
+  for (const h of marc) {
+    let pl = PLANES.find(x => +x.anio === +h.anio && mismoCtr(x.contrato, h.ctr));
+    const nuevo = !pl;
+    if (nuevo) pl = {id:nid('p'), creado:Date.now(), guardado:Date.now(), anio:+h.anio, contrato:h.ctr ? {...h.ctr} : null, filas:[]};
+    else pl = JSON.parse(JSON.stringify(pl));
+    const claves = new Set(pl.filas.map(claveFila)); let n = 0;
+    h.filas.forEach(f => { const k = claveFila(f); if (claves.has(k)) return; claves.add(k); pl.filas.push(f); n++; });
+    pl.guardado = Date.now();
+    pl.importado = [...(pl.importado || []), {archivo:h.archivo, hoja:h.hoja, f:Date.now(), n}].slice(-20);
+    await pdb.put(pl);
+    const i = PLANES.findIndex(x => x.id === pl.id); if (i >= 0) PLANES[i] = pl; else PLANES.unshift(pl);
+    res.push({pl, n, nuevo, rep:h.filas.length - n});
+  }
+  await cargar();
+  if (res.length === 1 && res[0].n) { abrir(res[0].pl.id); }
+  const txt = res.map(x => `${titPlan(x.pl)}${x.pl.contrato ? ' · ' + nombreContrato(x.pl.contrato) : ''}: ${x.n ? plural(x.n, 'medida añadida', 'medidas añadidas') : 'nada nuevo'}${x.rep ? ` (${plural(x.rep, 'ya estaba', 'ya estaban')})` : ''}`).join('\n');
+  toast(res.length === 1 ? txt : `Importadas ${plural(res.length, 'planificación', 'planificaciones')}.`);
+}
+
 /* ---------- arranque ---------- */
 function montar() {
   const main = document.createElement('main');
   main.id = 'view-plan'; main.setAttribute('role', 'tabpanel'); main.hidden = true;
-  main.innerHTML = '<div id="pl-lista"></div><div id="pl-ed" hidden></div><div id="pl-fila" hidden></div>';
+  main.innerHTML = '<div id="pl-lista"></div><div id="pl-ed" hidden></div><div id="pl-fila" hidden></div><input type="file" id="pl-file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple hidden>';
   const hist = $('#view-hist'); hist.parentNode.insertBefore(main, hist);
   const bar = document.createElement('div'); bar.className = 'ibar pl-bar'; bar.id = 'pl-bar'; bar.hidden = true;
   bar.innerHTML = '<button type="button" class="btn" data-pb="xlsx">Excel</button><button type="button" class="btn primary" data-pb="add">+ Añadir medida</button>';

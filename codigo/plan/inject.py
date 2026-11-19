@@ -86,5 +86,15 @@ if "{v:'1.11.1'" not in h:
     h=re.sub(r"const APP_VER = '[^']+';","const APP_VER = '1.11.1';",h,count=1)
     rep("const NOVEDADES = [\n","const NOVEDADES = [\n  {v:'1.11.1', fecha:'06/11/2026', items:[\n    '<b>Limpieza interna</b>: la plantilla del informe de seguimiento ya no guarda datos del informe que se usó de modelo. El Word que sale es el mismo.'\n  ]},\n")
     h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.11.1 · 06/11/2026",h,count=1)
+if "{v:'1.31.0'" not in h:
+    h=re.sub(r"const APP_VER = '[^']+';","const APP_VER = '1.31.0';",h,count=1)
+    rep("const NOVEDADES = [\n","""const NOVEDADES = [
+  {v:'1.31.0', fecha:'19/11/2026', items:[
+    '<b>Importar planificaciones ya hechas</b>: en Planificación preventiva, «Importar Excel» lee el Excel de la planificación (.xlsx) y pasa sus medidas a la app.',
+    '<b>Cada medida con su origen</b>: el color de la fila decide si es periódica PRL o CA-MA, visita del Responsable SPP/MA, auditoría o deficiencia, como en la leyenda. También entran la prioridad, las fechas, el plazo y el responsable.',
+    '<b>Sin duplicados</b>: antes de importar eliges el año y el contrato. Si ya tienes esa planificación, solo se añaden las medidas que falten.'
+  ]},
+""")
+    h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.31.0 · 19/11/2026",h,count=1)
 open(IDX,'w',encoding='utf-8').write(h)
 print('ok', len(h))
