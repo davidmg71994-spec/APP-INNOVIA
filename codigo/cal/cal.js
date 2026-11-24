@@ -25,6 +25,7 @@ const SUG = [
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const XLS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9.5 12.5l5 5M14.5 12.5l-5 5"/></svg>';
 const REPIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 14-4.5M20 13a8 8 0 0 1-14 4.5"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>';
 
 /* ---------- almacén ---------- */
@@ -191,7 +192,7 @@ function renderMain() {
   const pendN = r.venc + r.semana;
   const tab = (k, txt, n) => `<button type="button" role="tab" data-cmodo="${k}" aria-selected="${modo === k}" aria-pressed="${modo === k}">${txt}${n ? `<i>${n}</i>` : ''}</button>`;
   M.innerHTML = `<div class="ihead"><button type="button" class="linkbtn" data-ca="ini">‹ Inicio</button></div>
-    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}${window.ULT_API ? `<button type="button" class="cal-ultb" data-ca="ult">Últimas fechas: charlas, formación, simulacros, comités… ›</button>` : ''}</header>
+    <header class="cal-top"><h2>Calendario</h2>${vacio ? '' : resumenHtml(r)}${window.ULT_API ? `<button type="button" class="cal-ultb" data-ca="ult">Últimas fechas: charlas, formación, simulacros, comités… ›</button>` : ''}${vacio && !(window.ULT_API && ULT_API.lista().length) ? '' : `<button type="button" class="cal-xlsb" data-ca="xlsx">${XLS}Sacar todo a Excel</button>`}</header>
     ${vacio ? `<div class="empty cal-blank"><b>Tu calendario está en blanco</b><span>Añade tus tareas de PRL: las sueltas (una reunión, una entrega) y las que se repiten cada semana, mes, trimestre o año (visitas a tajo, índices, revisiones, comités…).</span><button type="button" class="btn primary" data-nueva="">${PLUS}Añadir la primera tarea</button></div>` : `
     <div class="cal-tabs" role="tablist" aria-label="Cómo ver las tareas">${tab('agenda', 'Pendientes', pendN)}${tab('mes', 'Mes')}${tab('lista', 'Mis tareas', TAREAS.length)}</div>
     ${ctrsHtml()}
@@ -276,6 +277,83 @@ async function borrar(id) {
   const y = window.scrollY; ED = null; renderMain(); refrescaIni(); if (id) window.scrollTo({top:y}); toast('Tarea quitada.');
 }
 
+/* ---------- sacar todo a Excel (1.32.0): por si se pierde la app ---------- */
+const XLSXM = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const ULTN = {charla:'Charla de sensibilización', form:'Formación periódica', sim:'Simulacro', com:'Comité o comisión', cyp:'Consulta y participación'};
+const xesc = v => String(v == null ? '' : v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const serie = s => { const [y, m, d] = s.split('-').map(Number); return Math.round(Date.UTC(y, m - 1, d) / 864e5) + 25569; };
+const colX = n => { let s = ''; for (n++; n > 0; n = Math.floor((n - 1) / 26)) s = String.fromCharCode(65 + (n - 1) % 26) + s; return s; };
+/* celda: {d:'AAAA-MM-DD'} fecha de Excel, {s:texto, e:'bad'|'ok'|'aviso'} con color, o texto/número a secas */
+function xHoja(cols, filas) {
+  const x = [`<row r="1" ht="30" customHeight="1">${cols.map((c, i) => `<c r="${colX(i)}1" s="1" t="inlineStr"><is><t>${xesc(c[0])}</t></is></c>`).join('')}</row>`];
+  filas.forEach((f, r) => {
+    x.push(`<row r="${r + 2}">${f.map((v, i) => {
+      const ref = colX(i) + (r + 2);
+      if (v == null || v === '') return '';
+      if (typeof v === 'number') return `<c r="${ref}" s="3"><v>${v}</v></c>`;
+      if (v.d) return `<c r="${ref}" s="2"><v>${serie(v.d)}</v></c>`;
+      const st = typeof v === 'object' ? ({bad:4, ok:5, aviso:6}[v.e] || 0) : 0;
+      return `<c r="${ref}" s="${st}" t="inlineStr"><is><t xml:space="preserve">${xesc(typeof v === 'object' ? v.s : v)}</t></is></c>`;
+    }).join('')}</row>`);
+  });
+  const fin = colX(cols.length - 1) + (filas.length + 1);
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>${cols.map((c, i) => `<col min="${i + 1}" max="${i + 1}" width="${c[1]}" customWidth="1"/>`).join('')}</cols><sheetData>${x.join('')}</sheetData><autoFilter ref="A1:${fin}"/><pageMargins left="0.5" right="0.5" top="0.6" bottom="0.6" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToHeight="0"/></worksheet>`;
+}
+const X_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="dd/mm/yyyy"/></numFmts>
+<fonts count="5"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><sz val="11"/><color rgb="FF9C0006"/><name val="Calibri"/></font><font><sz val="11"/><color rgb="FF006100"/><name val="Calibri"/></font><font><sz val="11"/><color rgb="FF9C5700"/><name val="Calibri"/></font></fonts>
+<fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF1F4E79"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFC7CE"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFC6EFCE"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFEB9C"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top/><bottom style="thin"><color rgb="FFD9D9D9"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="7"><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="top"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="top"/></xf><xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="3" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="4" fillId="5" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs>
+<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+const marcaDia = v => typeof v === 'number' && v > 1e11 ? isoDate(new Date(v)) : '';
+async function generarExcel() {
+  if (typeof JSZip === 'undefined') throw new Error('Falta JSZip');
+  const h = hoy(), pr = Object.fromEntries(REP);
+  /* hoja 1: una fila por tarea */
+  const filas1 = TAREAS.slice().map(t => ({t, p:proxima(t)})).sort((x, y) => x.p.d < y.p.d ? -1 : x.p.d > y.p.d ? 1 : (x.t.t || '').localeCompare(y.t.t || '')).map(({t, p}) => {
+    const hs = Object.keys(t.hechas || {}).filter(d => t.hechas[d]).sort();
+    const est = p.late ? {s:'Vencida', e:'bad'} : (!t.rep && hs.includes(t.f)) ? {s:'Hecha', e:'ok'} : p.d === '9999' ? 'Sin próximas fechas' : 'Al día';
+    return [t.t || '', (TIPO[t.k] || TIPO.otr).t, t.ctr ? (t.ctr.nombre || (t.ctr.sie ? 'SIE ' + t.ctr.sie : '')) : 'Sin contrato', pr[t.rep || ''] || 'No se repite', t.f ? {d:t.f} : '', t.hasta ? {d:t.hasta} : '',
+      p.d !== '9999' && !p.late ? {d:p.d} : p.late ? {d:p.d} : '', est, hs.length, hs.length ? {d:hs[hs.length - 1]} : '', t.notas || ''];
+  });
+  /* hoja 2: cada día en que toca, con lo que está hecho */
+  let a = h; TAREAS.forEach(t => { const c = [t.f, t.rep ? t.desde : '', ...Object.keys(t.hechas || {})].filter(Boolean).sort()[0]; if (c && c < a) a = c; });
+  const todas = ocurr(a, masDias(h, 365), true).slice(0, 8000);
+  const filas2 = todas.map(o => {
+    const t = o.t, mk = marcaDia(t.hechas && t.hechas[o.d]);
+    const est = o.ok ? {s:'Hecha', e:'ok'} : o.d < h ? {s:'Vencida', e:'bad'} : o.d === h ? {s:'Hoy', e:'aviso'} : 'Pendiente';
+    return [{d:o.d}, DIAS[pISO(o.d).getDay()], t.t || '', (TIPO[t.k] || TIPO.otr).t, t.ctr ? (t.ctr.nombre || (t.ctr.sie ? 'SIE ' + t.ctr.sie : '')) : 'Sin contrato', pr[t.rep || ''] || 'No se repite', est, mk ? {d:mk} : '', t.notas || ''];
+  });
+  /* hoja 3: últimas fechas */
+  const ult = window.ULT_API ? ULT_API.lista().slice().sort((x, y) => (y.f || '') < (x.f || '') ? -1 : 1) : [];
+  const filas3 = ult.map(u => [{d:u.f}, ULTN[u.k] || u.k || '', u.t || '', u.ctr ? (u.ctr.nombre || (u.ctr.sie ? 'SIE ' + u.ctr.sie : '')) : 'Sin contrato', u.n === '' || u.n == null ? '' : +u.n, u.notas || '']);
+  const hojas = [
+    ['Tareas', xHoja([['Tarea', 46], ['Tipo', 26], ['Contrato', 24], ['Se repite', 15], ['Primera fecha', 14], ['Hasta', 12], ['Próxima fecha', 14], ['Estado', 18], ['Veces hecha', 11], ['Última vez hecha', 15], ['Notas', 50]], filas1)],
+    ['Fechas', xHoja([['Fecha', 12], ['Día', 12], ['Tarea', 46], ['Tipo', 26], ['Contrato', 24], ['Se repite', 15], ['Estado', 12], ['Marcada hecha el', 15], ['Notas', 50]], filas2)]
+  ];
+  if (filas3.length) hojas.push(['Últimas fechas', xHoja([['Fecha', 12], ['Qué', 28], ['Tema', 46], ['Contrato', 24], ['Asistentes', 11], ['Notas', 50]], filas3)]);
+  const zip = new JSZip();
+  zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${hojas.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`);
+  zip.file('_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>');
+  zip.file('xl/workbook.xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${hojas.map((x, i) => `<sheet name="${xesc(x[0])}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('')}</sheets></workbook>`);
+  zip.file('xl/_rels/workbook.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${hojas.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('')}<Relationship Id="rId${hojas.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`);
+  zip.file('xl/styles.xml', X_STYLES);
+  hojas.forEach((x, i) => zip.file(`xl/worksheets/sheet${i + 1}.xml`, x[1]));
+  const blob = await zip.generateAsync({type:'blob', mimeType:XLSXM, compression:'DEFLATE'});
+  return {blob, tareas:filas1.length, fechas:filas2.length, ult:filas3.length};
+}
+async function exportarExcel() {
+  if (!TAREAS.length && !(window.ULT_API && ULT_API.lista().length)) { toast('Todavía no hay nada anotado.'); return; }
+  toast('Preparando el Excel…');
+  try {
+    const r = await generarExcel(), nombre = `Calendario PRL ${hoy()}.xlsx`;
+    const msg = `Calendario PRL a ${fmtDate(hoy())}.\n${plural(r.tareas, 'tarea', 'tareas')}${r.ult ? ` y ${plural(r.ult, 'anotación', 'anotaciones')} de «Últimas fechas»` : ''}.`;
+    await entregar(r.blob, nombre, 'Calendario PRL en Excel', msg);
+  } catch (e) { console.error(e); toast('No se pudo preparar el Excel.'); }
+}
+
 /* ---------- eventos ---------- */
 async function onClick(e) {
   const hc = e.target.closest('[data-hecha]');
@@ -304,6 +382,7 @@ async function onClick(e) {
   const a = b.dataset.ca;
   if (a === 'ini') { showTab('ini'); return; }
   if (a === 'ult') { if (window.ULT_API) ULT_API.abrir(); return; }
+  if (a === 'xlsx') return exportarExcel();
   if (a === 'volver') { ED = null; renderMain(); window.scrollTo({top:0}); return; }
   if (a === 'guardar') return guardarForm();
   if (a === 'borrar') return borrar();

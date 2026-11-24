@@ -96,5 +96,13 @@ if "{v:'1.31.0'" not in h:
   ]},
 """)
     h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.31.0 · 19/11/2026",h,count=1)
+if "{v:'1.32.0'" not in h:
+    h=re.sub(r"const APP_VER = '[^']+';","const APP_VER = '1.32.0';",h,count=1)
+    rep("const NOVEDADES = [\n","""const NOVEDADES = [
+  {v:'1.32.0', fecha:'24/11/2026', items:[
+    '<b>Sacar el calendario a Excel</b>: en Calendario, el botón «Sacar todo a Excel» genera un .xlsx con todas tus tareas, cada fecha en que tocan (hechas, pendientes y vencidas) y las «Últimas fechas». Sirve de copia legible por si se pierde la app.'
+  ]},
+""")
+    h=re.sub(r"Versión de la app: [0-9.]+ · [0-9/]+","Versión de la app: 1.32.0 · 24/11/2026",h,count=1)
 open(IDX,'w',encoding='utf-8').write(h)
 print('ok', len(h))

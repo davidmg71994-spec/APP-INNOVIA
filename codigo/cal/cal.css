@@ -123,3 +123,6 @@
   .cal-tm{font:600 11px/1.2 var(--f-body);color:var(--muted);padding:0 3px}
 }
 .ini-t.bad .ini-n{background:var(--bad-soft);color:var(--bad)}
+
+.cal-xlsb{justify-self:start;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:99px;border:1px solid var(--line-strong);background:var(--surface);color:var(--corp-text);font:600 14px var(--f-body);cursor:pointer}
+.cal-xlsb svg{width:16px;height:16px}
